@@ -12,10 +12,24 @@
   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-;(function(){
+;(function(root,factory){
     'use strict';
+    /* amd like aml */
+    if(typeof define === 'function' && define.amd) {
+        define(['passme'], factory);
+    }else if(typeof exports !== 'undefined') {
+        factory(exports);
+    }else{
+        factory((root['passme'] = {}));
+    }
+})(this,function(exports){
 
-    var sytax;
+    var Sytax,
+        Token;
+
+    var passme = function(){
+    
+    }
     
     function LexicalParser(){
     
@@ -24,5 +38,7 @@
     function Parser(){
     
     }
-})();
+    console.log(exports)
+
+});
 /* vim: set sw=4 ts=4 et tw=80 : */
