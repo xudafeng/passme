@@ -14,13 +14,14 @@
 */
 ;(function(root,factory){
     'use strict';
-    /* amd like aml */
+    /* amd like aml https://github.com/xudafeng/aml.git */
     if(typeof define === 'function' && define.amd) {
-        define(['passme'], factory);
+        return define(['exports'], factory);
     }else if(typeof exports !== 'undefined') {
-        factory(exports);
+        return factory(exports);
     }else{
-        factory((root['passme'] = {}));
+    /* browser */
+        factory(root['passme'] || (root['passme'] = {}));
     }
 })(this,function(exports){
 
@@ -30,15 +31,14 @@
     var passme = function(){
     
     }
-    
+    /* lexicalParse */
     function LexicalParser(){
     
     }
-
+    /* build tree */
     function Parser(){
     
     }
     console.log(exports)
-
 });
 /* vim: set sw=4 ts=4 et tw=80 : */
