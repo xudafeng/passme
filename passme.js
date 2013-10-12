@@ -1,6 +1,8 @@
 /*
   Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
 
+  Improved from civet https://github.com/xudafeng/civet
+
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -108,9 +110,13 @@
     }
     /* exports */
     function parse(code,options){
-        console.log(code)
+    }
+
+    function tokenize(code){
+    
     }
     exports.version = '1.0.0';
     exports.parse = parse;
+    exports.tokenize = tokenize;
 });
 /* vim: set sw=4 ts=4 et tw=80 : */
