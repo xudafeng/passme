@@ -3,7 +3,7 @@
 
     var code = document.getElementById('code').value;
 
-    var tokens = passme.parse(code);
+    var tokens = passme.tokenize(code);
 
     console.log(tokens)
 })(this)
