@@ -31,6 +31,12 @@
         Regex,
         Token;
 
+    /* default options */
+    var options = {
+        ecmascript:5,
+        comment:true
+    }
+
     Syntax = {
         AssignmentExpression: 'AssignmentExpression',
         ArrayExpression: 'ArrayExpression',
@@ -100,20 +106,34 @@
     var passme = function(){
     
     }
-    /* lexicalParse */
-    function LexicalParser(){
-    
+    /* lexicalParse class */
+    function LexAnalyzer(){
+        this.init();
     }
-    /* build tree */
+    LexAnalyzer.prototype = {
+        init:function(){
+        
+        }
+    };
+    /* build tree class */
     function Parser(){
-    
+        this.init();
+    }
+    Parser.prototype = {
+        init:function(){
+        
+        }
+    };
+    /* set options */
+    function setOptions(o){
+        
     }
     /* exports */
     function parse(code,options){
     }
-
-    function tokenize(code){
-    
+    function tokenize(code,options){
+        setOptions(options);
+        return new LexAnalyzer();
     }
     exports.version = '1.0.0';
     exports.parse = parse;
