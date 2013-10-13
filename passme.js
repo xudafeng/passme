@@ -29,8 +29,9 @@
 
     var Sytax,
         Regex,
-        Token;
-
+        Token,
+        Message;
+    
     /* default options */
     var options = {
         ecmascript:5,
@@ -97,6 +98,9 @@
         StringLiteral: 7,
         RegularExpression: 8
     };
+
+    Message = {};
+
     /* lexicalParse class */
     function LexAnalyzer(cfg){
         this.source = cfg.code;
@@ -114,10 +118,10 @@
         scanner:function(){
             var that = this;
             function getChar(){
-                console.log(that.source[that.index])
-                return that.source[that.index];
+                return that.source.charCodeAt(that.index);
             }
             while (that.index <= that.length -1){
+                console.log(getChar)
                 switch (getChar()){
                     case 123:
                         break;
