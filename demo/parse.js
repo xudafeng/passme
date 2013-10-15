@@ -6,4 +6,4 @@
     var tokens = passme.tokenize(code);
 
     console.log(tokens)
-})(this)
+})(this);

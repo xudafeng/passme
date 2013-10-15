@@ -121,18 +121,38 @@
                 return that.source.charCodeAt(that.index);
             }
             while (that.index <= that.length -1){
-                console.log(getChar)
-                switch (getChar()){
-                    case 123:
-                        break;
-                    default:
-                        
-                        break;
-                }
+                var currentChar = getChar();
+                var token = that.getToken(currentChar);
+                console.log(token)
                 that.index ++;
+            }
+        },
+        getToken:function(char){
+            var that = this;
+            var token = '';
+            function isNumericLiteral(){
+            
+            }
+
+            function error(){
+            
+            }
+
+            switch (char){
+                case 118:
+                    return 118;
+                    break;
+                default:
+                    error();
+                    break;
             }
         }
     };
+
+    function throwError(){
+    
+    }
+
     /* build tree class */
     function Parser(){
         this.init();
