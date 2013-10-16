@@ -117,6 +117,14 @@
 
     Message = {};
 
+    /**
+     * util
+     */
+    function inArray(){
+    
+    }
+
+
     /* lexicalParse class */
     function LexAnalyzer(cfg){
         this.source = cfg.code;
@@ -131,6 +139,7 @@
             that.index = 0;
             that.token = EMPTY;
             that.type = null;
+            that.expect = null;
             that.scanner();
         },
         scanner:function(){
@@ -151,15 +160,15 @@
             function isKeyWordState(){
                 return that.type === Token['Keyword'];
             }
-            function expectKeyWord(c){
-                var keyWordInitial = 'bcdefinstvw';
-                if(!!~keyWordInitial.indexOf(c)){
-                    that.type = Token['Keyword'];
-                    that.token += c;
+            function expectWord(w){
+                if(w.length >1){
+                    that.expectWords(w);
+                }else{
+                    that.expect = w;
                 }
             }
-            function error(){
-                
+            function expectWords(a){
+                that.expect = a
             }
             /** 
              * javascript es5 Keywords:
@@ -169,23 +178,77 @@
              * else 
              * finally for function 
              * if in instanceof 
-             * new return 
+             * new 
+             * return 
              * switch 
              * this throw try typeof 
              * var void 
              * while with     
              */
 
+            function expectKeyWord(c){
+                var keyWordInitial = 'bcdefinstvw';
+                if(!!~keyWordInitial.indexOf(c)){
+                    that.type = Token['Keyword'];
+                    that.token += c;
+                    switch(that.token){
+                        case 'b':
+                            expectWord(['break']);
+                            break;
+                        case 'c:
+                            expectWord(['case','catch','continue']);
+                            break;
+                        case 'd':
+                            expectWord(['default','delete','do']);
+                            break;
+                        case 'e':
+                            expectWord(['else']);
+                            break;
+                        case 'f':
+                            expectWord(['finally','for','function']);
+                            break;
+                        case 'i':
+                            expectWord(['if','in','instanceof']);
+                            break;
+                        case 'n':
+                            expectWord(['new']);
+                            break;
+                        case 's':
+                            expectWord(['switch']);
+                            break;
+                        case 't':
+                            expectWord(['this','throw','try','typeof']);
+                            break;
+                        case 'v':
+                            expectWord(['var','void']);
+                            break;
+                        case 'w':
+                            expectWord(['while','with']);
+                            break;
+                    }
+                }
+            }
+
+            /* break */
+            function expectBreak(){
+                
+            }
+            function error(){
+                
+            }
+
             /* validata keyword for the first */
 
-            !isKeyWordState() && expectKeyWord(char);
-
-            switch (char){
-                case 'b':
-                    break;
-                default:
-                    error();
-                    break;
+            if(isKeyWordState()){
+                switch (char){
+                    case 'b':
+                        break;
+                    default:
+                        error();
+                        break;
+                }
+            }else {
+                expectKeyWord(char);
             }
         },
         validateToken:function(token){
