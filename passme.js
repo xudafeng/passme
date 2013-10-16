@@ -102,6 +102,18 @@
         Comment:9,
         WhiteSpace:10
     };
+    /* map for type */
+
+    Token['BooleanLiteral'] = 'BooleanLiteral';
+    Token['Identifier'] = 'Identifier';
+    Token['Keyword'] = 'Keyword';
+    Token['NullLiteral'] = 'NullLiteral';
+    Token['NumericLiteral'] = 'NumericLiteral';
+    Token['Punctuator'] = 'Punctuator';
+    Token['StringLiteral'] = 'StringLiteral';
+    Token['RegularExpression'] = 'RegularExpression';
+    Token['Comment'] = 'Comment';
+    Token['WhiteSpace'] = 'WhiteSpace';
 
     Message = {};
 
@@ -118,6 +130,7 @@
             that.length = that.source.length;
             that.index = 0;
             that.token = EMPTY;
+            that.type = null;
             that.scanner();
         },
         scanner:function(){
@@ -135,7 +148,16 @@
         },
         getToken:function(char){
             var that = this;
-            console.log(char)
+            function isKeyWordState(){
+                return that.type === Token['Keyword'];
+            }
+            function expectKeyWord(c){
+                var keyWordInitial = 'bcdefinstvw';
+                if(!!~keyWordInitial.indexOf(c)){
+                    that.type = Token['Keyword'];
+                    that.token += c;
+                }
+            }
             function error(){
                 
             }
@@ -153,29 +175,13 @@
              * var void 
              * while with     
              */
+
+            /* validata keyword for the first */
+
+            !isKeyWordState() && expectKeyWord(char);
+
             switch (char){
                 case 'b':
-                    break;
-                case 'c':
-                    break;
-                case 'd':
-                    break;
-                case 'e':
-                    break;
-                case 'f':
-                    break;
-                case 'i':
-                    break;
-                case 'n':
-                    break;
-                case 's':
-                    break;
-                case 't':
-                    break;
-                case 'v':
-                    console.log('var')
-                    break;
-                case 'w':
                     break;
                 default:
                     error();
