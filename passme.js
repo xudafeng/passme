@@ -120,10 +120,17 @@
     /**
      * util
      */
-    function inArray(){
-    
+    function indexOf(item, arr) {
+        for (var i = 0, len = arr.length; i < len; ++i) {
+            if (arr[i] === item) {
+                return i;
+            }
+        }
+        return -1;
     }
-
+    function inArray(item, arr) {
+        return indexOf(item, arr) > -1;
+    }
 
     /* lexicalParse class */
     function LexAnalyzer(cfg){
