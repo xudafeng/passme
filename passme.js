@@ -162,13 +162,13 @@
             }
             function expectWord(w){
                 if(w.length >1){
-                    that.expectWords(w);
+                    expectWords(w);
                 }else{
-                    that.expect = w;
+                    that.expect = w[0];
                 }
             }
             function expectWords(a){
-                that.expect = a
+                that.expect = a;
             }
             /** 
              * javascript es5 Keywords:
@@ -195,7 +195,7 @@
                         case 'b':
                             expectWord(['break']);
                             break;
-                        case 'c:
+                        case 'c':
                             expectWord(['case','catch','continue']);
                             break;
                         case 'd':
@@ -240,6 +240,7 @@
             /* validata keyword for the first */
 
             if(isKeyWordState()){
+                
                 switch (char){
                     case 'b':
                         break;
