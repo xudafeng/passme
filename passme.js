@@ -123,6 +123,7 @@
         scanner:function(){
             var that = this;
             function getChar(){
+                return that.source[that.index];
                 return that.source.charCodeAt(that.index);
             }
             while (that.index <= that.length -1){
@@ -134,18 +135,48 @@
         },
         getToken:function(char){
             var that = this;
+            console.log(char)
             function error(){
                 
             }
-/* break case catch continue default delete do else finally for function if in
-instanceof new return switch this throw try typeof var void while with     
-*/
+            /** 
+             * javascript es5 Keywords:
+             * break 
+             * case catch continue 
+             * default delete do 
+             * else 
+             * finally for function 
+             * if in instanceof 
+             * new return 
+             * switch 
+             * this throw try typeof 
+             * var void 
+             * while with     
+             */
             switch (char){
                 case 'b':
-                    that.token = 111;
-                    return 118;
                     break;
-                case '':
+                case 'c':
+                    break;
+                case 'd':
+                    break;
+                case 'e':
+                    break;
+                case 'f':
+                    break;
+                case 'i':
+                    break;
+                case 'n':
+                    break;
+                case 's':
+                    break;
+                case 't':
+                    break;
+                case 'v':
+                    console.log('var')
+                    break;
+                case 'w':
+                    break;
                 default:
                     error();
                     break;
