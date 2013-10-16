@@ -190,7 +190,6 @@
                 var keyWordInitial = 'bcdefinstvw';
                 if(!!~keyWordInitial.indexOf(c)){
                     that.type = Token['Keyword'];
-                    that.token += c;
                     switch(that.token){
                         case 'b':
                             expectWord(['break']);
@@ -251,9 +250,13 @@
             }else {
                 expectKeyWord(char);
             }
+
+            that.token += char;
+
         },
         validateToken:function(token){
             var that = this;
+            console.log(that)
             if(token){
                 var _t = that.token;
                 that.tokens.push(_t);
