@@ -96,7 +96,9 @@
         NumericLiteral: 5,
         Punctuator: 6,
         StringLiteral: 7,
-        RegularExpression: 8
+        RegularExpression: 8,
+        Comment:9,
+        WhiteSpace:10
     };
 
     Message = {};
