@@ -137,12 +137,15 @@
             function error(){
                 
             }
-
+/* break case catch continue default delete do else finally for function if in
+instanceof new return switch this throw try typeof var void while with     
+*/
             switch (char){
-                case 118:
+                case 'b':
                     that.token = 111;
                     return 118;
                     break;
+                case '':
                 default:
                     error();
                     break;
