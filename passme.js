@@ -32,6 +32,8 @@
         Token,
         Message;
     
+    var EMPTY = '';
+    
     /* default options */
     var options = {
         ecmascript:5,
@@ -115,6 +117,7 @@
             that.tokens = [];
             that.length = that.source.length;
             that.index = 0;
+            that.token = EMPTY;
             that.scanner();
         },
         scanner:function(){
@@ -125,28 +128,32 @@
             while (that.index <= that.length -1){
                 var currentChar = getChar();
                 var token = that.getToken(currentChar);
-                console.log(token)
+                that.validateToken(token);
                 that.index ++;
             }
         },
         getToken:function(char){
             var that = this;
-            var token = '';
-            function isNumericLiteral(){
-            
-            }
-
             function error(){
-            
+                
             }
 
             switch (char){
                 case 118:
+                    that.token = 111;
                     return 118;
                     break;
                 default:
                     error();
                     break;
+            }
+        },
+        validateToken:function(token){
+            var that = this;
+            if(token){
+                var _t = that.token;
+                that.tokens.push(_t);
+                that.token = EMPTY;
             }
         }
     };
