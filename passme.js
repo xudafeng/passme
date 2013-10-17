@@ -224,7 +224,7 @@
              */
 
             function parseKeyWord(c){
-                if(!!~'bcdefinstvw'.indexOf(c)){
+                if(_.isIn(c,'bcdefinstvw')){
 
                     that.type = Token['Keyword'];
                     that.token += c;

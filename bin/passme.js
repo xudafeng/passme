@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-18 2:26:12
+ * Latest build : 2013-10-18 2:27:07
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -244,7 +244,7 @@
              */
 
             function parseKeyWord(c){
-                if(!!~'bcdefinstvw'.indexOf(c)){
+                if(_.isIn(c,'bcdefinstvw')){
 
                     that.type = Token['Keyword'];
                     that.token += c;
