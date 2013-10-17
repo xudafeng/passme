@@ -104,40 +104,58 @@
     /**
      * util
      */
-    function indexOf(item, arr) {
-        for (var i = 0, len = arr.length; i < len; ++i) {
-            if (arr[i] === item) {
-                return i;
-            }
-        }
-        return -1;
-    }
-    function inArray(item, arr) {
-        return indexOf(item, arr) > -1;
-    }
 
-    function each (object, fn) {
-        if(object){
-            for(var i in object){
-                if(i !== 'length' && i !== 'item'){
-                    fn.call(this,object[i],i);
-                }
-            }
-        }
-        return object;
+    var _ = function(){
+    
     };
-
-    function _typeof(type){
+    function __typeof(type){
         return function(obj){
             return Object.prototype.toString.call(obj) === '[object ' + type + ']';
         };
+    }
+    _.prototype = {
+        indexOf:function(item, arr) {
+            for (var i = 0, len = arr.length; i < len; ++i) {
+                if (arr[i] === item) {
+                    return i;
+                }
+            }
+            return -1;
+        },
+        inArray:function(item, arr) {
+            return this.indexOf(item, arr) > -1;
+        },
+        isIn:function(i,s){
+            return !!~s.indexOf(i);
+        },
+        each:function(object, fn) {
+            if(object){
+                for(var i in object){
+                    if(i !== 'length' && i !== 'item'){
+                        fn.call(this,object[i],i);
+                    }
+                }
+            }
+            return object;
+        },
+        isString:function(){
+            return __typeof('String');
+        },
+        isArray:function(){
+            return __typeof('Array');
+        },
+        isObject:function(){
+            return __typeof('Object');
+        },
+        isFunction:function(){
+            return __typeof('Function');
+        },
+        isUndefined:function(){
+            return __typeof('Undefined');
+        }
     };
-    var isString = _typeof('String');
-    var isArray = _typeof('Array');
-    var isObject = _typeof('Object');
-    var isFunction = _typeof('Function');
-    var isUndefined = _typeof('Undefined');
-
+    _ = new _();
+    exports._ = _;
     /* lexicalParse class */
     function LexAnalyzer(cfg){
         this.source = cfg.code;
@@ -263,9 +281,11 @@
                 switch (that.type){
                     case 'Keyword':
                         console.log(that)
-                        if(isArray(that.expect)){
-                            each(that.expect,function(i){
-                                console.log(i)
+                        var _t,_e;
+                        if(_.isArray(that.expect)){
+                            _.each(that.expect,function(i){
+                                i === that.token && (_t = that.token);
+                                i.indexOf
                             });
                         }else{
                             
