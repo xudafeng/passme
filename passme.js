@@ -132,6 +132,18 @@
         return indexOf(item, arr) > -1;
     }
 
+    function each (object, fn) {
+
+        if(object){
+            for(var i in object){
+                if(i !== 'length' && i !== 'item'){
+                    fn.call(this,object[i],i);
+                }
+            }
+        }
+        return object;
+    };
+
     /* lexicalParse class */
     function LexAnalyzer(cfg){
         this.source = cfg.code;
