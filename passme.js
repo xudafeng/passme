@@ -9,13 +9,13 @@
     /* browser */
         factory(root['passme'] || (root['passme'] = {}));
     }
-})(this,function(exports){
-
+})(this,function(exports,undefined){
     var Sytax,
         Regex,
         Token,
         Message;
-    
+
+    /* static */
     var EMPTY = '';
     
     /* default options */
