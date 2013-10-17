@@ -127,6 +127,17 @@
         return object;
     };
 
+    function _typeof(type){
+        return function(obj){
+            return Object.prototype.toString.call(obj) === '[object ' + type + ']';
+        };
+    };
+    var isString = _typeof('String');
+    var isArray = _typeof('Array');
+    var isObject = _typeof('Object');
+    var isFunction = _typeof('Function');
+    var isUndefined = _typeof('Undefined');
+
     /* lexicalParse class */
     function LexAnalyzer(cfg){
         this.source = cfg.code;
@@ -159,7 +170,7 @@
             while (that.index <= that.length -1){
                 var curChar = getChar();
                 that.getToken(curChar);
-                that.validate();
+                //that.validate();
                 that.goToNextToken();
             }
         },
@@ -196,8 +207,10 @@
 
             function parseKeyWord(c){
                 if(!!~'bcdefinstvw'.indexOf(c)){
+
                     that.type = Token['Keyword'];
-                    switch(that.token){
+
+                    switch(c){
                         case 'b':
                             expectWord(['break']);
                             break;
@@ -234,7 +247,6 @@
                     }
                 }
             }
-
             /* break */
             function expectBreak(){
                 
@@ -247,8 +259,16 @@
 
             if(that.type){
                 
-                switch (char){
-                    case 'b':
+                switch (that.type){
+                    case 'Keyword':
+                        console.log(that)
+                        if(isArray(that.expect)){
+                            each(that.expect,function(i){
+                                console.log(i)
+                            });
+                        }else{
+                            
+                        }
                         break;
                     default:
                         error();
@@ -258,7 +278,7 @@
                 parseKeyWord(char);
             }
 
-            that.token += char;
+            //that.token += char;
         },
         validate:function(){
             var that = this;
