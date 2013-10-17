@@ -1,19 +1,3 @@
-/*
-  Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
-
-  Improved from civet https://github.com/xudafeng/civet
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-  ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
-  DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 ;(function(root,factory){
     'use strict';
     /* amd like aml https://github.com/xudafeng/aml.git */
@@ -133,7 +117,6 @@
     }
 
     function each (object, fn) {
-
         if(object){
             for(var i in object){
                 if(i !== 'length' && i !== 'item'){
@@ -153,13 +136,19 @@
     LexAnalyzer.prototype = {
         init:function(){
             var that = this;
-            that.tokens = [];
+            that.initIndex();
+            that.initFlags();
+            that.scanner();
+        },
+        initIndex:function(){
+            var that = this;
             that.length = that.source.length;
             that.index = 0;
-            that.token = EMPTY;
-            that.type = null;
-            that.expect = null;
-            that.scanner();
+        },
+        initFlags:function(){
+            var that = this;
+            that.tokens = [];
+            that.clearFlags();
         },
         scanner:function(){
             var that = this;
@@ -168,10 +157,10 @@
                 return that.source.charCodeAt(that.index);
             }
             while (that.index <= that.length -1){
-                var currentChar = getChar();
-                var token = that.getToken(currentChar);
-                that.validateToken(token);
-                that.index ++;
+                var curChar = getChar();
+                that.getToken(curChar);
+                that.validate();
+                that.goToNextToken();
             }
         },
         getToken:function(char){
@@ -205,9 +194,8 @@
              * while with     
              */
 
-            function expectKeyWord(c){
-                var keyWordInitial = 'bcdefinstvw';
-                if(!!~keyWordInitial.indexOf(c)){
+            function parseKeyWord(c){
+                if(!!~'bcdefinstvw'.indexOf(c)){
                     that.type = Token['Keyword'];
                     switch(that.token){
                         case 'b':
@@ -257,7 +245,7 @@
 
             /* validata keyword for the first */
 
-            if(isKeyWordState()){
+            if(that.type){
                 
                 switch (char){
                     case 'b':
@@ -267,20 +255,24 @@
                         break;
                 }
             }else {
-                expectKeyWord(char);
+                parseKeyWord(char);
             }
 
             that.token += char;
-
         },
-        validateToken:function(token){
+        validate:function(){
             var that = this;
-            console.log(that)
-            if(token){
-                var _t = that.token;
-                that.tokens.push(_t);
-                that.token = EMPTY;
-            }
+            that.tokens.push(that.token);
+            that.clearFlags();
+        },
+        clearFlags:function(){
+            var that = this;
+            that.token = EMPTY;
+            that.expect = null;
+            that.type = null;
+        },
+        goToNextToken:function(){
+            this.index ++;
         }
     };
 

@@ -11,10 +11,9 @@ module.exports = function(grunt) {
         version = '<%= '+ packageName +'.version %>',
         name = '<%= '+ packageName +'.name %>',
         author = '<%= '+ packageName +'.author %>',
-        page = '<%= '+ packageName +'.page %>',
         description = '<%= '+ packageName +'.description %>',
-        srcPath = '/src',
-        buildPath = '/bin',
+        srcPath = '',
+        buildPath = 'bin',
         cfgFile = packageName + '.json',
         jsSuffix = '.js',
         buildTime = grunt.template.today("yyyy-mm-dd H:MM:ss"),
@@ -26,15 +25,21 @@ module.exports = function(grunt) {
             ' * '+ description +'\n',
             ' * Latest build : '+ buildTime +'\n',
             ' *\n',
-            ' * ' + page + '\n',
             ' * ================================================================\n',
-            ' * Copyright 2013 '+ author +'\n',
-            ' *\n',
-            ' * Licensed under the <%= '+ packageName +'.licenses[0].type %> License\n',
-            ' * You may not use this file except in compliance with the License.\n',
-            ' *\n',
-            ' * <%= '+ packageName +'.licenses[0].url %>\n',
-            ' * ================================================================ */\n\n\n'
+            ' *',
+            ' * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>\n',
+            ' * Improved from civet https://github.com/xudafeng/civet\n',
+            ' * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"\n',
+            ' * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\n',
+            ' * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE\n',
+            ' * ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY\n',
+            ' * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES\n',
+            ' * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;\n',
+            ' * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND\n',
+            ' * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT\n',
+            ' * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF\n',
+            ' * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n',
+            ' * ================================================================ */\n'
         ].join(''),
 
         tinyBanner = '/*! '+name + ' v' + version + ' ' + author + ' ' + buildTime + ' */\n';
@@ -44,44 +49,7 @@ module.exports = function(grunt) {
      */
     var filesMap = [
         {
-            name : 'intro',
-            concat : true
-        },{
-            name : 'static',
-            concat : true
-        },{
-            name : 'base',
-            concat : true
-        },{
-            name : 'util/error',
-            concat : true
-        },{
-            name : 'util/type',
-            concat : true
-        },{
-            name : 'util/broadcast',
-            concat : true
-        },{
-            name : 'util/path',
-            concat : true
-        },{
-            name : 'util/loader',
-            concat : true
-        },{
-            name : 'util/depend',
-            concat : true
-        },
-        {
-            name : 'loader',
-            concat : true
-        },{
-            name : 'module',
-            concat : true
-        },{
-            name : 'config',
-            concat : true
-        },{
-            name : 'outro',
+            name : 'passme',
             concat : true
         }
     ];
@@ -93,12 +61,12 @@ module.exports = function(grunt) {
      * @returns {Array}
      */
     var createTarget = function(task,path,filesMap){
-            var _t = [];
-            for(var i in filesMap){
-                filesMap[i][task] && _t.push(version + path +'/'+ filesMap[i]['name'] + jsSuffix);
-            }
-            return _t;
-        };
+        var _t = [];
+        for(var i in filesMap){
+            filesMap[i][task] && _t.push(path +'/'+ filesMap[i]['name'] + jsSuffix);
+        }
+        return _t;
+    };
     /**
      * 创建配置
      */
@@ -112,9 +80,9 @@ module.exports = function(grunt) {
             options: {
                 banner: '<%= banner %>'
             },
-            dist: {
+            build: {
                 src: createTarget('concat',srcPath,filesMap),
-                dest: version + buildPath + '/' + name + jsSuffix
+                dest: buildPath + '/' + name + jsSuffix
             }
         },
         /**
@@ -123,11 +91,11 @@ module.exports = function(grunt) {
         uglify: {
             options: {
                 banner: tinyBanner,
-                sourceMap: version + buildPath + '/' + name + ".map"
+                sourceMap: buildPath + '/' + name + ".map"
             },
             build: {
-                src: version + buildPath + '/' + name + jsSuffix,
-                dest: version + buildPath + '/' + name +'.min' + jsSuffix
+                src: buildPath + '/' + name + jsSuffix,
+                dest: buildPath + '/' + name +'.min' + jsSuffix
             }
         }
     };
