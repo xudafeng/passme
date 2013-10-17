@@ -209,6 +209,7 @@
                 if(!!~'bcdefinstvw'.indexOf(c)){
 
                     that.type = Token['Keyword'];
+                    that.token += c;
 
                     switch(c){
                         case 'b':
@@ -277,8 +278,6 @@
             }else {
                 parseKeyWord(char);
             }
-
-            //that.token += char;
         },
         validate:function(){
             var that = this;
