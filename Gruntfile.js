@@ -12,7 +12,7 @@ module.exports = function(grunt) {
         name = '<%= '+ packageName +'.name %>',
         author = '<%= '+ packageName +'.author %>',
         description = '<%= '+ packageName +'.description %>',
-        srcPath = '',
+        srcPath = 'src',
         buildPath = 'bin',
         cfgFile = packageName + '.json',
         jsSuffix = '.js',
@@ -63,7 +63,7 @@ module.exports = function(grunt) {
     var createTarget = function(task,path,filesMap){
         var _t = [];
         for(var i in filesMap){
-            filesMap[i][task] && _t.push(path + filesMap[i]['name'] + jsSuffix);
+            filesMap[i][task] && _t.push(path + '/' + filesMap[i]['name'] + jsSuffix);
         }
         return _t;
     };
