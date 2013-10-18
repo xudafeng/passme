@@ -181,19 +181,21 @@
         },
         scanner:function(){
             var that = this;
-            function getChar(){
-                return that.source[that.index];
-                return that.source.charCodeAt(that.index);
-            }
             while (that.index <= that.length -1){
-                var curChar = getChar();
-                that.getToken(curChar);
+                that.getChar();
+                that.getToken();
                 that.validate();
                 that.goToNextToken();
             }
         },
-        getToken:function(char){
+        getChar:function(){
             var that = this;
+            that.char = that.source[that.index];
+            //that.char = that.source.charCodeAt(that.index);
+        },
+        getToken:function(){
+            var that = this;
+            /* Keyword */
             function isKeyWordState(){
                 return that.type === Token['Keyword'];
             }
@@ -223,7 +225,7 @@
              * while with     
              */
 
-            function parseKeyWord(c){
+            function expectKeyWord(c){
                 if(_.isIn(c,'bcdefinstvw')){
 
                     that.type = Token['Keyword'];
@@ -266,19 +268,9 @@
                     }
                 }
             }
-            /* break */
-            function expectBreak(){
-                
-            }
-            function error(){
-                
-            }
-
-            /* validata keyword for the first */
-
             function checkKeyWordExpect(c){
                 var _t ,_e = false;
-                that.token += char;
+                that.token += c;
                 if(_.isArray(that.expect)){
                     _.each(that.expect,function(i){
                         if(i===that.token){
@@ -304,30 +296,50 @@
                 };
             }
 
+            function parseKeyword(){
+                var c = that.char;
+                var r = checkKeyWordExpect(c);
+                if(r['token']){
+                    that.token = r['token'];
+                    that.expect = null;
+                }else{
+                    if(!r['isExpect']){
+                        that.type = Token['Identifier'];
+                        that.expect = null;
+                    }
+                }
+            }
+            /* Identifier */
+            function parseIdentifier(){
+                var c = that.char;
+                console.log(c);
+            }
+            
+            /* break */
+            function expectBreak(){
+                
+            }
+            function error(){
+                
+            }
+
+            /* validata keyword for the first */
+
             if(that.type){
                 
                 switch (that.type){
                     case 'Keyword':
-                        var r = checkKeyWordExpect(char);
-                        if(r['token']){
-                            that.token = r['token'];
-                            that.expect = null;
-                        }else{
-                            if(!r['isExpect']){
-                                that.type = Token['Identifier'];
-                                that.expect = null;
-                            }
-                        }
+                        parseKeyword();
                         break;
                     case 'Identifier':
-
+                        parseIdentifier();
                         break;
                     default:
                         error();
                         break;
                 }
             }else {
-                parseKeyWord(char);
+                expectKeyWord(that.char);
             }
         },
         validate:function(){
@@ -344,7 +356,6 @@
             var that = this;
             that.token = EMPTY;
             that.expect = null;
-            that.type = null;
         },
         goToNextToken:function(){
             this.index ++;
