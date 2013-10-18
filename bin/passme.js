@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-18 2:27:07
+ * Latest build : 2013-10-18 8:58:56
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -208,7 +208,7 @@
             while (that.index <= that.length -1){
                 var curChar = getChar();
                 that.getToken(curChar);
-                //that.validate();
+                that.validate();
                 that.goToNextToken();
             }
         },
@@ -296,20 +296,51 @@
 
             /* validata keyword for the first */
 
+            function checkKeyWordExpect(c){
+                var _t ,_e = false;
+                that.token += char;
+                if(_.isArray(that.expect)){
+                    _.each(that.expect,function(i){
+                        if(i===that.token){
+                            _t = that.token;
+                        }else{
+                            if(_.isIn(that.token,i)){
+                                _e = true;
+                            }
+                        }
+                    });
+                }else{
+                    if(that.token === that.expect){
+                        _t = that.expect;
+                    }else{
+                        if(_.isIn(that.token,that.expect)){
+                            _e = true;
+                        }
+                    }
+                }
+                return {
+                    token:_t,
+                    isExpect:_e
+                };
+            }
+
             if(that.type){
                 
                 switch (that.type){
                     case 'Keyword':
-                        console.log(that)
-                        var _t,_e;
-                        if(_.isArray(that.expect)){
-                            _.each(that.expect,function(i){
-                                i === that.token && (_t = that.token);
-                                i.indexOf
-                            });
+                        var r = checkKeyWordExpect(char);
+                        if(r['token']){
+                            that.token = r['token'];
+                            that.expect = null;
                         }else{
-                            
+                            if(!r['isExpect']){
+                                that.type = Token['Identifier'];
+                                that.expect = null;
+                            }
                         }
+                        break;
+                    case 'Identifier':
+
                         break;
                     default:
                         error();
@@ -321,8 +352,13 @@
         },
         validate:function(){
             var that = this;
-            that.tokens.push(that.token);
-            that.clearFlags();
+            if(that.token && that.type && !that.expect){
+                that.tokens.push({
+                    type:that.type,
+                    value:that.token
+                });
+                that.clearFlags();
+            }
         },
         clearFlags:function(){
             var that = this;
