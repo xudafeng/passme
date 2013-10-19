@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-20 3:28:46
+ * Latest build : 2013-10-20 3:34:16
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -207,6 +207,8 @@
                 that.type = Token['WhiteSpace'];
             }else if(that.isIdentifier()){
                 that.type = Token['Identifier'];
+            }else if(that.isPunctuator()){
+                that.type = Token['Punctuator'];
             }
             that.token += that.char;
         },
@@ -278,7 +280,7 @@
              * ||
              * !
              */
-            
+            return _.isIn(c,'+-*/%=&|!\'\"\,\;');
         },
         isStringLiteral:function(){
         },
@@ -308,7 +310,6 @@
                 if(that.isIdentifier()){
                     that.token += char;
                 }else {
-                    console.log(char)
                     that.validate();
                 }
             }

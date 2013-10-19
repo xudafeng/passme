@@ -187,6 +187,8 @@
                 that.type = Token['WhiteSpace'];
             }else if(that.isIdentifier()){
                 that.type = Token['Identifier'];
+            }else if(that.isPunctuator()){
+                that.type = Token['Punctuator'];
             }
             that.token += that.char;
         },
@@ -258,7 +260,7 @@
              * ||
              * !
              */
-            
+            return _.isIn(c,'+-*/%=&|!\'\"\,\;');
         },
         isStringLiteral:function(){
         },
@@ -288,7 +290,6 @@
                 if(that.isIdentifier()){
                     that.token += char;
                 }else {
-                    console.log(char)
                     that.validate();
                 }
             }
