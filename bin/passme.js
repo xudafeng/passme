@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-20 3:34:16
+ * Latest build : 2013-10-20 3:36:01
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -367,19 +367,6 @@
                 case 'WhiteSpace':
                     parseWhiteSpace();
                     break;
-            }
-
-            return;
-            /* Keyword */
-            function expectWord(w){
-                if(w.length >1){
-                    expectWords(w);
-                }else{
-                    that.expect = w[0];
-                }
-            }
-            function expectWords(a){
-                that.expect = a;
             }
             /** 
              * javascript es5 Keywords:

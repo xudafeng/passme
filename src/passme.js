@@ -348,19 +348,6 @@
                     parseWhiteSpace();
                     break;
             }
-
-            return;
-            /* Keyword */
-            function expectWord(w){
-                if(w.length >1){
-                    expectWords(w);
-                }else{
-                    that.expect = w[0];
-                }
-            }
-            function expectWords(a){
-                that.expect = a;
-            }
             /** 
              * javascript es5 Keywords:
              * break 
