@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-19 10:30:27
+ * Latest build : 2013-10-20 2:27:52
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -174,20 +174,19 @@
             return __typeof('Undefined');
         }
     };
-    _ = new _();
-    exports._ = _;
+    exports._ = _ = new _();
     /* lexicalParse class */
     function LexAnalyzer(cfg){
         this.source = cfg.code;
-        this.init();
-        return this.tokens;
+        return this.init(cfg);
     }
     LexAnalyzer.prototype = {
-        init:function(){
+        init:function(cfg){
             var that = this;
             that.initIndex();
             that.initFlags();
             that.scanner();
+            return this.tokens;
         },
         initIndex:function(){
             var that = this;
@@ -199,26 +198,134 @@
             that.tokens = [];
             that.clearFlags();
         },
+        initType:function(){
+            var that = this;
+            if(that.isWhiteSpace()){
+                that.type = Token['WhiteSpace'];
+            }else if(that.isIdentifier()){
+                that.type = Token['Identifier'];
+            }
+            that.token += that.char;
+        },
+        clearFlags:function(){
+            var that = this;
+            that.token = EMPTY;
+            that.type = null;
+        },
         scanner:function(){
             var that = this;
             while (that.index <= that.length -1){
                 that.getChar();
                 that.getToken();
-                that.validate();
-                that.goToNextToken();
             }
         },
         getChar:function(){
             var that = this;
             that.char = that.source[that.index];
+            that.index ++;
             //that.char = that.source.charCodeAt(that.index);
+        },
+        isBooleanLiteral:function(){
+        
+        },
+        isIdentifier:function(){
+            var that = this;
+            var c = that.char;
+            var hasInitialWord = !!that.token;
+            return hasInitialWord ? (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$') : (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$' || c >=0 && c <=9);
+        },
+        isKeyword:function(){
+        
+        },
+        isNullLiteral:function(){
+            var c = this.char;
+            
+        },
+        isNumericLiteral:function(){
+
+        },
+        isPunctuator:function(){
+        },
+        isStringLiteral:function(){
+        },
+        isRegularExpression:function(){
+        },
+        isComment:function(){
+        },
+        isWhiteSpace:function(){
+            var c = this.char;
+            return c ==='\n' || c === ' '||c === '\t';
+        },
+        validate:function(){
+            var that = this;
+            that.tokens.push({
+                type:that.type,
+                value:that.token
+            });
+            that.clearFlags();
+            that.initType();
         },
         getToken:function(){
             var that = this;
-            /* Keyword */
-            function isKeyWordState(){
-                return that.type === Token['Keyword'];
+            var char = that.char;
+            /* BooleanLiteral */
+            /* Identifier */
+            function parseIdentifier(){
+                if(that.isIdentifier()){
+                    that.token += char;
+                }else {
+                    that.validate();
+                }
             }
+            /* Keyword */
+            function parseKeyword(){
+            
+            }
+            /* NullLiteral */
+            /* NumericLiteral */
+            /* Punctuator */
+            /* StringLiteral */
+            /* RegularExpression */
+            /* Comment */
+            /* WhiteSpace */
+            function parseWhiteSpace(){
+                if(that.isWhiteSpace()){
+                    that.token += char;
+                }else{
+                    that.validate();
+                }
+            }
+            /* type router */
+            switch(that.type){
+                case null:
+                    that.initType();
+                    break;
+                case 'BooleanLiteral':
+                    break;
+                case 'Identifier':
+                    break;
+                case 'Keyword':
+                    parseKeyword();
+                    break;
+                case 'NullLiteral':
+                    break;
+                case 'NumericLiteral':
+                    break;
+                case 'Punctuator':
+                    break;
+                case 'StringLiteral':
+                    break;
+                case 'RegularExpression':
+                    break;
+                case 'Comment':
+                    break;
+                case 'WhiteSpace':
+                    parseWhiteSpace();
+                    break;
+            }
+
+            return;
+            /* Keyword */
             function expectWord(w){
                 if(w.length >1){
                     expectWords(w);
@@ -250,7 +357,6 @@
 
                     that.type = Token['Keyword'];
                     that.token += c;
-
                     switch(c){
                         case 'b':
                             expectWord(['break']);
@@ -272,6 +378,9 @@
                             break;
                         case 'n':
                             expectWord(['new']);
+                            break;
+                        case 'r':
+                            expectWord(['return']);
                             break;
                         case 's':
                             expectWord(['switch']);
@@ -361,24 +470,6 @@
             }else {
                 expectKeyWord(that.char);
             }
-        },
-        validate:function(){
-            var that = this;
-            if(that.token && that.type && !that.expect){
-                that.tokens.push({
-                    type:that.type,
-                    value:that.token
-                });
-                that.clearFlags();
-            }
-        },
-        clearFlags:function(){
-            var that = this;
-            that.token = EMPTY;
-            that.expect = null;
-        },
-        goToNextToken:function(){
-            this.index ++;
         }
     };
 

@@ -4,6 +4,7 @@
     var code = document.getElementById('code').value;
 
     var tokens = passme.tokenize(code);
-
-    console.log(tokens)
+    for(var i = 0;i<tokens.length;i++){
+        console.log(tokens[i])
+    }
 })(this);
