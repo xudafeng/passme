@@ -301,25 +301,34 @@
                     that.expect = null;
                 }else{
                     if(!r['isExpect']){
-                        that.type = isWhiteSpace() ? Token['WhiteSpace'] :Token['Identifier'];
-                        that.expect = null;
+                        that.type = isWhiteSpace(that.token) ? Token['WhiteSpace'] :Token['Identifier'];
+                        that.expect = true;
                     }
                 }
             }
             /* Identifier */
             function parseIdentifier(){
                 var c = that.char;
-                console.log(that.token)
-                console.log(c);
+                that.token +=c;
+                if(isWhiteSpace(c)){
+                
+                }
+                //that.type = isWhiteSpace(c) ? Token['WhiteSpace'] :Token['Identifier'];
             }
 
             /* WhiteSpace */
-            function isWhiteSpace(){
-                console.log(that.char)
+            function isWhiteSpace(c){
+                return c ==='\n' || c === ' '||c === '\t';
             }
 
             function parseWhiteSpace(){
-            
+                var c = that.char;
+                if(isWhiteSpace(c)){
+                    that.token += c;
+                }else{
+                    that.type = Token['Identifier'];
+                    that.expect = null;
+                }
             }
             
             /* break */
