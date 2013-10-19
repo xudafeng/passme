@@ -114,6 +114,9 @@
         };
     }
     _.prototype = {
+        log:function (l){
+            console && this.isObject(console.log) && console.log(l)
+        },
         indexOf:function(item, arr) {
             for (var i = 0, len = arr.length; i < len; ++i) {
                 if (arr[i] === item) {
@@ -212,7 +215,7 @@
             var that = this;
             var c = that.char;
             var hasInitialWord = !!that.token;
-            return hasInitialWord ? (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$') : (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$' || c >=0 && c <=9);
+            return !hasInitialWord ? (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$') : (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$' || c >=0 && c <=9);
         },
         isKeyword:function(){
         
@@ -234,7 +237,7 @@
         },
         isWhiteSpace:function(){
             var c = this.char;
-            return c ==='\n' || c === ' '||c === '\t';
+            return c ==='\n' || c === ' '|| c === '\t';
         },
         validate:function(){
             var that = this;
@@ -283,6 +286,7 @@
                 case 'BooleanLiteral':
                     break;
                 case 'Identifier':
+                    parseIdentifier();
                     break;
                 case 'Keyword':
                     parseKeyword();
@@ -407,91 +411,8 @@
                 };
             }
 
-            function parseKeyword(){
-                var c = that.char;
-                var r = checkKeyWordExpect(c);
-                if(r['token']){
-                    that.token = r['token'];
-                    that.expect = null;
-                }else{
-                    if(!r['isExpect']){
-                        that.type = Token['Identifier'];
-                        that.expect = true;
-                    }
-                }
-            }
-            /* Identifier */
-            function parseIdentifier(){
-                var c = that.char;
-                if(isisWhiteSpace(that.token)){
-                    that.type = Token['WhiteSpace'];
-                }else{
-                    that.token +=c;
-                }
-            }
-
-            /* WhiteSpace */
-            function isWhiteSpace(c){
-                return c ==='\n' || c === ' '||c === '\t';
-            }
-
-            function parseWhiteSpace(){
-                var c = that.char;
-                if(isWhiteSpace(c)){
-                    that.token += c;
-                }else{
-                    that.type = Token['Keyword'];
-                    that.expect = null;
-                }
-            }
-            
-            /* break */
-            function expectBreak(){
-                
-            }
             function error(){
                 
-            }
-
-            /* validata keyword for the first */
-            if(that.type){
-                switch (that.type){
-                    case 'BooleanLiteral':
-                        parseBooleanLiteral();
-                        break;
-                    case 'Identifier':
-                        parseIdentifier();
-                        break;
-                    case 'Keyword':
-                        parseKeyword();
-                        break;
-                    case 'NullLiteral':
-                        parseNullLiteral();
-                        break;
-                    case 'NumericLiteral':
-                        parseNumericLiteral();
-                        break;
-                    case 'Punctuator':
-                        parsePunctuator();
-                        break;
-                    case 'StringLiteral':
-                        parseStringLiteral();
-                        break;
-                    case 'RegularExpression':
-                        parseRegularExpression();
-                        break;
-                    case 'Comment':
-                        parseComment();
-                        break;
-                    case 'WhiteSpace':
-                        parseWhiteSpace();
-                        break;
-                    default:
-                        error();
-                        break;
-                }
-            }else {
-                expectKeyWord();
             }
         }
     };
