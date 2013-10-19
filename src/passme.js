@@ -304,7 +304,7 @@
                     that.expect = null;
                 }else{
                     if(!r['isExpect']){
-                        that.type = isWhiteSpace(that.token) ? Token['WhiteSpace'] :Token['Identifier'];
+                        that.type = Token['Identifier'];
                         that.expect = true;
                     }
                 }
@@ -312,8 +312,11 @@
             /* Identifier */
             function parseIdentifier(){
                 var c = that.char;
-                that.token +=c;
-                //that.type = isWhiteSpace(c) ? Token['WhiteSpace'] :Token['Identifier'];
+                if(isisWhiteSpace(that.token)){
+                    that.type = Token['WhiteSpace'];
+                }else{
+                    that.token +=c;
+                }
             }
 
             /* WhiteSpace */
