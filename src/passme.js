@@ -224,10 +224,11 @@
              * while with     
              */
 
-            function expectKeyWord(c){
+            function expectKeyWord(){
+                var c = that.char;
+                that.token += c;
                 if(_.isIn(c,'bcdefinstvw')){
                     that.type = Token['Keyword'];
-                    that.token += c;
                     switch(c){
                         case 'b':
                             expectWord(['break']);
@@ -263,6 +264,8 @@
                             expectWord(['while','with']);
                             break;
                     }
+                }else{
+                    that.type = Token['Identifier'];
                 }
             }
             function checkKeyWordExpect(c){
@@ -310,9 +313,6 @@
             function parseIdentifier(){
                 var c = that.char;
                 that.token +=c;
-                if(isWhiteSpace(c)){
-                
-                }
                 //that.type = isWhiteSpace(c) ? Token['WhiteSpace'] :Token['Identifier'];
             }
 
@@ -326,7 +326,7 @@
                 if(isWhiteSpace(c)){
                     that.token += c;
                 }else{
-                    that.type = Token['Identifier'];
+                    that.type = Token['Keyword'];
                     that.expect = null;
                 }
             }
@@ -340,14 +340,34 @@
             }
 
             /* validata keyword for the first */
-
             if(that.type){
                 switch (that.type){
-                    case 'Keyword':
-                        parseKeyword();
+                    case 'BooleanLiteral':
+                        parseBooleanLiteral();
                         break;
                     case 'Identifier':
                         parseIdentifier();
+                        break;
+                    case 'Keyword':
+                        parseKeyword();
+                        break;
+                    case 'NullLiteral':
+                        parseNullLiteral();
+                        break;
+                    case 'NumericLiteral':
+                        parseNumericLiteral();
+                        break;
+                    case 'Punctuator':
+                        parsePunctuator();
+                        break;
+                    case 'StringLiteral':
+                        parseStringLiteral();
+                        break;
+                    case 'RegularExpression':
+                        parseRegularExpression();
+                        break;
+                    case 'Comment':
+                        parseComment();
                         break;
                     case 'WhiteSpace':
                         parseWhiteSpace();
@@ -357,7 +377,7 @@
                         break;
                 }
             }else {
-                expectKeyWord(that.char);
+                expectKeyWord();
             }
         },
         validate:function(){
@@ -374,6 +394,7 @@
             var that = this;
             that.token = EMPTY;
             that.expect = null;
+            that.type = null;
         },
         goToNextToken:function(){
             this.index ++;
