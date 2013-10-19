@@ -201,8 +201,12 @@
         },
         getChar:function(){
             var that = this;
+<<<<<<< HEAD
             that.char = that.source[that.index];
             that.index ++;
+=======
+            return that.char = that.source[that.index];
+>>>>>>> 056d7b176ff0d09dff2ebae7aea085f176cc589b
             //that.char = that.source.charCodeAt(that.index);
         },
         isBooleanLiteral:function(){
@@ -258,6 +262,7 @@
                 }
             }
             /* Keyword */
+<<<<<<< HEAD
             function parseKeyword(){
             
             }
@@ -302,6 +307,10 @@
                 case 'WhiteSpace':
                     parseWhiteSpace();
                     break;
+=======
+            function isKeyWord(){
+                
+>>>>>>> 056d7b176ff0d09dff2ebae7aea085f176cc589b
             }
 
             return;
@@ -332,11 +341,11 @@
              * while with     
              */
 
-            function expectKeyWord(c){
+            function expectKeyWord(){
+                var c = that.char;
+                that.token += c;
                 if(_.isIn(c,'bcdefinstvw')){
-
                     that.type = Token['Keyword'];
-                    that.token += c;
                     switch(c){
                         case 'b':
                             expectWord(['break']);
@@ -375,6 +384,8 @@
                             expectWord(['while','with']);
                             break;
                     }
+                }else{
+                    that.type = Token['Identifier'];
                 }
             }
             function checkKeyWordExpect(c){
@@ -414,14 +425,33 @@
                 }else{
                     if(!r['isExpect']){
                         that.type = Token['Identifier'];
-                        that.expect = null;
+                        that.expect = true;
                     }
                 }
             }
             /* Identifier */
             function parseIdentifier(){
                 var c = that.char;
-                console.log(c);
+                if(isisWhiteSpace(that.token)){
+                    that.type = Token['WhiteSpace'];
+                }else{
+                    that.token +=c;
+                }
+            }
+
+            /* WhiteSpace */
+            function isWhiteSpace(c){
+                return c ==='\n' || c === ' '||c === '\t';
+            }
+
+            function parseWhiteSpace(){
+                var c = that.char;
+                if(isWhiteSpace(c)){
+                    that.token += c;
+                }else{
+                    that.type = Token['Keyword'];
+                    that.expect = null;
+                }
             }
             
             /* break */
@@ -433,23 +463,67 @@
             }
 
             /* validata keyword for the first */
-
             if(that.type){
-                
                 switch (that.type){
-                    case 'Keyword':
-                        parseKeyword();
+                    case 'BooleanLiteral':
+                        parseBooleanLiteral();
                         break;
                     case 'Identifier':
                         parseIdentifier();
+                        break;
+                    case 'Keyword':
+                        parseKeyword();
+                        break;
+                    case 'NullLiteral':
+                        parseNullLiteral();
+                        break;
+                    case 'NumericLiteral':
+                        parseNumericLiteral();
+                        break;
+                    case 'Punctuator':
+                        parsePunctuator();
+                        break;
+                    case 'StringLiteral':
+                        parseStringLiteral();
+                        break;
+                    case 'RegularExpression':
+                        parseRegularExpression();
+                        break;
+                    case 'Comment':
+                        parseComment();
+                        break;
+                    case 'WhiteSpace':
+                        parseWhiteSpace();
                         break;
                     default:
                         error();
                         break;
                 }
             }else {
-                expectKeyWord(that.char);
+                expectKeyWord();
             }
+<<<<<<< HEAD
+=======
+        },
+        validate:function(){
+            var that = this;
+            if(that.token && that.type && !that.expect){
+                that.tokens.push({
+                    type:that.type,
+                    value:that.token
+                });
+                that.clearFlags();
+            }
+        },
+        clearFlags:function(){
+            var that = this;
+            that.token = EMPTY;
+            that.expect = null;
+            that.type = null;
+        },
+        goToNextToken:function(){
+            this.index ++;
+>>>>>>> 056d7b176ff0d09dff2ebae7aea085f176cc589b
         }
     };
 
