@@ -2,11 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
-<<<<<<< HEAD
- * Latest build : 2013-10-20 2:27:52
-=======
- * Latest build : 2013-10-19 19:20:37
->>>>>>> 056d7b176ff0d09dff2ebae7aea085f176cc589b
+ * Latest build : 2013-10-20 2:30:32
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -225,12 +221,8 @@
         },
         getChar:function(){
             var that = this;
-<<<<<<< HEAD
             that.char = that.source[that.index];
             that.index ++;
-=======
-            return that.char = that.source[that.index];
->>>>>>> 056d7b176ff0d09dff2ebae7aea085f176cc589b
             //that.char = that.source.charCodeAt(that.index);
         },
         isBooleanLiteral:function(){
@@ -286,7 +278,6 @@
                 }
             }
             /* Keyword */
-<<<<<<< HEAD
             function parseKeyword(){
             
             }
@@ -331,10 +322,6 @@
                 case 'WhiteSpace':
                     parseWhiteSpace();
                     break;
-=======
-            function isKeyWord(){
-                
->>>>>>> 056d7b176ff0d09dff2ebae7aea085f176cc589b
             }
 
             return;
@@ -370,10 +357,6 @@
                 that.token += c;
                 if(_.isIn(c,'bcdefinstvw')){
                     that.type = Token['Keyword'];
-<<<<<<< HEAD
-                    that.token += c;
-=======
->>>>>>> 056d7b176ff0d09dff2ebae7aea085f176cc589b
                     switch(c){
                         case 'b':
                             expectWord(['break']);
@@ -530,28 +513,6 @@
             }else {
                 expectKeyWord();
             }
-<<<<<<< HEAD
-=======
-        },
-        validate:function(){
-            var that = this;
-            if(that.token && that.type && !that.expect){
-                that.tokens.push({
-                    type:that.type,
-                    value:that.token
-                });
-                that.clearFlags();
-            }
-        },
-        clearFlags:function(){
-            var that = this;
-            that.token = EMPTY;
-            that.expect = null;
-            that.type = null;
-        },
-        goToNextToken:function(){
-            this.index ++;
->>>>>>> 056d7b176ff0d09dff2ebae7aea085f176cc589b
         }
     };
 

@@ -201,12 +201,8 @@
         },
         getChar:function(){
             var that = this;
-<<<<<<< HEAD
             that.char = that.source[that.index];
             that.index ++;
-=======
-            return that.char = that.source[that.index];
->>>>>>> 056d7b176ff0d09dff2ebae7aea085f176cc589b
             //that.char = that.source.charCodeAt(that.index);
         },
         isBooleanLiteral:function(){
@@ -262,7 +258,6 @@
                 }
             }
             /* Keyword */
-<<<<<<< HEAD
             function parseKeyword(){
             
             }
@@ -307,10 +302,6 @@
                 case 'WhiteSpace':
                     parseWhiteSpace();
                     break;
-=======
-            function isKeyWord(){
-                
->>>>>>> 056d7b176ff0d09dff2ebae7aea085f176cc589b
             }
 
             return;
@@ -502,28 +493,6 @@
             }else {
                 expectKeyWord();
             }
-<<<<<<< HEAD
-=======
-        },
-        validate:function(){
-            var that = this;
-            if(that.token && that.type && !that.expect){
-                that.tokens.push({
-                    type:that.type,
-                    value:that.token
-                });
-                that.clearFlags();
-            }
-        },
-        clearFlags:function(){
-            var that = this;
-            that.token = EMPTY;
-            that.expect = null;
-            that.type = null;
-        },
-        goToNextToken:function(){
-            this.index ++;
->>>>>>> 056d7b176ff0d09dff2ebae7aea085f176cc589b
         }
     };
 
