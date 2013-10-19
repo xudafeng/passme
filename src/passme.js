@@ -215,7 +215,7 @@
             var that = this;
             var c = that.char;
             var hasInitialWord = !!that.token;
-            return !hasInitialWord ? (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$') : (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$' || c >=0 && c <=9);
+            return hasInitialWord ? (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c === '_' || c === '$') : (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$');
         },
         isKeyword:function(){
         
@@ -228,6 +228,37 @@
 
         },
         isPunctuator:function(){
+            var that = this;
+            var c = that.char;
+            /**
+             * +
+             * -
+             * *
+             * /
+             * %
+             * ++
+             * --
+             ************
+             * =
+             * +=
+             * -=
+             * *=
+             * /=
+             * %=
+             ************
+             * ==
+             * ===
+             * !=
+             * >
+             * <
+             * >=
+             * <=
+             ************
+             * &&
+             * ||
+             * !
+             */
+            
         },
         isStringLiteral:function(){
         },
@@ -257,6 +288,7 @@
                 if(that.isIdentifier()){
                     that.token += char;
                 }else {
+                    console.log(char)
                     that.validate();
                 }
             }
@@ -267,6 +299,13 @@
             /* NullLiteral */
             /* NumericLiteral */
             /* Punctuator */
+            function parsePunctuator(){
+                if(that.isPunctuator()){
+                    that.token += char;
+                }else{
+                    that.validate();
+                }
+            }
             /* StringLiteral */
             /* RegularExpression */
             /* Comment */
@@ -296,6 +335,7 @@
                 case 'NumericLiteral':
                     break;
                 case 'Punctuator':
+                    parsePunctuator();
                     break;
                 case 'StringLiteral':
                     break;
@@ -409,10 +449,6 @@
                     token:_t,
                     isExpect:_e
                 };
-            }
-
-            function error(){
-                
             }
         }
     };
