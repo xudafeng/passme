@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-20 2:30:32
+ * Latest build : 2013-10-20 3:28:46
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -134,6 +134,9 @@
         };
     }
     _.prototype = {
+        log:function (l){
+            console && this.isObject(console.log) && console.log(l)
+        },
         indexOf:function(item, arr) {
             for (var i = 0, len = arr.length; i < len; ++i) {
                 if (arr[i] === item) {
@@ -232,7 +235,7 @@
             var that = this;
             var c = that.char;
             var hasInitialWord = !!that.token;
-            return hasInitialWord ? (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$') : (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$' || c >=0 && c <=9);
+            return hasInitialWord ? (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c === '_' || c === '$') : (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$');
         },
         isKeyword:function(){
         
@@ -245,6 +248,37 @@
 
         },
         isPunctuator:function(){
+            var that = this;
+            var c = that.char;
+            /**
+             * +
+             * -
+             * *
+             * /
+             * %
+             * ++
+             * --
+             ************
+             * =
+             * +=
+             * -=
+             * *=
+             * /=
+             * %=
+             ************
+             * ==
+             * ===
+             * !=
+             * >
+             * <
+             * >=
+             * <=
+             ************
+             * &&
+             * ||
+             * !
+             */
+            
         },
         isStringLiteral:function(){
         },
@@ -254,7 +288,7 @@
         },
         isWhiteSpace:function(){
             var c = this.char;
-            return c ==='\n' || c === ' '||c === '\t';
+            return c ==='\n' || c === ' '|| c === '\t';
         },
         validate:function(){
             var that = this;
@@ -274,6 +308,7 @@
                 if(that.isIdentifier()){
                     that.token += char;
                 }else {
+                    console.log(char)
                     that.validate();
                 }
             }
@@ -284,6 +319,13 @@
             /* NullLiteral */
             /* NumericLiteral */
             /* Punctuator */
+            function parsePunctuator(){
+                if(that.isPunctuator()){
+                    that.token += char;
+                }else{
+                    that.validate();
+                }
+            }
             /* StringLiteral */
             /* RegularExpression */
             /* Comment */
@@ -303,6 +345,7 @@
                 case 'BooleanLiteral':
                     break;
                 case 'Identifier':
+                    parseIdentifier();
                     break;
                 case 'Keyword':
                     parseKeyword();
@@ -312,6 +355,7 @@
                 case 'NumericLiteral':
                     break;
                 case 'Punctuator':
+                    parsePunctuator();
                     break;
                 case 'StringLiteral':
                     break;
@@ -425,93 +469,6 @@
                     token:_t,
                     isExpect:_e
                 };
-            }
-
-            function parseKeyword(){
-                var c = that.char;
-                var r = checkKeyWordExpect(c);
-                if(r['token']){
-                    that.token = r['token'];
-                    that.expect = null;
-                }else{
-                    if(!r['isExpect']){
-                        that.type = Token['Identifier'];
-                        that.expect = true;
-                    }
-                }
-            }
-            /* Identifier */
-            function parseIdentifier(){
-                var c = that.char;
-                if(isisWhiteSpace(that.token)){
-                    that.type = Token['WhiteSpace'];
-                }else{
-                    that.token +=c;
-                }
-            }
-
-            /* WhiteSpace */
-            function isWhiteSpace(c){
-                return c ==='\n' || c === ' '||c === '\t';
-            }
-
-            function parseWhiteSpace(){
-                var c = that.char;
-                if(isWhiteSpace(c)){
-                    that.token += c;
-                }else{
-                    that.type = Token['Keyword'];
-                    that.expect = null;
-                }
-            }
-            
-            /* break */
-            function expectBreak(){
-                
-            }
-            function error(){
-                
-            }
-
-            /* validata keyword for the first */
-            if(that.type){
-                switch (that.type){
-                    case 'BooleanLiteral':
-                        parseBooleanLiteral();
-                        break;
-                    case 'Identifier':
-                        parseIdentifier();
-                        break;
-                    case 'Keyword':
-                        parseKeyword();
-                        break;
-                    case 'NullLiteral':
-                        parseNullLiteral();
-                        break;
-                    case 'NumericLiteral':
-                        parseNumericLiteral();
-                        break;
-                    case 'Punctuator':
-                        parsePunctuator();
-                        break;
-                    case 'StringLiteral':
-                        parseStringLiteral();
-                        break;
-                    case 'RegularExpression':
-                        parseRegularExpression();
-                        break;
-                    case 'Comment':
-                        parseComment();
-                        break;
-                    case 'WhiteSpace':
-                        parseWhiteSpace();
-                        break;
-                    default:
-                        error();
-                        break;
-                }
-            }else {
-                expectKeyWord();
             }
         }
     };
