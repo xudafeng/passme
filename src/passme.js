@@ -154,8 +154,7 @@
             return __typeof('Undefined');
         }
     };
-    _ = new _();
-    exports._ = _;
+    exports._ = _ = new _();
     /* lexicalParse class */
     function LexAnalyzer(cfg){
         this.source = cfg.code;
@@ -230,7 +229,6 @@
 
                     that.type = Token['Keyword'];
                     that.token += c;
-
                     switch(c){
                         case 'b':
                             expectWord(['break']);
