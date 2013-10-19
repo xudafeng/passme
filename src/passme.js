@@ -189,14 +189,14 @@
         },
         getChar:function(){
             var that = this;
-            that.char = that.source[that.index];
+            return that.char = that.source[that.index];
             //that.char = that.source.charCodeAt(that.index);
         },
         getToken:function(){
             var that = this;
             /* Keyword */
-            function isKeyWordState(){
-                return that.type === Token['Keyword'];
+            function isKeyWord(){
+                
             }
             function expectWord(w){
                 if(w.length >1){
@@ -226,7 +226,6 @@
 
             function expectKeyWord(c){
                 if(_.isIn(c,'bcdefinstvw')){
-
                     that.type = Token['Keyword'];
                     that.token += c;
                     switch(c){
@@ -302,7 +301,7 @@
                     that.expect = null;
                 }else{
                     if(!r['isExpect']){
-                        that.type = Token['Identifier'];
+                        that.type = isWhiteSpace() ? Token['WhiteSpace'] :Token['Identifier'];
                         that.expect = null;
                     }
                 }
@@ -310,7 +309,17 @@
             /* Identifier */
             function parseIdentifier(){
                 var c = that.char;
+                console.log(that.token)
                 console.log(c);
+            }
+
+            /* WhiteSpace */
+            function isWhiteSpace(){
+                console.log(that.char)
+            }
+
+            function parseWhiteSpace(){
+            
             }
             
             /* break */
@@ -324,13 +333,15 @@
             /* validata keyword for the first */
 
             if(that.type){
-                
                 switch (that.type){
                     case 'Keyword':
                         parseKeyword();
                         break;
                     case 'Identifier':
                         parseIdentifier();
+                        break;
+                    case 'WhiteSpace':
+                        parseWhiteSpace();
                         break;
                     default:
                         error();
