@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-20 3:36:01
+ * Latest build : 2013-10-20 11:31:49
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -37,6 +37,8 @@
 
     /* static */
     var EMPTY = '';
+
+    var KEY_WORDS = 'break|case|catch|continue|default|delete|do|else|finally|for|function|if|in|instanceof|new|return|switch|this|throw|try|typeof|var|void|while|with'.split('|');
     
     /* default options */
     var options = {
@@ -181,10 +183,10 @@
     /* lexicalParse class */
     function LexAnalyzer(cfg){
         this.source = cfg.code;
-        return this.init(cfg);
+        return this.init();
     }
     LexAnalyzer.prototype = {
-        init:function(cfg){
+        init:function(){
             var that = this;
             that.initIndex();
             that.initFlags();
@@ -247,7 +249,8 @@
             
         },
         isNumericLiteral:function(){
-
+            var c = this.char;
+            return c >= 0 && c <= 9;
         },
         isPunctuator:function(){
             var that = this;
@@ -283,6 +286,8 @@
             return _.isIn(c,'+-*/%=&|!\'\"\,\;');
         },
         isStringLiteral:function(){
+            var c = this.char;
+            return 1;
         },
         isRegularExpression:function(){
         },
@@ -307,15 +312,49 @@
             /* BooleanLiteral */
             /* Identifier */
             function parseIdentifier(){
-                if(that.isIdentifier()){
-                    that.token += char;
-                }else {
+                if(isKeyword()){
+                    that.type = Token['Keyword'];
                     that.validate();
+                }else{
+                    if(that.isIdentifier()){
+                        that.token += char;
+                    }else {
+                        that.validate();
+                    }
                 }
             }
             /* Keyword */
+            function isKeyword(){
+                var t = that.token;
+                var r;
+                if(_.isIn(t[0],'bcdefinrstvw')){
+                    /** 
+                     * javascript es5 Keywords:
+                     * break 
+                     * case catch continue 
+                     * default delete do 
+                     * else 
+                     * finally for function 
+                     * if in instanceof 
+                     * new 
+                     * return 
+                     * switch 
+                     * this throw try typeof 
+                     * var void 
+                     * while with     
+                     */
+                    if(_.isIn(t,KEY_WORDS)){
+                        r = !r;
+                    }else{
+                        r = !!r;
+                    }
+                }else {
+                    r = !!r;
+                }
+                return r;
+            }
             function parseKeyword(){
-            
+                
             }
             /* NullLiteral */
             /* NumericLiteral */
@@ -367,96 +406,6 @@
                 case 'WhiteSpace':
                     parseWhiteSpace();
                     break;
-            }
-            /** 
-             * javascript es5 Keywords:
-             * break 
-             * case catch continue 
-             * default delete do 
-             * else 
-             * finally for function 
-             * if in instanceof 
-             * new 
-             * return 
-             * switch 
-             * this throw try typeof 
-             * var void 
-             * while with     
-             */
-
-            function expectKeyWord(){
-                var c = that.char;
-                that.token += c;
-                if(_.isIn(c,'bcdefinstvw')){
-                    that.type = Token['Keyword'];
-                    switch(c){
-                        case 'b':
-                            expectWord(['break']);
-                            break;
-                        case 'c':
-                            expectWord(['case','catch','continue']);
-                            break;
-                        case 'd':
-                            expectWord(['default','delete','do']);
-                            break;
-                        case 'e':
-                            expectWord(['else']);
-                            break;
-                        case 'f':
-                            expectWord(['finally','for','function']);
-                            break;
-                        case 'i':
-                            expectWord(['if','in','instanceof']);
-                            break;
-                        case 'n':
-                            expectWord(['new']);
-                            break;
-                        case 'r':
-                            expectWord(['return']);
-                            break;
-                        case 's':
-                            expectWord(['switch']);
-                            break;
-                        case 't':
-                            expectWord(['this','throw','try','typeof']);
-                            break;
-                        case 'v':
-                            expectWord(['var','void']);
-                            break;
-                        case 'w':
-                            expectWord(['while','with']);
-                            break;
-                    }
-                }else{
-                    that.type = Token['Identifier'];
-                }
-            }
-            function checkKeyWordExpect(c){
-                var _t ,_e = false;
-                that.token += c;
-                if(_.isArray(that.expect)){
-                    _.each(that.expect,function(i){
-                        if(i===that.token){
-                            _t = that.token;
-                        }else{
-                            if(_.isIn(that.token,i)){
-                                _e = true;
-                            }
-                        }
-                    });
-                }else{
-                    if(that.token === that.expect){
-                        _t = that.expect;
-                    }else{
-                        if(_.isIn(that.token,that.expect)){
-                            _e = true;
-                        }
-                    }
-                }
-                return {
-                    token:_t,
-                    isExpect:_e
-                };
             }
         }
     };
