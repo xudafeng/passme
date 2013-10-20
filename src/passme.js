@@ -19,7 +19,11 @@
     var EMPTY = '';
 
     var KEY_WORDS = 'break|case|catch|continue|default|delete|do|else|finally|for|function|if|in|instanceof|new|return|switch|this|throw|try|typeof|var|void|while|with'.split('|');
+
+    var BOOlEAN_LITERALS = ['true','false'];
     
+    var NULLLITERAL = ['null'];
+
     /* default options */
     var options = {
         ecmascript:5,
@@ -213,7 +217,8 @@
             //that.char = that.source.charCodeAt(that.index);
         },
         isBooleanLiteral:function(){
-        
+            var t = this.token;
+            return _.isIn(t,BOOlEAN_LITERALS);
         },
         isIdentifier:function(){
             var that = this;
@@ -222,11 +227,37 @@
             return hasInitialWord ? (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c === '_' || c === '$') : (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$');
         },
         isKeyword:function(){
-        
+            var t = this.token;
+            var r;
+            if(_.isIn(t[0],'bcdefinrstvw')){
+                /** 
+                 * javascript es5 Keywords:
+                 * break 
+                 * case catch continue 
+                 * default delete do 
+                 * else 
+                 * finally for function 
+                 * if in instanceof 
+                 * new 
+                 * return 
+                 * switch 
+                 * this throw try typeof 
+                 * var void 
+                 * while with     
+                 */
+                if(_.isIn(t,KEY_WORDS)){
+                    r = !r;
+                }else{
+                    r = !!r;
+                }
+            }else {
+                r = !!r;
+            }
+            return r;
         },
         isNullLiteral:function(){
-            var c = this.char;
-            
+            var t = this.token;
+            return _.isIn(t,NULLLITERAL);
         },
         isNumericLiteral:function(){
             var c = this.char;
@@ -263,7 +294,7 @@
              * ||
              * !
              */
-            return _.isIn(c,'+-*/%=&|!\'\"\,\;');
+            return _.isIn(c,'+-*/%=&|!\'\"\,\;\(\)');
         },
         isStringLiteral:function(){
             var c = this.char;
@@ -292,8 +323,14 @@
             /* BooleanLiteral */
             /* Identifier */
             function parseIdentifier(){
-                if(isKeyword()){
-                    that.type = Token['Keyword'];
+                if(that.isKeyword()){
+                    if(that.isBooleanLiteral()){
+                        that.type = Token['BooleanLiteral'];
+                    }else if(that.isNullLiteral()){
+                        that.type = Token['NullLiteral'];
+                    }else {
+                        that.type = Token['Keyword'];
+                    }
                     that.validate();
                 }else{
                     if(that.isIdentifier()){
@@ -304,35 +341,6 @@
                 }
             }
             /* Keyword */
-            function isKeyword(){
-                var t = that.token;
-                var r;
-                if(_.isIn(t[0],'bcdefinrstvw')){
-                    /** 
-                     * javascript es5 Keywords:
-                     * break 
-                     * case catch continue 
-                     * default delete do 
-                     * else 
-                     * finally for function 
-                     * if in instanceof 
-                     * new 
-                     * return 
-                     * switch 
-                     * this throw try typeof 
-                     * var void 
-                     * while with     
-                     */
-                    if(_.isIn(t,KEY_WORDS)){
-                        r = !r;
-                    }else{
-                        r = !!r;
-                    }
-                }else {
-                    r = !!r;
-                }
-                return r;
-            }
             function parseKeyword(){
                 
             }
