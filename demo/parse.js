@@ -4,7 +4,7 @@
     var code = document.getElementById('code').value;
 
     var tokens = passme.tokenize(code,{
-       // whiteSpace:true
+        //whiteSpace:true
     });
 
     for(var i = 0;i<tokens.length;i++){

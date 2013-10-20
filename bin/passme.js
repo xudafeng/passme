@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-20 20:57:54
+ * Latest build : 2013-10-21 1:34:50
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -224,6 +224,10 @@
                 that.type = Token['Identifier'];
             }else if(that.isPunctuator()){
                 that.type = Token['Punctuator'];
+            }else if(that.isNumericLiteral()){
+                that.type = Token['NumericLiteral'];
+            }else if(that.isStringLiteral()){
+                that.type = Token['StringLiteral'];
             }
             that.token += that.char;
         },
@@ -295,11 +299,12 @@
         isPunctuator:function(){
             var that = this;
             var c = that.char;
-            return _.isIn(c,'+-*/%=&|!\'\"\,\;\(\)');
+            return _.isIn(c,'+-*/%=&|!\,\;\(\)');
         },
         isStringLiteral:function(){
             var c = this.char;
-            return 1;
+            var t = this.token;
+            return !!t ? t[t.length-1] !== '\'' && t.length > 1 || t.length === 1 && c !== '\'' : c === '\'';
         },
         isRegularExpression:function(){
         },
@@ -326,7 +331,6 @@
         getToken:function(){
             var that = this;
             var char = that.char;
-            /* BooleanLiteral */
             /* Identifier */
             function parseIdentifier(){
                 if(that.isKeyword()){
@@ -346,15 +350,17 @@
                     }
                 }
             }
-            /* Keyword */
-            function parseKeyword(){
-                
-            }
-            /* NullLiteral */
             /* NumericLiteral */
+            function parseNumericLiteral(){
+                if(that.isNumericLiteral()){
+                    that.token += char;
+                }else {
+                    that.validate();
+                }
+            }
             /* Punctuator */
             function parsePunctuator(){
-                if(that.isPunctuator()){
+                var t = that.token;
                 /***
                  * +
                  * -
@@ -390,12 +396,25 @@
                  * '
                  * "
                  ***/
-                    that.token += char;
-                }else{
+
+                if(_.isIn(t,'\,|\;|\(|\)'.split('|'))){
                     that.validate();
+                }else{
+                    if(that.isPunctuator()){
+                        that.token += char;
+                    }else{
+                        that.validate();
+                    }
                 }
             }
             /* StringLiteral */
+            function parseStringLiteral(){
+                if(that.isStringLiteral()){
+                    that.token += char;
+                }else {
+                    that.validate();
+                }
+            }
             /* RegularExpression */
             /* Comment */
             /* WhiteSpace */
@@ -411,22 +430,20 @@
                 case null:
                     that.initType();
                     break;
-                case 'BooleanLiteral':
-                    break;
                 case 'Identifier':
                     parseIdentifier();
                     break;
                 case 'Keyword':
                     parseKeyword();
                     break;
-                case 'NullLiteral':
-                    break;
                 case 'NumericLiteral':
+                    parseNumericLiteral();
                     break;
                 case 'Punctuator':
                     parsePunctuator();
                     break;
                 case 'StringLiteral':
+                    parseStringLiteral();
                     break;
                 case 'RegularExpression':
                     break;
