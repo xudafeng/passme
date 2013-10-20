@@ -284,7 +284,7 @@
         isStringLiteral:function(){
             var c = this.char;
             var t = this.token;
-            return !!t ? t[t.length-1] !== '\'' && t.length > 1 || t.length === 1 && c !== '\'' || t.length === 1 && c === '\'' && t[0] ==='\'' : c === '\'';
+            return !!t ? t[t.length-1] !== '\'' && t.length > 1 || t.length === 1 && c !== '\'' || t.length === 1 && c === '\'' && t[0] ==='\'': c === '\'';
         },
         isRegularExpression:function(){
         },

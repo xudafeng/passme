@@ -12,197 +12,416 @@
 
 ;(function(root,factory){
     'use strict';
-})(this,function(exports){
-    function LexicalParse (cfg){
-        this.origin = cfg.origin || '';
-        this.init()
-        return this.tokens;
+    if(typeof define === 'function' && define.amd) {
+        return define(['exports'], factory);
+    }else if(typeof exports !== 'undefined') {
+        return factory(exports);
+    }else{
+        factory(root['passme'] || (root['passme'] = {}));
     }
-    LexicalParse.prototype = {
-            init:function(){
-                this.parser();
-            },
-            parser:function(){
-                var TPL = this.origin + ' ',
-                    length = TPL.length-1;
-                var i = this.i = -1;
-                var data = '',
-                    token  = '',
-                    tokens  = [];
-                var tags = {
-                    $Open : '{'
-                    ,$At : '@'
-                    ,$I : 'i'
-                    ,$E : 'e'
-                    ,$ : '$'
-                    ,$L : 'l'
-                    ,$A : 'a'
-                    ,$Wrap :'\n'
-                    ,$Close : '}'
-                    ,$End :'/'
-                    ,$Blank : ' '
-                    ,$Lt:'<'
-                    ,$Rt:'>'
-                };
-                function tokenization(){
-                    if(token || data){
-                        tokens.push({
-                            tag: token || 'text',
-                            exp: data
-                        });
-                        token = data = '';
-                    }
-                };
-                var parseState = {
-                    start:function(){
-                        if(tags.$Open == TPL[i]){
-                            return parseState.tagOpen;
-                        }else{
-                            data += TPL[i];
-                            return parseState.textData;
-                        }
-                    }
-                    ,tagOpen:function(){
-                        if(tags.$At == TPL[i]){
-                            tokenization();
-                            token += TPL[i];
-                            return parseState.identifyTag;
-                        }else if(tags.$Close == TPL[i]){
-                            return parseState.tagClose;
-                        }else{
-                            data += tags.$Open + TPL[i];
-                            return parseState.textData;
-                        }
-                    }
-                    ,tagClose:function(){
-                        if(tags.$Open == TPL[i]){
-                            return parseState.tagOpen;
-                        }else if(tags.$ == TPL[i]){
-                            return parseState.identifyVar;
-                        }else if(tags.$Wrap == TPL[i]){
-                            data += TPL[i];
-                            return parseState.textData;
-                        }else{
-                            data += TPL[i];
-                            return parseState.textData;
-                        }
-                    }
-                    ,tag$:function(){
-                        if(tags.$Open == TPL[i]){
-                            tokenization();
-                            token = tags.$;
-                            return parseState.identifyVar;
-                        }else{
-                            data += tags.$ + TPL[i];
-                            return parseState.textData;
-                        }
-                    }
-                    ,textData:function(){
-                        if(this.i == length){
-                            tokenization();
-                        }else if(tags.$Open == TPL[i]){
-                            return parseState.tagOpen;
-                        }else if(tags.$Wrap == TPL[i]){
-                            data += TPL[i];
-                            return parseState.textData;
-                        }else if(tags.$ == TPL[i]){
-                            return parseState.tag$;
-                        }else{
-                            data += TPL[i];
-                            if(TPL.length == i+1){
-                                tokenization();
-                                return;
-                            }
-                            return parseState.textData;
-                        }
-                    }
-                    ,identifyTag:function(){
-                        if(tags.$E == TPL[i] && token == tags.$At){
-                            token = TPL[i];
-                            return parseState.identifyTag;
-                        }else if(tags.$A == TPL[i] && tags.$E == token){
-                            token = 'each';
-                            this.i += 2;
-                            return parseState.identifyTag;
-                        }else if(tags.$L == TPL[i] && tags.$E == token){
-                            token = 'else';
-                            this.i += 2;
-                            return parseState.identifyTag;
-                        }else if(tags.$I == TPL[i] && token == tags.$At){
-                            token = 'if';
-                            this.i ++;
-                            return parseState.identifyTag;
-                        }else if(tags.$End == TPL[i] && token == tags.$At){
-                            token += TPL[i];
-                            return parseState.identifyTag;
-                        }else if(tags.$E == TPL[i] && token == tags.$At + tags.$End){
-                            token = '/each';
-                            this.i +=3;
-                            tokenization();
-                            return parseState.identifyTag;
-                        }else if(tags.$I == TPL[i] && token == tags.$At + tags.$End){
-                            token = '/if';
-                            this.i ++;
-                            tokenization();
-                            return parseState.identifyTag;
-                        }else if(tags.$Blank == TPL[i]){
-                            data += TPL[i];
-                            return parseState.identifyTag;
-                        }else if(tags.$Close == TPL[i]){
-                            tokenization();
-                            return parseState.tagClose;
-                        }else if (tags.$End == TPL[i]){
-                            token += TPL[i];
-                            return parseState.identifyTag;
-                        }else if(tags.$Wrap == TPL[i]){
-                            return parseState.identifyTag;
-                        }else{
-                            data += TPL[i];
-                            return parseState.identifyTag;
-                        }
-                    }
-                    ,identifyVar:function(){
-                        if(tags.$Close == TPL[i]){
-                            tokenization();
-                            return parseState.tagClose;
-                        }else{
-                            data += TPL[i];
-                            return parseState.identifyVar;
-                        }
-                    }
-                    ,identifyComment:function(){
-                        if(tags.$Wrap == TPL[i]){
-                            tokenization();
-                            return parseState.textData;
-                        }else{
-                            data += TPL[i];
-                            return parseState.identifyComment;
-                        }
-                    }
-                    ,end:function(){
+})(this,function(exports,undefined){
+    var Sytax,
+        Regex,
+        Token,
+        Message;
 
-                    }
-                    ,error:function(){
+    var EMPTY = '';
 
-                    }
-                };
-                this.state = parseState.start;
+    var KEY_WORDS_AND_BOOlEAN_LITERALS_AND_NULLLITERAL = 'break|case|catch|continue|default|delete|do|else|finally|for|function|if|in|instanceof|new|return|switch|this|throw|try|typeof|var|void|while|with|true|false|null'.split('|');
 
-                for(var i = 0; i < TPL.length;i++){
-                    this.inputByChar(i);
-                }
-                this.tokens = tokens;
-            },
-            inputByChar:function(c){
-                if(this.i < c){
-                    this.i = c;
-                    this.state = this.state();
-                }else {
+    var BOOlEAN_LITERALS = ['true','false'];
+    
+    var NULLLITERAL = ['null'];
+
+    var options = {
+        ecmascript:5,
+        comment:true,
+        whiteSpace:false
+    }
+
+    var userConfig = {};
+
+    Syntax = {
+        AssignmentExpression: 'AssignmentExpression',
+        ArrayExpression: 'ArrayExpression',
+        ArrayPattern: 'ArrayPattern',
+        ArrowFunctionExpression: 'ArrowFunctionExpression',
+        BlockStatement: 'BlockStatement',
+        BinaryExpression: 'BinaryExpression',
+        BreakStatement: 'BreakStatement',
+        CallExpression: 'CallExpression',
+        CatchClause: 'CatchClause',
+        ComprehensionBlock: 'ComprehensionBlock',
+        ComprehensionExpression: 'ComprehensionExpression',
+        ConditionalExpression: 'ConditionalExpression',
+        ContinueStatement: 'ContinueStatement',
+        DirectiveStatement: 'DirectiveStatement',
+        DoWhileStatement: 'DoWhileStatement',
+        DebuggerStatement: 'DebuggerStatement',
+        EmptyStatement: 'EmptyStatement',
+        ExpressionStatement: 'ExpressionStatement',
+        ForStatement: 'ForStatement',
+        ForInStatement: 'ForInStatement',
+        FunctionDeclaration: 'FunctionDeclaration',
+        FunctionExpression: 'FunctionExpression',
+        Identifier: 'Identifier',
+        IfStatement: 'IfStatement',
+        Literal: 'Literal',
+        LabeledStatement: 'LabeledStatement',
+        LogicalExpression: 'LogicalExpression',
+        MemberExpression: 'MemberExpression',
+        NewExpression: 'NewExpression',
+        ObjectExpression: 'ObjectExpression',
+        ObjectPattern: 'ObjectPattern',
+        Program: 'Program',
+        Property: 'Property',
+        ReturnStatement: 'ReturnStatement',
+        SequenceExpression: 'SequenceExpression',
+        SwitchStatement: 'SwitchStatement',
+        SwitchCase: 'SwitchCase',
+        ThisExpression: 'ThisExpression',
+        ThrowStatement: 'ThrowStatement',
+        TryStatement: 'TryStatement',
+        UnaryExpression: 'UnaryExpression',
+        UpdateExpression: 'UpdateExpression',
+        VariableDeclaration: 'VariableDeclaration',
+        VariableDeclarator: 'VariableDeclarator',
+        WhileStatement: 'WhileStatement',
+        WithStatement: 'WithStatement',
+        YieldExpression: 'YieldExpression'
+    };
+
+    Token = {
+        BooleanLiteral: 1,
+        Identifier: 2,
+        Keyword: 3,
+        NullLiteral: 4,
+        NumericLiteral: 5,
+        Punctuator: 6,
+        StringLiteral: 7,
+        RegularExpression: 8,
+        Comment:9,
+        WhiteSpace:10
+    };
+    /* map for type */
+
+    Token['BooleanLiteral'] = 'BooleanLiteral';
+    Token['Identifier'] = 'Identifier';
+    Token['Keyword'] = 'Keyword';
+    Token['NullLiteral'] = 'NullLiteral';
+    Token['NumericLiteral'] = 'NumericLiteral';
+    Token['Punctuator'] = 'Punctuator';
+    Token['StringLiteral'] = 'StringLiteral';
+    Token['RegularExpression'] = 'RegularExpression';
+    Token['Comment'] = 'Comment';
+    Token['WhiteSpace'] = 'WhiteSpace';
+
+    Message = {};
+
+
+    var _ = function(){
+    
+    };
+    function __typeof(type){
+        return function(obj){
+            return Object.prototype.toString.call(obj) === '[object ' + type + ']';
+        };
+    }
+    _.prototype = {
+        log:function (l){
+            console && this.isObject(console.log) && console.log(l);
+        },
+        indexOf:function(item, arr) {
+            for (var i = 0, len = arr.length; i < len; ++i) {
+                if (arr[i] === item) {
+                    return i;
                 }
             }
-        };
-    exports.lexicalParse = LexicalParse;
+            return -1;
+        },
+        inArray:function(item, arr) {
+            return this.indexOf(item, arr) > -1;
+        },
+        isIn:function(i,s){
+            return !!~s.indexOf(i);
+        },
+        mix:function(r,s){
+            for(var i in s){
+                r[i] = s[i];
+            };
+            return r;
+        },
+        each:function(object, fn) {
+            if(object){
+                for(var i in object){
+                    if(i !== 'length' && i !== 'item'){
+                        fn.call(this,object[i],i);
+                    }
+                }
+            }
+            return object;
+        },
+        isString:function(){
+            return __typeof('String');
+        },
+        isArray:function(){
+            return __typeof('Array');
+        },
+        isObject:function(){
+            return __typeof('Object');
+        },
+        isFunction:function(){
+            return __typeof('Function');
+        },
+        isUndefined:function(){
+            return __typeof('Undefined');
+        }
+    };
+    exports._ = _ = new _();
+    function LexAnalyzer(cfg){
+        this.source = cfg.code;
+        return this.init();
+    }
+    LexAnalyzer.prototype = {
+        init:function(){
+            var that = this;
+            that.initIndex();
+            that.initFlags();
+            that.scanner();
+            return this.tokens;
+        },
+        initIndex:function(){
+            var that = this;
+            that.length = that.source.length;
+            that.index = 0;
+        },
+        initFlags:function(){
+            var that = this;
+            that.tokens = [];
+            that.clearFlags();
+        },
+        initType:function(){
+            var that = this;
+            if(that.isWhiteSpace()){
+                that.type = Token['WhiteSpace'];
+            }else if(that.isIdentifier()){
+                that.type = Token['Identifier'];
+            }else if(that.isPunctuator()){
+                that.type = Token['Punctuator'];
+            }else if(that.isNumericLiteral()){
+                that.type = Token['NumericLiteral'];
+            }else if(that.isStringLiteral()){
+                that.type = Token['StringLiteral'];
+            }
+            that.token += that.char;
+        },
+        clearFlags:function(){
+            var that = this;
+            that.token = EMPTY;
+            that.type = null;
+        },
+        scanner:function(){
+            var that = this;
+            while (that.index <= that.length -1){
+                that.getChar();
+                that.getToken();
+            }
+        },
+        getChar:function(){
+            var that = this;
+            that.char = that.source[that.index];
+            that.index ++;
+        },
+        isBooleanLiteral:function(){
+            var t = this.token;
+            return _.isIn(t,BOOlEAN_LITERALS);
+        },
+        isIdentifier:function(){
+            var that = this;
+            var c = that.char;
+            var hasInitialWord = !!that.token;
+            return hasInitialWord ? (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c === '_' || c === '$') : (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$');
+        },
+        isKeyword:function(){
+            var t = this.token;
+            var r;
+            if(_.isIn(t[0],'bcdefinrstvw')){
+                /** 
+                 * javascript es5 Keywords:
+                 * break 
+                 * case catch continue 
+                 * default delete do 
+                 * else 
+                 * finally for function 
+                 * if in instanceof 
+                 * new 
+                 * return 
+                 * switch 
+                 * this throw try typeof 
+                 * var void 
+                 * while with     
+                 */
+                if(_.isIn(t,KEY_WORDS_AND_BOOlEAN_LITERALS_AND_NULLLITERAL)){
+                    r = !r;
+                }else{
+                    r = !!r;
+                }
+            }else {
+                r = !!r;
+            }
+            return r;
+        },
+        isNullLiteral:function(){
+            var t = this.token;
+            return _.isIn(t,NULLLITERAL);
+        },
+        isNumericLiteral:function(){
+            var c = this.char;
+            return c >= '0' && c <= '9';
+        },
+        isPunctuator:function(){
+            var that = this;
+            var c = that.char;
+            return _.isIn(c,'+-*/%=&|!><:?.\{\}\[\]\,\;\(\)');
+        },
+        isStringLiteral:function(){
+            var c = this.char;
+            var t = this.token;
+            return !!t ? t[t.length-1] !== '\'' && t.length > 1 || t.length === 1 && c !== '\'' || t.length === 1 && c === '\'' && t[0] ==='\'' : c === '\'';
+        },
+        isRegularExpression:function(){
+        },
+        isComment:function(){
+        },
+        isWhiteSpace:function(){
+            var c = this.char;
+            return c ==='\n' || c === ' '|| c === '\t';
+        },
+        validate:function(){
+            var that = this;
+            var whiteSpace = userConfig.whiteSpace;
+            var filter;
+            if(that.type === Token['WhiteSpace'] && !whiteSpace){
+                filter = true;
+            }
+            !filter && that.tokens.push({
+                type:that.type,
+                value:that.token
+            });
+            that.clearFlags();
+            that.initType();
+        },
+        getToken:function(){
+            var that = this;
+            var char = that.char;
+            function parseIdentifier(){
+                if(that.isIdentifier()){
+                    that.token += char;
+                }else {
+                    if(that.isKeyword()){
+                        if(that.isBooleanLiteral()){
+                            that.type = Token['BooleanLiteral'];
+                        }else if(that.isNullLiteral()){
+                            that.type = Token['NullLiteral'];
+                        }else {
+                            that.type = Token['Keyword'];
+                        }
+                    }
+                    that.validate();
+                }
+            }
+            function parseNumericLiteral(){
+                if(that.isNumericLiteral()){
+                    that.token += char;
+                }else {
+                    that.validate();
+                }
+            }
+            function parsePunctuator(){
+                var t = that.token;
 
+
+                if(_.isIn(t,'\,|\;|\(|\)|\[|\]|\{|\}|:|?'.split('|'))){
+                    that.validate();
+                }else{
+                    if(that.isPunctuator()){
+                        that.token += char;
+                    }else{
+                        that.validate();
+                    }
+                }
+            }
+            function parseStringLiteral(){
+                if(that.isStringLiteral()){
+                    that.token += char;
+                }else {
+                    that.validate();
+                }
+            }
+            function parseWhiteSpace(){
+                if(that.isWhiteSpace()){
+                    that.token += char;
+                }else{
+                    that.validate();
+                }
+            }
+            switch(that.type){
+                case null:
+                    that.initType();
+                    break;
+                case 'Identifier':
+                    parseIdentifier();
+                    break;
+                case 'Keyword':
+                    parseKeyword();
+                    break;
+                case 'NumericLiteral':
+                    parseNumericLiteral();
+                    break;
+                case 'Punctuator':
+                    parsePunctuator();
+                    break;
+                case 'StringLiteral':
+                    parseStringLiteral();
+                    break;
+                case 'RegularExpression':
+                    break;
+                case 'Comment':
+                    break;
+                case 'WhiteSpace':
+                    parseWhiteSpace();
+                    break;
+            }
+        }
+    };
+
+    function throwError(){
+    
+    }
+
+    function Parser(){
+        this.init();
+    }
+    Parser.prototype = {
+        init:function(){
+        
+        }
+    };
+    function setOptions(code,o){
+        userConfig = _.mix(options,o);
+        _.mix(userConfig,{
+            code:code
+        });
+    }
+    function parse(code,options){
+    }
+    function tokenize(code,o){
+        setOptions(code,o);
+        return new LexAnalyzer(userConfig);
+    }
+    exports.version = '1.0.0';
+    exports.parse = parse;
+    exports.tokenize = tokenize;
 });
 </textarea>
 </div>
