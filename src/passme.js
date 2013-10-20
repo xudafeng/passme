@@ -18,7 +18,7 @@
     /* static */
     var EMPTY = '';
 
-    var KEY_WORDS = 'break|case|catch|continue|default|delete|do|else|finally|for|function|if|in|instanceof|new|return|switch|this|throw|try|typeof|var|void|while|with'.split('|');
+    var KEY_WORDS_AND_BOOlEAN_LITERALS_AND_NULLLITERAL = 'break|case|catch|continue|default|delete|do|else|finally|for|function|if|in|instanceof|new|return|switch|this|throw|try|typeof|var|void|while|with|true|false|null'.split('|');
 
     var BOOlEAN_LITERALS = ['true','false'];
     
@@ -245,7 +245,7 @@
                  * var void 
                  * while with     
                  */
-                if(_.isIn(t,KEY_WORDS)){
+                if(_.isIn(t,KEY_WORDS_AND_BOOlEAN_LITERALS_AND_NULLLITERAL)){
                     r = !r;
                 }else{
                     r = !!r;
@@ -261,7 +261,7 @@
         },
         isNumericLiteral:function(){
             var c = this.char;
-            return c >= 0 && c <= 9;
+            return c >= '0' && c <= '9';
         },
         isPunctuator:function(){
             var that = this;
