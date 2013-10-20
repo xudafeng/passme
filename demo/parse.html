@@ -10,21 +10,200 @@
 <div>
 <textarea id="code">
 
-;(function(win){
-    var doc = document;
-
-    var code = document.getElementById('code').value;
-
-    var tokens = passme.tokenize(code,{
-        whiteSpace:true
-    });
-
-    for(var i = 0;i<tokens.length;i++){
-        console.log(tokens[i])
-
+;(function(root,factory){
+    'use strict';
+})(this,function(exports){
+    function LexicalParse (cfg){
+        this.origin = cfg.origin || '';
+        this.init()
+        return this.tokens;
     }
-})(this);
+    LexicalParse.prototype = {
+            init:function(){
+                this.parser();
+            },
+            parser:function(){
+                var TPL = this.origin + ' ',
+                    length = TPL.length-1;
+                var i = this.i = -1;
+                var data = '',
+                    token  = '',
+                    tokens  = [];
+                var tags = {
+                    $Open : '{'
+                    ,$At : '@'
+                    ,$I : 'i'
+                    ,$E : 'e'
+                    ,$ : '$'
+                    ,$L : 'l'
+                    ,$A : 'a'
+                    ,$Wrap :'\n'
+                    ,$Close : '}'
+                    ,$End :'/'
+                    ,$Blank : ' '
+                    ,$Lt:'<'
+                    ,$Rt:'>'
+                };
+                function tokenization(){
+                    if(token || data){
+                        tokens.push({
+                            tag: token || 'text',
+                            exp: data
+                        });
+                        token = data = '';
+                    }
+                };
+                var parseState = {
+                    start:function(){
+                        if(tags.$Open == TPL[i]){
+                            return parseState.tagOpen;
+                        }else{
+                            data += TPL[i];
+                            return parseState.textData;
+                        }
+                    }
+                    ,tagOpen:function(){
+                        if(tags.$At == TPL[i]){
+                            tokenization();
+                            token += TPL[i];
+                            return parseState.identifyTag;
+                        }else if(tags.$Close == TPL[i]){
+                            return parseState.tagClose;
+                        }else{
+                            data += tags.$Open + TPL[i];
+                            return parseState.textData;
+                        }
+                    }
+                    ,tagClose:function(){
+                        if(tags.$Open == TPL[i]){
+                            return parseState.tagOpen;
+                        }else if(tags.$ == TPL[i]){
+                            return parseState.identifyVar;
+                        }else if(tags.$Wrap == TPL[i]){
+                            data += TPL[i];
+                            return parseState.textData;
+                        }else{
+                            data += TPL[i];
+                            return parseState.textData;
+                        }
+                    }
+                    ,tag$:function(){
+                        if(tags.$Open == TPL[i]){
+                            tokenization();
+                            token = tags.$;
+                            return parseState.identifyVar;
+                        }else{
+                            data += tags.$ + TPL[i];
+                            return parseState.textData;
+                        }
+                    }
+                    ,textData:function(){
+                        if(this.i == length){
+                            tokenization();
+                        }else if(tags.$Open == TPL[i]){
+                            return parseState.tagOpen;
+                        }else if(tags.$Wrap == TPL[i]){
+                            data += TPL[i];
+                            return parseState.textData;
+                        }else if(tags.$ == TPL[i]){
+                            return parseState.tag$;
+                        }else{
+                            data += TPL[i];
+                            if(TPL.length == i+1){
+                                tokenization();
+                                return;
+                            }
+                            return parseState.textData;
+                        }
+                    }
+                    ,identifyTag:function(){
+                        if(tags.$E == TPL[i] && token == tags.$At){
+                            token = TPL[i];
+                            return parseState.identifyTag;
+                        }else if(tags.$A == TPL[i] && tags.$E == token){
+                            token = 'each';
+                            this.i += 2;
+                            return parseState.identifyTag;
+                        }else if(tags.$L == TPL[i] && tags.$E == token){
+                            token = 'else';
+                            this.i += 2;
+                            return parseState.identifyTag;
+                        }else if(tags.$I == TPL[i] && token == tags.$At){
+                            token = 'if';
+                            this.i ++;
+                            return parseState.identifyTag;
+                        }else if(tags.$End == TPL[i] && token == tags.$At){
+                            token += TPL[i];
+                            return parseState.identifyTag;
+                        }else if(tags.$E == TPL[i] && token == tags.$At + tags.$End){
+                            token = '/each';
+                            this.i +=3;
+                            tokenization();
+                            return parseState.identifyTag;
+                        }else if(tags.$I == TPL[i] && token == tags.$At + tags.$End){
+                            token = '/if';
+                            this.i ++;
+                            tokenization();
+                            return parseState.identifyTag;
+                        }else if(tags.$Blank == TPL[i]){
+                            data += TPL[i];
+                            return parseState.identifyTag;
+                        }else if(tags.$Close == TPL[i]){
+                            tokenization();
+                            return parseState.tagClose;
+                        }else if (tags.$End == TPL[i]){
+                            token += TPL[i];
+                            return parseState.identifyTag;
+                        }else if(tags.$Wrap == TPL[i]){
+                            return parseState.identifyTag;
+                        }else{
+                            data += TPL[i];
+                            return parseState.identifyTag;
+                        }
+                    }
+                    ,identifyVar:function(){
+                        if(tags.$Close == TPL[i]){
+                            tokenization();
+                            return parseState.tagClose;
+                        }else{
+                            data += TPL[i];
+                            return parseState.identifyVar;
+                        }
+                    }
+                    ,identifyComment:function(){
+                        if(tags.$Wrap == TPL[i]){
+                            tokenization();
+                            return parseState.textData;
+                        }else{
+                            data += TPL[i];
+                            return parseState.identifyComment;
+                        }
+                    }
+                    ,end:function(){
 
+                    }
+                    ,error:function(){
+
+                    }
+                };
+                this.state = parseState.start;
+
+                for(var i = 0; i < TPL.length;i++){
+                    this.inputByChar(i);
+                }
+                this.tokens = tokens;
+            },
+            inputByChar:function(c){
+                if(this.i < c){
+                    this.i = c;
+                    this.state = this.state();
+                }else {
+                }
+            }
+        };
+    exports.lexicalParse = LexicalParse;
+
+});
 </textarea>
 </div>
 <script src="parse.js"></script>

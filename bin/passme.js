@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-21 1:46:06
+ * Latest build : 2013-10-21 1:55:18
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -299,12 +299,12 @@
         isPunctuator:function(){
             var that = this;
             var c = that.char;
-            return _.isIn(c,'+-*/%=&|!><.\{\}\[\]\,\;\(\)');
+            return _.isIn(c,'+-*/%=&|!><:?.\{\}\[\]\,\;\(\)');
         },
         isStringLiteral:function(){
             var c = this.char;
             var t = this.token;
-            return !!t ? t[t.length-1] !== '\'' && t.length > 1 || t.length === 1 && c !== '\'' : c === '\'';
+            return !!t ? t[t.length-1] !== '\'' && t.length > 1 || t.length === 1 && c !== '\'' || t.length === 1 && c === '\'' && t[0] ==='\'' : c === '\'';
         },
         isRegularExpression:function(){
         },
@@ -395,7 +395,7 @@
                  * "
                  ***/
 
-                if(_.isIn(t,'\,|\;|\(|\)|\[|\]|\{|\}'.split('|'))){
+                if(_.isIn(t,'\,|\;|\(|\)|\[|\]|\{|\}|:|?'.split('|'))){
                     that.validate();
                 }else{
                     if(that.isPunctuator()){

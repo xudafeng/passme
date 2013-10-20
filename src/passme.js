@@ -279,12 +279,12 @@
         isPunctuator:function(){
             var that = this;
             var c = that.char;
-            return _.isIn(c,'+-*/%=&|!><.\{\}\[\]\,\;\(\)');
+            return _.isIn(c,'+-*/%=&|!><:?.\{\}\[\]\,\;\(\)');
         },
         isStringLiteral:function(){
             var c = this.char;
             var t = this.token;
-            return !!t ? t[t.length-1] !== '\'' && t.length > 1 || t.length === 1 && c !== '\'' : c === '\'';
+            return !!t ? t[t.length-1] !== '\'' && t.length > 1 || t.length === 1 && c !== '\'' || t.length === 1 && c === '\'' && t[0] ==='\'' : c === '\'';
         },
         isRegularExpression:function(){
         },
@@ -375,7 +375,7 @@
                  * "
                  ***/
 
-                if(_.isIn(t,'\,|\;|\(|\)|\[|\]|\{|\}'.split('|'))){
+                if(_.isIn(t,'\,|\;|\(|\)|\[|\]|\{|\}|:|?'.split('|'))){
                     that.validate();
                 }else{
                     if(that.isPunctuator()){
