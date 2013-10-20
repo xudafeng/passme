@@ -8,11 +8,23 @@
 </head>
 <body>
 <div>
+<textarea id="code">
 
-<textarea id="code">  var   v123   = '  123  ' ; 
-var h = true;
+;(function(win){
+    var doc = document;
 
-var n = (null && true !== 1 || h === 2);
+    var code = document.getElementById('code').value;
+
+    var tokens = passme.tokenize(code,{
+        whiteSpace:true
+    });
+
+    for(var i = 0;i<tokens.length;i++){
+        console.log(tokens[i])
+
+    }
+})(this);
+
 </textarea>
 </div>
 <script src="parse.js"></script>

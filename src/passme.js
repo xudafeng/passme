@@ -279,7 +279,7 @@
         isPunctuator:function(){
             var that = this;
             var c = that.char;
-            return _.isIn(c,'+-*/%=&|!\,\;\(\)');
+            return _.isIn(c,'+-*/%=&|!><.\{\}\[\]\,\;\(\)');
         },
         isStringLiteral:function(){
             var c = this.char;
@@ -313,21 +313,19 @@
             var char = that.char;
             /* Identifier */
             function parseIdentifier(){
-                if(that.isKeyword()){
-                    if(that.isBooleanLiteral()){
-                        that.type = Token['BooleanLiteral'];
-                    }else if(that.isNullLiteral()){
-                        that.type = Token['NullLiteral'];
-                    }else {
-                        that.type = Token['Keyword'];
+                if(that.isIdentifier()){
+                    that.token += char;
+                }else {
+                    if(that.isKeyword()){
+                        if(that.isBooleanLiteral()){
+                            that.type = Token['BooleanLiteral'];
+                        }else if(that.isNullLiteral()){
+                            that.type = Token['NullLiteral'];
+                        }else {
+                            that.type = Token['Keyword'];
+                        }
                     }
                     that.validate();
-                }else{
-                    if(that.isIdentifier()){
-                        that.token += char;
-                    }else {
-                        that.validate();
-                    }
                 }
             }
             /* NumericLiteral */
@@ -377,7 +375,7 @@
                  * "
                  ***/
 
-                if(_.isIn(t,'\,|\;|\(|\)'.split('|'))){
+                if(_.isIn(t,'\,|\;|\(|\)|\[|\]|\{|\}'.split('|'))){
                     that.validate();
                 }else{
                     if(that.isPunctuator()){

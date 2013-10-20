@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-21 1:34:50
+ * Latest build : 2013-10-21 1:46:06
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -299,7 +299,7 @@
         isPunctuator:function(){
             var that = this;
             var c = that.char;
-            return _.isIn(c,'+-*/%=&|!\,\;\(\)');
+            return _.isIn(c,'+-*/%=&|!><.\{\}\[\]\,\;\(\)');
         },
         isStringLiteral:function(){
             var c = this.char;
@@ -333,21 +333,19 @@
             var char = that.char;
             /* Identifier */
             function parseIdentifier(){
-                if(that.isKeyword()){
-                    if(that.isBooleanLiteral()){
-                        that.type = Token['BooleanLiteral'];
-                    }else if(that.isNullLiteral()){
-                        that.type = Token['NullLiteral'];
-                    }else {
-                        that.type = Token['Keyword'];
+                if(that.isIdentifier()){
+                    that.token += char;
+                }else {
+                    if(that.isKeyword()){
+                        if(that.isBooleanLiteral()){
+                            that.type = Token['BooleanLiteral'];
+                        }else if(that.isNullLiteral()){
+                            that.type = Token['NullLiteral'];
+                        }else {
+                            that.type = Token['Keyword'];
+                        }
                     }
                     that.validate();
-                }else{
-                    if(that.isIdentifier()){
-                        that.token += char;
-                    }else {
-                        that.validate();
-                    }
                 }
             }
             /* NumericLiteral */
@@ -397,7 +395,7 @@
                  * "
                  ***/
 
-                if(_.isIn(t,'\,|\;|\(|\)'.split('|'))){
+                if(_.isIn(t,'\,|\;|\(|\)|\[|\]|\{|\}'.split('|'))){
                     that.validate();
                 }else{
                     if(that.isPunctuator()){
