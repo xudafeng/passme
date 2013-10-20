@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-20 12:19:18
+ * Latest build : 2013-10-20 15:26:13
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -47,8 +47,11 @@
     /* default options */
     var options = {
         ecmascript:5,
-        comment:true
+        comment:true,
+        whiteSpace:false
     }
+
+    var userConfig = {};
 
     Syntax = {
         AssignmentExpression: 'AssignmentExpression',
@@ -141,7 +144,7 @@
     }
     _.prototype = {
         log:function (l){
-            console && this.isObject(console.log) && console.log(l)
+            console && this.isObject(console.log) && console.log(l);
         },
         indexOf:function(item, arr) {
             for (var i = 0, len = arr.length; i < len; ++i) {
@@ -156,6 +159,12 @@
         },
         isIn:function(i,s){
             return !!~s.indexOf(i);
+        },
+        mix:function(r,s){
+            for(var i in s){
+                r[i] = s[i];
+            };
+            return r;
         },
         each:function(object, fn) {
             if(object){
@@ -286,6 +295,7 @@
         isPunctuator:function(){
             var that = this;
             var c = that.char;
+            var t = that.token;
             /**
              * +
              * -
@@ -330,7 +340,12 @@
         },
         validate:function(){
             var that = this;
-            that.tokens.push({
+            var whiteSpace = userConfig.whiteSpace;
+            var filter;
+            if(that.type === Token['WhiteSpace'] && !whiteSpace){
+                filter = true;
+            }
+            !filter && that.tokens.push({
                 type:that.type,
                 value:that.token
             });
@@ -432,18 +447,18 @@
         }
     };
     /* set options */
-    function setOptions(o){
-        
+    function setOptions(code,o){
+        userConfig = _.mix(options,o);
+        _.mix(userConfig,{
+            code:code
+        });
     }
     /* exports */
     function parse(code,options){
     }
-    function tokenize(code,options){
-        setOptions(options);
-        var cfg = {
-            code:code
-        };
-        return new LexAnalyzer(cfg);
+    function tokenize(code,o){
+        setOptions(code,o);
+        return new LexAnalyzer(userConfig);
     }
     exports.version = '1.0.0';
     exports.parse = parse;
