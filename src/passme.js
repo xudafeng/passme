@@ -275,35 +275,6 @@
         isPunctuator:function(){
             var that = this;
             var c = that.char;
-            var t = that.token;
-            /**
-             * +
-             * -
-             * *
-             * /
-             * %
-             * ++
-             * --
-             ************
-             * =
-             * +=
-             * -=
-             * *=
-             * /=
-             * %=
-             ************
-             * ==
-             * ===
-             * !=
-             * >
-             * <
-             * >=
-             * <=
-             ************
-             * &&
-             * ||
-             * !
-             */
             return _.isIn(c,'+-*/%=&|!\'\"\,\;\(\)');
         },
         isStringLiteral:function(){
@@ -364,6 +335,41 @@
             /* Punctuator */
             function parsePunctuator(){
                 if(that.isPunctuator()){
+                /***
+                 * +
+                 * -
+                 * *
+                 * /
+                 * %
+                 * ++
+                 * --
+                 ****
+                 * =
+                 * +=
+                 * -=
+                 * *=
+                 * /=
+                 * %=
+                 ****
+                 * ==
+                 * ===
+                 * !=
+                 * >
+                 * <
+                 * >=
+                 * <=
+                 ****
+                 * &&
+                 * ||
+                 * !
+                 ****
+                 * ,
+                 * ;
+                 * (
+                 * )
+                 * '
+                 * "
+                 ***/
                     that.token += char;
                 }else{
                     that.validate();

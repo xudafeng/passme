@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-20 15:26:13
+ * Latest build : 2013-10-20 20:57:54
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -295,35 +295,6 @@
         isPunctuator:function(){
             var that = this;
             var c = that.char;
-            var t = that.token;
-            /**
-             * +
-             * -
-             * *
-             * /
-             * %
-             * ++
-             * --
-             ************
-             * =
-             * +=
-             * -=
-             * *=
-             * /=
-             * %=
-             ************
-             * ==
-             * ===
-             * !=
-             * >
-             * <
-             * >=
-             * <=
-             ************
-             * &&
-             * ||
-             * !
-             */
             return _.isIn(c,'+-*/%=&|!\'\"\,\;\(\)');
         },
         isStringLiteral:function(){
@@ -384,6 +355,41 @@
             /* Punctuator */
             function parsePunctuator(){
                 if(that.isPunctuator()){
+                /***
+                 * +
+                 * -
+                 * *
+                 * /
+                 * %
+                 * ++
+                 * --
+                 ****
+                 * =
+                 * +=
+                 * -=
+                 * *=
+                 * /=
+                 * %=
+                 ****
+                 * ==
+                 * ===
+                 * !=
+                 * >
+                 * <
+                 * >=
+                 * <=
+                 ****
+                 * &&
+                 * ||
+                 * !
+                 ****
+                 * ,
+                 * ;
+                 * (
+                 * )
+                 * '
+                 * "
+                 ***/
                     that.token += char;
                 }else{
                     that.validate();
