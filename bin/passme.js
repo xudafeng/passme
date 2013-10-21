@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-21 11:31:49
+ * Latest build : 2013-10-21 11:39:24
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -306,13 +306,15 @@
             var t = this.token;
             switch (t.length){
                 case 0:
-                    return c === '\'';
+                    return c === '\''|| c === '\"';
                     break;
                 case 1:
-                    return c !== '\'' || c === '\'' && t[t.length -1] !=='\\';
+                    var _t = t[0];
+                    return c !== _t || c === _t && t[t.length -1] !=='\\';
                     break;
                 default :
-                    return t[t.length-1] !== '\'' || c === '\'' && t[t.length-1] !=='\\';
+                    var _t = t[0];
+                    return t[t.length-1] !== _t || c === _t && t[t.length-1] !=='\\';
                     break;
             }
         },
