@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-21 21:35:56
+ * Latest build : 2013-10-21 21:37:10
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -244,7 +244,7 @@
                 that.getChar();
                 that.getToken();
                 parseInt(k)+1 === that.length && that.getToken();
-             });
+            });
         },
         getChar:function(){
             var that = this;

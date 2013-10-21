@@ -224,7 +224,7 @@
                 that.getChar();
                 that.getToken();
                 parseInt(k)+1 === that.length && that.getToken();
-             });
+            });
         },
         getChar:function(){
             var that = this;
