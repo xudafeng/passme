@@ -258,7 +258,7 @@
                  * switch 
                  * this throw try typeof 
                  * var void 
-                 * while with     
+                 * while with
                  */
                 if(_.isIn(t,KEY_WORDS_AND_BOOlEAN_LITERALS_AND_NULLLITERAL)){
                     r = !r;

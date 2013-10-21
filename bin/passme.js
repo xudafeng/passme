@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-21 15:45:23
+ * Latest build : 2013-10-21 18:38:48
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -278,7 +278,7 @@
                  * switch 
                  * this throw try typeof 
                  * var void 
-                 * while with     
+                 * while with
                  */
                 if(_.isIn(t,KEY_WORDS_AND_BOOlEAN_LITERALS_AND_NULLLITERAL)){
                     r = !r;
