@@ -494,6 +494,52 @@
             this.sytaxTree = {};
         }
     };
+
+    function parseBreakStatement(){
+    
+    }
+    function parseContinueStatement(){
+    
+    }
+    function parseDebuggerStatement(){
+    
+    }
+    function parseDoWhileStatement(){
+    
+    }
+    function parseForStatement(){
+    
+    }
+
+    function parseFunctionDeclaration(){
+    
+    }
+    function parseIfStatement(){
+    
+    }
+    function parseReturnStatement(){
+    
+    }
+    function parseSwitchStatement(){
+    
+    }
+
+    function parseThrowStatement(){
+    
+    }
+    function parseTryStatement(){
+    
+    }
+    function parseVariableStatement(){
+    
+    }
+    function parseWhileStatement(){
+    
+    }
+
+    function parseWithStatement(){
+    
+    }
     /**
     * Programs
     * 

@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-21 15:35:47
+ * Latest build : 2013-10-21 15:42:43
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -514,6 +514,52 @@
             this.sytaxTree = {};
         }
     };
+
+    function parseBreakStatement(){
+    
+    }
+    function parseContinueStatement(){
+    
+    }
+    function parseDebuggerStatement(){
+    
+    }
+    function parseDoWhileStatement(){
+    
+    }
+    function parseForStatement(){
+    
+    }
+
+    function parseFunctionDeclaration(){
+    
+    }
+    function parseIfStatement(){
+    
+    }
+    function parseReturnStatement(){
+    
+    }
+    function parseSwitchStatement(){
+    
+    }
+
+    function parseThrowStatement(){
+    
+    }
+    function parseTryStatement(){
+    
+    }
+    function parseVariableStatement(){
+    
+    }
+    function parseWhileStatement(){
+    
+    }
+
+    function parseWithStatement(){
+    
+    }
     /**
     * Programs
     * 
