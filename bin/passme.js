@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-21 2:05:55
+ * Latest build : 2013-10-21 11:31:49
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -304,7 +304,17 @@
         isStringLiteral:function(){
             var c = this.char;
             var t = this.token;
-            return !!t ? t[t.length-1] !== '\'' && t.length > 1 || t.length === 1 && c !== '\'' || t.length === 1 && c === '\'' && t[0] ==='\'': c === '\'';
+            switch (t.length){
+                case 0:
+                    return c === '\'';
+                    break;
+                case 1:
+                    return c !== '\'' || c === '\'' && t[t.length -1] !=='\\';
+                    break;
+                default :
+                    return t[t.length-1] !== '\'' || c === '\'' && t[t.length-1] !=='\\';
+                    break;
+            }
         },
         isRegularExpression:function(){
         },
