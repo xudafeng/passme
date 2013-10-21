@@ -208,6 +208,10 @@
                 that.type = Token['NumericLiteral'];
             }else if(that.isStringLiteral()){
                 that.type = Token['StringLiteral'];
+            }else if(that.isComment()){
+                that.type = Token['Comment'];
+            }else if(that.isRegularExpression()){
+                that.type = Token['RegularExpression'];
             }
             that.token += that.char;
         },
@@ -406,7 +410,13 @@
                 }
             }
             /* RegularExpression */
+            function parseRegularExpression(){
+            
+            }
             /* Comment */
+            function parseComment(){
+            
+            }
             /* WhiteSpace */
             function parseWhiteSpace(){
                 if(that.isWhiteSpace()){
@@ -436,8 +446,10 @@
                     parseStringLiteral();
                     break;
                 case 'RegularExpression':
+                    parseRegularExpression();
                     break;
                 case 'Comment':
+                    parseComment();
                     break;
                 case 'WhiteSpace':
                     parseWhiteSpace();
