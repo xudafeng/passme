@@ -585,7 +585,7 @@
         setOptions(code,o);
         return new LexAnalyzer(userConfig);
     }
-    exports.version = '1.0.1';
+    exports.version = '1.0.2';
     exports.parse = parse;
     exports.tokenize = tokenize;
 });
