@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-21 15:42:43
+ * Latest build : 2013-10-21 15:45:23
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -511,7 +511,7 @@
     Parser.prototype = {
         init:function(){
             console.log(this.tokens)
-            this.sytaxTree = {};
+            this.syntaxTree = {};
         }
     };
 

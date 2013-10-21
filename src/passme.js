@@ -491,7 +491,7 @@
     Parser.prototype = {
         init:function(){
             console.log(this.tokens)
-            this.sytaxTree = {};
+            this.syntaxTree = {};
         }
     };
 
