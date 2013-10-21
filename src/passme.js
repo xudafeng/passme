@@ -281,7 +281,7 @@
         isPunctuator:function(){
             var that = this;
             var c = that.char;
-            return _.isIn(c,'+-*/%=&|!><:?.\{\}\[\]\,\;\(\)');
+            return _.isIn(c,'+-*/%=&|!><:?~.\{\}\[\]\,\;\(\)');
         },
         isStringLiteral:function(){
             var c = this.char;
@@ -393,7 +393,7 @@
                  * %  * <   * "  * [ *
                  * ++ * >=  *    * ] *
                  * -- * <=  *    * { *
-                 *    *     *    * } *
+                 * ~  *     *    * } *
                  ********************/
                 if(_.isIn(t,'\,|\;|\(|\)|\[|\]|\{|\}|:|?'.split('|'))){
                     that.validate();
@@ -479,7 +479,10 @@
     
     }
 
-    /* build tree class */
+    /* build tree class 
+     *
+     * based on https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
+     */
     function Parser(cfg){
         this.source = cfg.code;
         this.tokens = new LexAnalyzer(userConfig);
@@ -487,6 +490,7 @@
     }
     Parser.prototype = {
         init:function(){
+            console.log(this.tokens)
             this.sytaxTree = {};
         }
     };
@@ -500,7 +504,7 @@
     /* exports */
     function parse(code,o){
         setOptions(code,o);
-        return new Parser(userConfig).sytaxTree;
+        return new Parser(userConfig).syntaxTree;
     }
     function tokenize(code,o){
         setOptions(code,o);
