@@ -220,10 +220,11 @@
         },
         scanner:function(){
             var that = this;
-            while (that.index <= that.length -1){
+            _.each(that.source,function(i,k){
                 that.getChar();
                 that.getToken();
-            }
+                parseInt(k)+1 === that.length && that.getToken();
+             });
         },
         getChar:function(){
             var that = this;
