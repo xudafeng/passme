@@ -1,8 +1,8 @@
 /* ================================================================
- * passme.js v0.0.0
+ * passme.js v0.0.1
  *
  * parse me!
- * Latest build : 2013-10-21 21:37:10
+ * Latest build : 2013-10-21 21:40:07
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -605,7 +605,7 @@
         setOptions(code,o);
         return new LexAnalyzer(userConfig);
     }
-    exports.version = '1.0.0';
+    exports.version = '1.0.1';
     exports.parse = parse;
     exports.tokenize = tokenize;
 });
