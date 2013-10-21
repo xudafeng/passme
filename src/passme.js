@@ -494,6 +494,27 @@
             this.sytaxTree = {};
         }
     };
+    /**
+    * Programs
+    * 
+    * interface Program <: Node {
+    *   type: "Program";
+    *   body: [ Statement ];
+    * }
+    */
+
+    /*
+    * Function
+    * interface Function <: Node {
+    *   id: Identifier | null;
+    *   params: [ Pattern ];
+    *   defaults: [ Expression ];
+    *   rest: Identifier | null;
+    *   body: BlockStatement | Expression;
+    *   generator: boolean;
+    *   expression: boolean;
+    * }
+
     /* set options */
     function setOptions(code,o){
         userConfig = _.mix(options,o);
