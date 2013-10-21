@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-21 14:43:03
+ * Latest build : 2013-10-21 14:54:02
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -500,12 +500,14 @@
     }
 
     /* build tree class */
-    function Parser(){
+    function Parser(cfg){
+        this.source = cfg.code;
+        this.tokens = new LexAnalyzer(userConfig);
         this.init();
     }
     Parser.prototype = {
         init:function(){
-        
+            this.sytaxTree = {};
         }
     };
     /* set options */
@@ -516,7 +518,9 @@
         });
     }
     /* exports */
-    function parse(code,options){
+    function parse(code,o){
+        setOptions(code,o);
+        return new Parser(userConfig).sytaxTree;
     }
     function tokenize(code,o){
         setOptions(code,o);

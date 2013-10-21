@@ -14,4 +14,5 @@
     var tree = passme.parse(code,{
         whiteSpace:true
     });
+    console.log(tree)
 })(this);

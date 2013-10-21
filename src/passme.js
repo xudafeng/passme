@@ -480,12 +480,14 @@
     }
 
     /* build tree class */
-    function Parser(){
+    function Parser(cfg){
+        this.source = cfg.code;
+        this.tokens = new LexAnalyzer(userConfig);
         this.init();
     }
     Parser.prototype = {
         init:function(){
-        
+            this.sytaxTree = {};
         }
     };
     /* set options */
@@ -496,7 +498,9 @@
         });
     }
     /* exports */
-    function parse(code,options){
+    function parse(code,o){
+        setOptions(code,o);
+        return new Parser(userConfig).sytaxTree;
     }
     function tokenize(code,o){
         setOptions(code,o);
