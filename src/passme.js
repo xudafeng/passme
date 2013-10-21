@@ -514,6 +514,13 @@
     *   generator: boolean;
     *   expression: boolean;
     * }
+    */
+
+    /**
+     * Statements
+     *
+     * interface Statement <: Node { }
+     */
 
     /* set options */
     function setOptions(code,o){

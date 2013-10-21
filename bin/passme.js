@@ -2,7 +2,7 @@
  * passme.js v0.0.0
  *
  * parse me!
- * Latest build : 2013-10-21 15:21:51
+ * Latest build : 2013-10-21 15:35:47
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -534,6 +534,13 @@
     *   generator: boolean;
     *   expression: boolean;
     * }
+    */
+
+    /**
+     * Statements
+     *
+     * interface Statement <: Node { }
+     */
 
     /* set options */
     function setOptions(code,o){
