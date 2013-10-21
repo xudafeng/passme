@@ -202,16 +202,14 @@
                 that.type = Token['WhiteSpace'];
             }else if(that.isIdentifier()){
                 that.type = Token['Identifier'];
+            }else if(that.isRegularExpression()){
+                that.type = Token['RegularExpression'];
             }else if(that.isPunctuator()){
                 that.type = Token['Punctuator'];
             }else if(that.isNumericLiteral()){
                 that.type = Token['NumericLiteral'];
             }else if(that.isStringLiteral()){
                 that.type = Token['StringLiteral'];
-            }else if(that.isComment()){
-                that.type = Token['Comment'];
-            }else if(that.isRegularExpression()){
-                that.type = Token['RegularExpression'];
             }
             that.token += that.char;
         },
@@ -303,8 +301,40 @@
             }
         },
         isRegularExpression:function(){
+            // /pattern/attribute
+            var c = this.char;
+            var t = this.token;
+            switch (t.length){
+                case 0:
+                    return c === '/';
+                    break;
+                case 1:
+                    return c !== '/'&& c !=='*';
+                    break;
+                default:
+                    return c !==' ' && c !== '\,' && c !== '\;';
+                    break;
+            }
         },
         isComment:function(){
+            /** 
+             * //     singel
+             * /* *\/ multi
+             */
+            var c = this.char;
+            var t = this.token;
+            switch (t.length){
+                case 0:
+                    return c === '/';
+                    break;
+                case 1:
+                    return c === '/' || c === '*';
+                    break;
+                default:
+                    return t[1] === '/' ? c !== '\n': t[1] === '*' && (t[t.length-1] !== '/' || t[t.length-2] !== '*');
+                    break;
+            }
+            
         },
         isWhiteSpace:function(){
             var c = this.char;
@@ -355,11 +385,11 @@
             /* Punctuator */
             function parsePunctuator(){
                 var t = that.token;
-                /***
-                 * +
-                 * -
-                 * *
-                 * /
+                /*****************
+                 * +  *
+                 * -  *
+                 * *  *
+                 * /  *
                  * %
                  * ++
                  * --
@@ -411,11 +441,24 @@
             }
             /* RegularExpression */
             function parseRegularExpression(){
-            
+                if(that.isRegularExpression()){
+                    that.token += char;
+                }else{
+                    if(that.isComment()){
+                        that.type = Token['Comment'];
+                        that.token +=char;
+                    }else{
+                        that.validate();
+                    }
+                }
             }
             /* Comment */
             function parseComment(){
-            
+                if(that.isComment()){
+                    that.token += char;
+                }else{
+                    that.validate();
+                }
             }
             /* WhiteSpace */
             function parseWhiteSpace(){
