@@ -286,13 +286,15 @@
             var t = this.token;
             switch (t.length){
                 case 0:
-                    return c === '\'';
+                    return c === '\''|| c === '\"';
                     break;
                 case 1:
-                    return c !== '\'' || c === '\'' && t[t.length -1] !=='\\';
+                    var _t = t[0];
+                    return c !== _t || c === _t && t[t.length -1] !=='\\';
                     break;
                 default :
-                    return t[t.length-1] !== '\'' || c === '\'' && t[t.length-1] !=='\\';
+                    var _t = t[0];
+                    return t[t.length-1] !== _t || c === _t && t[t.length-1] !=='\\';
                     break;
             }
         },
