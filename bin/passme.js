@@ -2,7 +2,7 @@
  * passme.js v0.0.2
  *
  * parse me!
- * Latest build : 2013-10-22 14:04:49
+ * Latest build : 2013-10-22 18:45:17
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
