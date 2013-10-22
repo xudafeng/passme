@@ -496,7 +496,6 @@
     }
     Parser.prototype = {
         init:function(){
-            console.log(this.tokens)
             this.syntaxTree = {};
         }
     };
@@ -590,7 +589,7 @@
         setOptions(code,o);
         return new LexAnalyzer(userConfig);
     }
-    exports.version = '1.0.2';
+    exports.version = '1.0.3';
     exports.parse = parse;
     exports.tokenize = tokenize;
 });
