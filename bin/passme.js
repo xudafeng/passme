@@ -2,7 +2,7 @@
  * passme.js v0.0.2
  *
  * parse me!
- * Latest build : 2013-10-22 11:11:16
+ * Latest build : 2013-10-22 14:04:49
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -30,7 +30,8 @@
         factory(root['passme'] || (root['passme'] = {}));
     }
 })(this,function(exports,undefined){
-    var Sytax,
+    var _,
+        Sytax,
         Regex,
         Token,
         Message;
@@ -134,15 +135,13 @@
      * util
      */
 
-    var _ = function(){
-    
-    };
+    function __(){};
     function __typeof(type){
         return function(obj){
             return Object.prototype.toString.call(obj) === '[object ' + type + ']';
         };
     }
-    _.prototype = {
+    __.prototype = {
         log:function (l){
             console && this.isObject(console.log) && console.log(l);
         },
@@ -169,7 +168,7 @@
         each:function(object, fn) {
             if(object){
                 for(var i in object){
-                    if(i !== 'length' && i !== 'item'){
+                    if(i !== 'length' && i !== 'item' && object.hasOwnProperty(i)){
                         fn.call(this,object[i],i);
                     }
                 }
@@ -192,7 +191,7 @@
             return __typeof('Undefined');
         }
     };
-    exports._ = _ = new _();
+    exports._ = _ = new __();
     /* lexicalParse class */
     function LexAnalyzer(cfg){
         this.source = cfg.code;
@@ -240,7 +239,7 @@
         },
         scanner:function(){
             var that = this;
-            _.each(that.source,function(i,k){
+            _.each(that.source,function(){
                 that.getChar();
                 that.getToken();
             });
@@ -253,7 +252,7 @@
         },
         end:function(){
             var that = this;
-            if(that.length == that.index){
+            if(that.index === that.length){
                 that.validate();
             }
         },
