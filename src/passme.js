@@ -223,7 +223,6 @@
             _.each(that.source,function(i,k){
                 that.getChar();
                 that.getToken();
-                parseInt(k)+1 === that.length && that.getToken();
             });
         },
         getChar:function(){
@@ -231,6 +230,12 @@
             that.char = that.source[that.index];
             that.index ++;
             //that.char = that.source.charCodeAt(that.index);
+        },
+        end:function(){
+            var that = this;
+            if(that.length == that.index){
+                that.validate();
+            }
         },
         isBooleanLiteral:function(){
             var t = this.token;
@@ -473,6 +478,7 @@
                     parseWhiteSpace();
                     break;
             }
+            that.end();
         }
     };
 

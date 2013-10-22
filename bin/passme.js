@@ -2,7 +2,7 @@
  * passme.js v0.0.2
  *
  * parse me!
- * Latest build : 2013-10-21 21:49:47
+ * Latest build : 2013-10-22 11:11:16
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -243,7 +243,6 @@
             _.each(that.source,function(i,k){
                 that.getChar();
                 that.getToken();
-                parseInt(k)+1 === that.length && that.getToken();
             });
         },
         getChar:function(){
@@ -251,6 +250,12 @@
             that.char = that.source[that.index];
             that.index ++;
             //that.char = that.source.charCodeAt(that.index);
+        },
+        end:function(){
+            var that = this;
+            if(that.length == that.index){
+                that.validate();
+            }
         },
         isBooleanLiteral:function(){
             var t = this.token;
@@ -493,6 +498,7 @@
                     parseWhiteSpace();
                     break;
             }
+            that.end();
         }
     };
 
