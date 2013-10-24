@@ -29,7 +29,9 @@
     var options = {
         ecmascript:5,
         comment:true,
-        whiteSpace:false
+        whiteSpace:false,
+        ranges:false,
+        locations:false
     }
 
     var userConfig = {};

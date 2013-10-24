@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-24 9:02:52
+ * Latest build : 2013-10-24 9:12:12
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -49,7 +49,9 @@
     var options = {
         ecmascript:5,
         comment:true,
-        whiteSpace:false
+        whiteSpace:false,
+        ranges:false,
+        locations:false
     }
 
     var userConfig = {};
