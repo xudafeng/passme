@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-22 18:46:39
+ * Latest build : 2013-10-24 9:02:52
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -105,29 +105,18 @@
     };
 
     Token = {
-        BooleanLiteral: 1,
-        Identifier: 2,
-        Keyword: 3,
-        NullLiteral: 4,
-        NumericLiteral: 5,
-        Punctuator: 6,
-        StringLiteral: 7,
-        RegularExpression: 8,
-        Comment:9,
-        WhiteSpace:10
+        BooleanLiteral: 'BooleanLiteral',
+        Identifier: 'Identifier',
+        Keyword: 'Keyword',
+        NullLiteral: 'NullLiteral',
+        NumericLiteral: 'NumericLiteral',
+        Punctuator: 'Punctuator',
+        StringLiteral: 'StringLiteral',
+        RegularExpression: 'RegularExpression',
+        Comment:'Comment',
+        WhiteSpace:'WhiteSpace'
     };
     /* map for type */
-
-    Token['BooleanLiteral'] = 'BooleanLiteral';
-    Token['Identifier'] = 'Identifier';
-    Token['Keyword'] = 'Keyword';
-    Token['NullLiteral'] = 'NullLiteral';
-    Token['NumericLiteral'] = 'NumericLiteral';
-    Token['Punctuator'] = 'Punctuator';
-    Token['StringLiteral'] = 'StringLiteral';
-    Token['RegularExpression'] = 'RegularExpression';
-    Token['Comment'] = 'Comment';
-    Token['WhiteSpace'] = 'WhiteSpace';
 
     Message = {};
 

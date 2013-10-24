@@ -85,29 +85,18 @@
     };
 
     Token = {
-        BooleanLiteral: 1,
-        Identifier: 2,
-        Keyword: 3,
-        NullLiteral: 4,
-        NumericLiteral: 5,
-        Punctuator: 6,
-        StringLiteral: 7,
-        RegularExpression: 8,
-        Comment:9,
-        WhiteSpace:10
+        BooleanLiteral: 'BooleanLiteral',
+        Identifier: 'Identifier',
+        Keyword: 'Keyword',
+        NullLiteral: 'NullLiteral',
+        NumericLiteral: 'NumericLiteral',
+        Punctuator: 'Punctuator',
+        StringLiteral: 'StringLiteral',
+        RegularExpression: 'RegularExpression',
+        Comment:'Comment',
+        WhiteSpace:'WhiteSpace'
     };
     /* map for type */
-
-    Token['BooleanLiteral'] = 'BooleanLiteral';
-    Token['Identifier'] = 'Identifier';
-    Token['Keyword'] = 'Keyword';
-    Token['NullLiteral'] = 'NullLiteral';
-    Token['NumericLiteral'] = 'NumericLiteral';
-    Token['Punctuator'] = 'Punctuator';
-    Token['StringLiteral'] = 'StringLiteral';
-    Token['RegularExpression'] = 'RegularExpression';
-    Token['Comment'] = 'Comment';
-    Token['WhiteSpace'] = 'WhiteSpace';
 
     Message = {};
 
