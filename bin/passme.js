@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-25 23:41:03
+ * Latest build : 2013-10-26 0:52:49
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -350,7 +350,6 @@
                     return t[1] === '/' ? c !== '\n': t[1] === '*' && (t[t.length-1] !== '/' || t[t.length-2] !== '*');
                     break;
             }
-            
         },
         isWhiteSpace:function(){
             var c = this.char;

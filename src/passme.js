@@ -330,7 +330,6 @@
                     return t[1] === '/' ? c !== '\n': t[1] === '*' && (t[t.length-1] !== '/' || t[t.length-2] !== '*');
                     break;
             }
-            
         },
         isWhiteSpace:function(){
             var c = this.char;
