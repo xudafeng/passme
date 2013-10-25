@@ -574,11 +574,19 @@
     /* exports */
     function parse(code,o){
         setOptions(code,o);
-        return new Parser(userConfig).syntaxTree;
+        try{
+            return new Parser(userConfig).syntaxTree;
+        } catch (e){
+            throw e;
+        }
     }
     function tokenize(code,o){
         setOptions(code,o);
-        return new LexAnalyzer(userConfig);
+        try {
+            return new LexAnalyzer(userConfig);
+        } catch (e) {
+            throw e;
+        }
     }
     exports.version = '1.0.3';
     exports.parse = parse;

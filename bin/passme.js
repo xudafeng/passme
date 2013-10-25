@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-24 9:12:12
+ * Latest build : 2013-10-25 23:41:03
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -594,11 +594,19 @@
     /* exports */
     function parse(code,o){
         setOptions(code,o);
-        return new Parser(userConfig).syntaxTree;
+        try{
+            return new Parser(userConfig).syntaxTree;
+        } catch (e){
+            throw e;
+        }
     }
     function tokenize(code,o){
         setOptions(code,o);
-        return new LexAnalyzer(userConfig);
+        try {
+            return new LexAnalyzer(userConfig);
+        } catch (e) {
+            throw e;
+        }
     }
     exports.version = '1.0.3';
     exports.parse = parse;
