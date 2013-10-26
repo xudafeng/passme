@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-26 22:40:29
+ * Latest build : 2013-10-26 23:29:28
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -396,7 +396,6 @@
             var comment = userConfig.comment;
             var ranges = userConfig.ranges;
             var locations = userConfig.locations;
-            var l = that.locations;
             var filter;
             var meta = {};
             that.setRanges();
@@ -409,7 +408,7 @@
                 ranges:that.ranges
             });
             locations && _.mix(meta,{
-                loactions:l
+                locations:that.locations
             });
             if(that.type === Token['WhiteSpace'] && !whiteSpace || that.type === Token['comment'] && !comment){
                 filter = true;

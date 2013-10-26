@@ -376,7 +376,6 @@
             var comment = userConfig.comment;
             var ranges = userConfig.ranges;
             var locations = userConfig.locations;
-            var l = that.locations;
             var filter;
             var meta = {};
             that.setRanges();
@@ -389,7 +388,7 @@
                 ranges:that.ranges
             });
             locations && _.mix(meta,{
-                loactions:l
+                locations:that.locations
             });
             if(that.type === Token['WhiteSpace'] && !whiteSpace || that.type === Token['comment'] && !comment){
                 filter = true;
