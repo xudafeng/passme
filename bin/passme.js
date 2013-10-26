@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-26 0:52:49
+ * Latest build : 2013-10-26 22:40:29
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -192,6 +192,7 @@
         init:function(){
             var that = this;
             that.initIndex();
+            that.initLocations();
             that.initFlags();
             that.scanner();
             return this.tokens;
@@ -200,6 +201,11 @@
             var that = this;
             that.length = that.source.length;
             that.index = 0;
+        },
+        initLocations:function(){
+            var that = this;
+            that.line = 1;
+            that.column = -1;
         },
         initFlags:function(){
             var that = this;
@@ -222,11 +228,30 @@
                 that.type = Token['StringLiteral'];
             }
             that.token += that.char;
+            that.setRanges();
+            that.setLocations();
+        },
+        setLocations:function(){
+            var that = this;
+            var f = that.locations['start'] ? 'end' : 'start';
+            that.locations[f] = {
+                line:that.line,
+                column:that.column
+            };
+        },
+        setWrap:function(){
+            var that = this;
+            if(that.isWrap()){
+                that.line ++;
+                that.column = -1;
+            };
         },
         clearFlags:function(){
             var that = this;
             that.token = EMPTY;
             that.type = null;
+            that.ranges = [];
+            that.locations = {};
         },
         scanner:function(){
             var that = this;
@@ -239,6 +264,7 @@
             var that = this;
             that.char = that.source[that.index];
             that.index ++;
+            that.column ++;
             //that.char = that.source.charCodeAt(that.index);
         },
         end:function(){
@@ -352,20 +378,43 @@
             }
         },
         isWhiteSpace:function(){
+            var that = this;
             var c = this.char;
-            return c ==='\n' || c === ' '|| c === '\t';
+            return that.isWrap() || c === ' '|| c === '\t';
+        },
+        isWrap:function(){
+            var c = this.char;
+            return c === '\n';
+        },
+        setRanges:function(){
+            var that = this;
+            that.ranges.push(that.index - 1);
         },
         validate:function(){
             var that = this;
             var whiteSpace = userConfig.whiteSpace;
+            var comment = userConfig.comment;
+            var ranges = userConfig.ranges;
+            var locations = userConfig.locations;
+            var l = that.locations;
             var filter;
-            if(that.type === Token['WhiteSpace'] && !whiteSpace){
-                filter = true;
-            }
-            !filter && that.tokens.push({
+            var meta = {};
+            that.setRanges();
+            that.setLocations();
+            _.mix(meta,{
                 type:that.type,
                 value:that.token
             });
+            ranges && _.mix(meta,{
+                ranges:that.ranges
+            });
+            locations && _.mix(meta,{
+                loactions:l
+            });
+            if(that.type === Token['WhiteSpace'] && !whiteSpace || that.type === Token['comment'] && !comment){
+                filter = true;
+            }
+            !filter && that.tokens.push(meta);
             that.clearFlags();
             that.initType();
         },
@@ -457,6 +506,8 @@
                     that.validate();
                 }
             }
+            /* set wrap */
+            that.setWrap();
             /* type router */
             switch(that.type){
                 case null:
