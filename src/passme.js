@@ -207,7 +207,7 @@
             }else if(that.isStringLiteral()){
                 that.type = Token['StringLiteral'];
             }
-            that.token += that.char;
+            that.token += String.fromCharCode(that.c);
             that.setRanges();
             that.setLocations();
         },
@@ -242,8 +242,7 @@
         },
         getChar:function(){
             var that = this;
-            that.char = that.source[that.index];
-            console.log(that.source.charCodeAt(that.index))
+            that.c = that.source.charCodeAt(that.index);
             that.index ++;
             that.column ++;
         },
@@ -259,9 +258,9 @@
         },
         isIdentifier:function(){
             var that = this;
-            var c = that.char;
+            var c = that.c;
             var hasInitialWord = !!that.token;
-            return hasInitialWord ? (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c >= '0' && c <= '9' || c === '_' || c === '$') : (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c === '_' || c === '$');
+            return hasInitialWord ? (c >= 97 && c <= 122 || c >= 65 && c <= 90 || c >= 48 && c <= 57 || c === 95 || c === 36) : (c >= 97 && c <= 122 || c >= 65 && c <= 90 || c === 95 || c === 36);
         },
         isKeyword:function(){
             var t = this.token;
@@ -297,44 +296,44 @@
             return _.isIn(t,NULLLITERAL);
         },
         isNumericLiteral:function(){
-            var c = this.char;
-            return c >= '0' && c <= '9';
+            var c = this.c;
+            return c >= 48 && c <= 57;
         },
         isPunctuator:function(){
             var that = this;
-            var c = that.char;
-            return _.isIn(c,'+-*/%=&|!><:?~.\{\}\[\]\,\;\(\)');
+            var c = that.c;
+            return _.isIn(c,[33, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 58, 59, 60, 61, 62, 63, 91, 93, 123, 124, 125, 126]);
         },
         isStringLiteral:function(){
-            var c = this.char;
+            var c = this.c;
             var t = this.token;
             switch (t.length){
                 case 0:
-                    return c === '\''|| c === '\"';
+                    return c === 39 || c === 34;
                     break;
                 case 1:
                     var _t = t[0];
-                    return c !== _t || c === _t && t[t.length -1] !=='\\';
+                    return c !== _t || c === _t && t[t.length -1] !==92;
                     break;
                 default :
                     var _t = t[0];
-                    return t[t.length-1] !== _t || c === _t && t[t.length-1] !=='\\';
+                    return t[t.length-1] !== _t || c === _t && t[t.length-1] !==92;
                     break;
             }
         },
         isRegularExpression:function(){
             // /pattern/attribute
-            var c = this.char;
+            var c = this.c;
             var t = this.token;
             switch (t.length){
                 case 0:
-                    return c === '/';
+                    return c === 47;
                     break;
                 case 1:
-                    return c !== '/'&& c !=='*';
+                    return c !== 47 && c !== 42;
                     break;
                 default:
-                    return c !==' ' && c !== '\,' && c !== '\;';
+                    return c !== 32 && c !== 44 && c !== 59;
                     break;
             }
         },
@@ -343,28 +342,28 @@
              * //     singel
              * /* *\/ multi
              */
-            var c = this.char;
+            var c = this.c;
             var t = this.token;
             switch (t.length){
                 case 0:
-                    return c === '/';
+                    return c === 47;
                     break;
                 case 1:
-                    return c === '/' || c === '*';
+                    return c === 47 || c === 42;
                     break;
                 default:
-                    return t[1] === '/' ? c !== '\n': t[1] === '*' && (t[t.length-1] !== '/' || t[t.length-2] !== '*');
+                    return t[1].charCodeAt() === 47 ? c !== 10: t[1].charCodeAt() === 42 && (t[t.length-1].charCodeAt() !== 47 || t[t.length-2].charCodeAt() !== 42);
                     break;
             }
         },
         isWhiteSpace:function(){
             var that = this;
-            var c = this.char;
-            return that.isWrap() || c === ' '|| c === '\t';
+            var c = this.c;
+            return that.isWrap() || c === 32 || c === 9;
         },
         isWrap:function(){
-            var c = this.char;
-            return c === '\n';
+            var c = this.c;
+            return c === 10;
         },
         setRanges:function(){
             var that = this;
@@ -399,7 +398,7 @@
         },
         getToken:function(){
             var that = this;
-            var char = that.char;
+            var char = String.fromCharCode(that.c);
             /* Identifier */
             function parseIdentifier(){
                 if(that.isIdentifier()){
@@ -438,7 +437,7 @@
                  * -- * <=  *    * { *
                  * ~  *     *    * } *
                  ********************/
-                if(_.isIn(t,'\,|\;|\(|\)|\[|\]|\{|\}|:|?'.split('|'))){
+                if(_.isIn(t.charCodeAt(),[40, 41, 44, 58, 59, 63, 91, 93, 123, 125])){
                     that.validate();
                 }else{
                     if(that.isPunctuator()){
