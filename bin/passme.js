@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-26 23:29:28
+ * Latest build : 2013-10-27 15:48:16
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -263,9 +263,9 @@
         getChar:function(){
             var that = this;
             that.char = that.source[that.index];
+            console.log(that.source.charCodeAt(that.index))
             that.index ++;
             that.column ++;
-            //that.char = that.source.charCodeAt(that.index);
         },
         end:function(){
             var that = this;
@@ -548,6 +548,8 @@
     /* build tree class 
      *
      * based on https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
+     *
+     * http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
      */
     function Parser(cfg){
         this.source = cfg.code;

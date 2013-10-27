@@ -243,9 +243,9 @@
         getChar:function(){
             var that = this;
             that.char = that.source[that.index];
+            console.log(that.source.charCodeAt(that.index))
             that.index ++;
             that.column ++;
-            //that.char = that.source.charCodeAt(that.index);
         },
         end:function(){
             var that = this;
@@ -528,6 +528,8 @@
     /* build tree class 
      *
      * based on https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
+     *
+     * http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
      */
     function Parser(cfg){
         this.source = cfg.code;
