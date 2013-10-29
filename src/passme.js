@@ -506,6 +506,7 @@
         ArrayExpression: 'ArrayExpression',
         ObjectExpression: 'ObjectExpression',
         FunctionExpression: 'FunctionExpression',
+        ArrowExpression:'ArrowExpression',
         SequenceExpression: 'SequenceExpression',
         UnaryExpression: 'UnaryExpression',
         BinaryExpression: 'BinaryExpression',
@@ -543,7 +544,7 @@
         init:function(){
             var that = this;
             for(var i =0;i<that.tokens.length;i++){
-                console.log(that.tokens[i])        
+                console.log(that.tokens[i]);
             }
             that.syntaxTree = {};
             return that.syntaxTree;

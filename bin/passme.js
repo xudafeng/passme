@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-29 14:30:29
+ * Latest build : 2013-10-29 14:49:39
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -526,6 +526,7 @@
         ArrayExpression: 'ArrayExpression',
         ObjectExpression: 'ObjectExpression',
         FunctionExpression: 'FunctionExpression',
+        ArrowExpression:'ArrowExpression',
         SequenceExpression: 'SequenceExpression',
         UnaryExpression: 'UnaryExpression',
         BinaryExpression: 'BinaryExpression',
@@ -563,7 +564,7 @@
         init:function(){
             var that = this;
             for(var i =0;i<that.tokens.length;i++){
-                console.log(that.tokens[i])        
+                console.log(that.tokens[i]);
             }
             that.syntaxTree = {};
             return that.syntaxTree;
