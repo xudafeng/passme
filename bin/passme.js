@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-29 11:52:01
+ * Latest build : 2013-10-29 14:30:29
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -496,53 +496,55 @@
      */
 
     Syntax = {
-        AssignmentExpression: 'AssignmentExpression',
-        ArrayExpression: 'ArrayExpression',
-        ArrayPattern: 'ArrayPattern',
-        ArrowFunctionExpression: 'ArrowFunctionExpression',
-        BlockStatement: 'BlockStatement',
-        BinaryExpression: 'BinaryExpression',
-        BreakStatement: 'BreakStatement',
-        CallExpression: 'CallExpression',
-        CatchClause: 'CatchClause',
-        ComprehensionBlock: 'ComprehensionBlock',
-        ComprehensionExpression: 'ComprehensionExpression',
-        ConditionalExpression: 'ConditionalExpression',
-        ContinueStatement: 'ContinueStatement',
-        DirectiveStatement: 'DirectiveStatement',
-        DoWhileStatement: 'DoWhileStatement',
-        DebuggerStatement: 'DebuggerStatement',
-        EmptyStatement: 'EmptyStatement',
-        ExpressionStatement: 'ExpressionStatement',
-        ForStatement: 'ForStatement',
-        ForInStatement: 'ForInStatement',
-        FunctionDeclaration: 'FunctionDeclaration',
-        FunctionExpression: 'FunctionExpression',
-        Identifier: 'Identifier',
-        IfStatement: 'IfStatement',
-        Literal: 'Literal',
-        LabeledStatement: 'LabeledStatement',
-        LogicalExpression: 'LogicalExpression',
-        MemberExpression: 'MemberExpression',
-        NewExpression: 'NewExpression',
-        ObjectExpression: 'ObjectExpression',
-        ObjectPattern: 'ObjectPattern',
-        Program: 'Program',
-        Property: 'Property',
-        ReturnStatement: 'ReturnStatement',
-        SequenceExpression: 'SequenceExpression',
+        //Programs
+        Program:'Program',
+        //Statements
+        EmptyStatement:'EmptyStatement',
+        BlockStatement:'BlockStatement',
+        ExpressionStatement:'ExpressionStatement',
+        IfStatement:'IfStatement',
+        LabeledStatement:'LabeledStatement',
+        BreakStatement:'BreakStatement',
+        ContinueStatement:'ContinueStatement',
+        WithStatement:'WithStatement',
         SwitchStatement: 'SwitchStatement',
-        SwitchCase: 'SwitchCase',
-        ThisExpression: 'ThisExpression',
+        ReturnStatement: 'ReturnStatement',
         ThrowStatement: 'ThrowStatement',
         TryStatement: 'TryStatement',
-        UnaryExpression: 'UnaryExpression',
-        UpdateExpression: 'UpdateExpression',
+        WhileStatement: 'WhileStatement',
+        DoWhileStatement: 'DoWhileStatement',
+        ForStatement: 'ForStatement',
+        ForInStatement: 'ForInStatement',
+        LetStatement:'LetStatement',
+        DebuggerStatement: 'DebuggerStatement',
+        //Declarations
+        FunctionDeclaration: 'FunctionDeclaration',
         VariableDeclaration: 'VariableDeclaration',
         VariableDeclarator: 'VariableDeclarator',
-        WhileStatement: 'WhileStatement',
-        WithStatement: 'WithStatement',
-        YieldExpression: 'YieldExpression'
+        //Expressions
+        ThisExpression: 'ThisExpression',
+        ArrayExpression: 'ArrayExpression',
+        ObjectExpression: 'ObjectExpression',
+        FunctionExpression: 'FunctionExpression',
+        SequenceExpression: 'SequenceExpression',
+        UnaryExpression: 'UnaryExpression',
+        BinaryExpression: 'BinaryExpression',
+        AssignmentExpression: 'AssignmentExpression',
+        UpdateExpression: 'UpdateExpression',
+        LogicalExpression: 'LogicalExpression',
+        ConditionalExpression: 'ConditionalExpression',
+        NewExpression: 'NewExpression',
+        CallExpression: 'CallExpression',
+        MemberExpression: 'MemberExpression',
+        //Patterns
+        ObjectPattern: 'ObjectPattern',
+        ArrayPattern: 'ArrayPattern',
+        //Clauses
+        SwitchCase: 'SwitchCase',
+        CatchClause: 'CatchClause',
+        //Miscellaneous
+        Identifier: 'Identifier',
+        Literal: 'Literal'
     };
 
     Message = {};
