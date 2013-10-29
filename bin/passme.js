@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-29 23:45:52
+ * Latest build : 2013-10-30 0:29:16
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -572,15 +572,45 @@
     Parser.prototype = {
         init:function(){
             var that = this;
+            that.syntaxTree = {};
+            that.setTokens();
+            that.initIndex();
             that.scanner();
             return that.syntaxTree;
         },
+        setTokens:function(){
+            var that = this;
+            that.syntaxTree['tokens'] = that.tokens;
+        },
+        initIndex:function(){
+            var that = this;
+            that.length = that.tokens.length;
+            that.index = 0;
+        },
+        initFlags:function(){
+            var that = this;
+            that.clearFlags();
+        },
+        clearFlags:function(){
+            var that = this;
+            that.syntax = null;
+            that.current = null;
+        },
         scanner:function(){
             var that = this;
-            for(var i =0;i<that.tokens.length;i++){
-                console.log(that.tokens[i]);
-            }
-            that.syntaxTree = {};
+            _.each(that.tokens,function(){
+                that.getToken();
+                that.create();
+            });
+        },
+        getToken:function(){
+            var that = this;
+            that.current = that.tokens[that.index];
+            that.index ++;
+        },
+        create:function(){
+            var that = this;
+            console.log(that.current)
         }
     };
 
