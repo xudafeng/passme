@@ -533,8 +533,12 @@
 
     Message = {};
 
-    function throwError(){
-    
+    // Throw error
+
+    function throwError(token, msg) {
+        var error = {};
+        error.xdf = 1;
+        throw error;
     }
 
     function Parser(cfg){
@@ -602,15 +606,17 @@
     /**
     * Programs
     * 
-    * interface Program <: Node {
-    *   type: "Program";
-    *   body: [ Statement ];
+    * interface Program: {
+    *   type:'Program',
+    *   body:[Statement],
+    *   comments:[],
+    *   tokens
     * }
     */
 
     /*
     * Function
-    * interface Function <: Node {
+    * interface Function: {
     *   id: Identifier | null;
     *   params: [ Pattern ];
     *   defaults: [ Expression ];
