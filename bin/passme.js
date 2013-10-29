@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-29 15:55:41
+ * Latest build : 2013-10-29 18:00:36
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -553,8 +553,12 @@
 
     Message = {};
 
-    function throwError(){
-    
+    // Throw error
+
+    function throwError(token, msg) {
+        var error = {};
+        error.xdf = 1;
+        throw error;
     }
 
     function Parser(cfg){
@@ -574,62 +578,25 @@
         }
     };
 
-    function parseBreakStatement(){
-    
-    }
-    function parseContinueStatement(){
-    
-    }
-    function parseDebuggerStatement(){
-    
-    }
-    function parseDoWhileStatement(){
-    
-    }
-    function parseForStatement(){
-    
-    }
-
-    function parseFunctionDeclaration(){
-    
-    }
-    function parseIfStatement(){
-    
-    }
-    function parseReturnStatement(){
-    
-    }
-    function parseSwitchStatement(){
-    
-    }
-
-    function parseThrowStatement(){
-    
-    }
-    function parseTryStatement(){
-    
-    }
-    function parseVariableStatement(){
-    
-    }
-    function parseWhileStatement(){
-    
-    }
-
-    function parseWithStatement(){
-    
-    }
     /**
     * Programs
-    * 
+    *
+    * A complete program source tree.
+    *
     * interface Program <: Node {
     *   type: "Program";
     *   body: [ Statement ];
+    *   comments: [ Comments ];
+    *   tokens: [ Tokens ];
     * }
     */
 
     /*
-    * Function
+    * Functions
+    *
+    * A function declaration or expression.
+    * The body of the function may be a block statement, or in the case of an expression closure, an expression.
+    *
     * interface Function <: Node {
     *   id: Identifier | null;
     *   params: [ Pattern ];
@@ -642,10 +609,32 @@
     */
 
     /**
-     * Statements
-     *
-     * interface Statement <: Node { }
-     */
+    * interface EmptyStatement <: Statement {
+    *   type: "EmptyStatement";
+    * }
+    */
+    function parseEmptyStatement(){
+    
+    }
+    /**
+    * interface BlockStatement <: Statement {
+    *   type: "BlockStatement";
+    *   body: [ Statement ];
+    * }
+    */
+    function parseBlockStatement(){
+    
+    }
+    /**
+    * interface ExpressionStatement <: Statement {
+    *   type: "ExpressionStatement";
+    *   expression: Expression;
+    * }
+    */
+    function parseExpressionStatement(){
+    
+    }
+
 
     /* set options */
     function setOptions(code,o){

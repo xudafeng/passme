@@ -558,65 +558,26 @@
         }
     };
 
-    function parseBreakStatement(){
-    
-    }
-    function parseContinueStatement(){
-    
-    }
-    function parseDebuggerStatement(){
-    
-    }
-    function parseDoWhileStatement(){
-    
-    }
-    function parseForStatement(){
-    
-    }
-
-    function parseFunctionDeclaration(){
-    
-    }
-    function parseIfStatement(){
-    
-    }
-    function parseReturnStatement(){
-    
-    }
-    function parseSwitchStatement(){
-    
-    }
-
-    function parseThrowStatement(){
-    
-    }
-    function parseTryStatement(){
-    
-    }
-    function parseVariableStatement(){
-    
-    }
-    function parseWhileStatement(){
-    
-    }
-
-    function parseWithStatement(){
-    
-    }
     /**
     * Programs
-    * 
-    * interface Program: {
-    *   type:'Program',
-    *   body:[Statement],
-    *   comments:[],
-    *   tokens
+    *
+    * A complete program source tree.
+    *
+    * interface Program <: Node {
+    *   type: "Program";
+    *   body: [ Statement ];
+    *   comments: [ Comments ];
+    *   tokens: [ Tokens ];
     * }
     */
 
     /*
-    * Function
-    * interface Function: {
+    * Functions
+    *
+    * A function declaration or expression.
+    * The body of the function may be a block statement, or in the case of an expression closure, an expression.
+    *
+    * interface Function <: Node {
     *   id: Identifier | null;
     *   params: [ Pattern ];
     *   defaults: [ Expression ];
@@ -628,10 +589,32 @@
     */
 
     /**
-     * Statements
-     *
-     * interface Statement <: Node { }
-     */
+    * interface EmptyStatement <: Statement {
+    *   type: "EmptyStatement";
+    * }
+    */
+    function parseEmptyStatement(){
+    
+    }
+    /**
+    * interface BlockStatement <: Statement {
+    *   type: "BlockStatement";
+    *   body: [ Statement ];
+    * }
+    */
+    function parseBlockStatement(){
+    
+    }
+    /**
+    * interface ExpressionStatement <: Statement {
+    *   type: "ExpressionStatement";
+    *   expression: Expression;
+    * }
+    */
+    function parseExpressionStatement(){
+    
+    }
+
 
     /* set options */
     function setOptions(code,o){
