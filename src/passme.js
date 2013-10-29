@@ -573,6 +573,7 @@
         },
         clearFlags:function(){
             var that = this;
+            that.type = null;
             that.syntax = null;
             that.current = null;
         },
