@@ -552,11 +552,15 @@
     Parser.prototype = {
         init:function(){
             var that = this;
+            that.scanner();
+            return that.syntaxTree;
+        },
+        scanner:function(){
+            var that = tihs;
             for(var i =0;i<that.tokens.length;i++){
                 console.log(that.tokens[i]);
             }
             that.syntaxTree = {};
-            return that.syntaxTree;
         }
     };
 
