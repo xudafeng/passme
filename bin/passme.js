@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-29 11:11:49
+ * Latest build : 2013-10-29 11:47:52
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -195,7 +195,7 @@
             that.initLocations();
             that.initFlags();
             that.scanner();
-            return this.tokens;
+            return that.tokens;
         },
         initIndex:function(){
             var that = this;
@@ -551,13 +551,19 @@
      * http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
      */
     function Parser(cfg){
-        this.source = cfg.code;
-        this.tokens = new LexAnalyzer(userConfig);
-        this.init();
+        var that = this;
+        that.source = cfg.code;
+        that.tokens = new LexAnalyzer(userConfig);
+        return that.init();
     }
     Parser.prototype = {
         init:function(){
-            this.syntaxTree = {};
+            var that = this;
+            for(var i =0;i<that.tokens.length;i++){
+                console.log(that.tokens[i])        
+            }
+            that.syntaxTree = {};
+            return that.syntaxTree;
         }
     };
 
@@ -645,7 +651,7 @@
     function parse(code,o){
         setOptions(code,o);
         try{
-            return new Parser(userConfig).syntaxTree;
+            return new Parser(userConfig);
         } catch (e){
             throw e;
         }

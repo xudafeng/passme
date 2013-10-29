@@ -175,7 +175,7 @@
             that.initLocations();
             that.initFlags();
             that.scanner();
-            return this.tokens;
+            return that.tokens;
         },
         initIndex:function(){
             var that = this;
@@ -531,13 +531,19 @@
      * http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
      */
     function Parser(cfg){
-        this.source = cfg.code;
-        this.tokens = new LexAnalyzer(userConfig);
-        this.init();
+        var that = this;
+        that.source = cfg.code;
+        that.tokens = new LexAnalyzer(userConfig);
+        return that.init();
     }
     Parser.prototype = {
         init:function(){
-            this.syntaxTree = {};
+            var that = this;
+            for(var i =0;i<that.tokens.length;i++){
+                console.log(that.tokens[i])        
+            }
+            that.syntaxTree = {};
+            return that.syntaxTree;
         }
     };
 
@@ -625,7 +631,7 @@
     function parse(code,o){
         setOptions(code,o);
         try{
-            return new Parser(userConfig).syntaxTree;
+            return new Parser(userConfig);
         } catch (e){
             throw e;
         }
