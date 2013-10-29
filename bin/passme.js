@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-29 18:02:10
+ * Latest build : 2013-10-29 18:56:39
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -167,19 +167,21 @@
         },
         initType:function(){
             var that = this;
+            var t;
             if(that.isWhiteSpace()){
-                that.type = Token['WhiteSpace'];
+                t = Token['WhiteSpace'];
             }else if(that.isIdentifier()){
-                that.type = Token['Identifier'];
+                t = Token['Identifier'];
             }else if(that.isRegularExpression()){
-                that.type = Token['RegularExpression'];
+                t = Token['RegularExpression'];
             }else if(that.isPunctuator()){
-                that.type = Token['Punctuator'];
+                t = Token['Punctuator'];
             }else if(that.isNumericLiteral()){
-                that.type = Token['NumericLiteral'];
+                t = Token['NumericLiteral'];
             }else if(that.isStringLiteral()){
-                that.type = Token['StringLiteral'];
+                t = Token['StringLiteral'];
             }
+            that.type = t;
             that.token += String.fromCharCode(that.c);
             that.setRanges();
             that.setLocations();

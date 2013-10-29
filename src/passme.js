@@ -147,19 +147,21 @@
         },
         initType:function(){
             var that = this;
+            var t;
             if(that.isWhiteSpace()){
-                that.type = Token['WhiteSpace'];
+                t = Token['WhiteSpace'];
             }else if(that.isIdentifier()){
-                that.type = Token['Identifier'];
+                t = Token['Identifier'];
             }else if(that.isRegularExpression()){
-                that.type = Token['RegularExpression'];
+                t = Token['RegularExpression'];
             }else if(that.isPunctuator()){
-                that.type = Token['Punctuator'];
+                t = Token['Punctuator'];
             }else if(that.isNumericLiteral()){
-                that.type = Token['NumericLiteral'];
+                t = Token['NumericLiteral'];
             }else if(that.isStringLiteral()){
-                that.type = Token['StringLiteral'];
+                t = Token['StringLiteral'];
             }
+            that.type = t;
             that.token += String.fromCharCode(that.c);
             that.setRanges();
             that.setLocations();
