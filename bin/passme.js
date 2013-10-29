@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-29 18:00:36
+ * Latest build : 2013-10-29 18:02:10
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -634,8 +634,17 @@
     function parseExpressionStatement(){
     
     }
-
-
+    /**
+    * interface IfStatement <: Statement {
+    *   type: "IfStatement";
+    *   test: Expression;
+    *   consequent: Statement;
+    *   alternate: Statement | null;
+    * }
+    */
+    function parseIfStatement(){
+    
+    }
     /* set options */
     function setOptions(code,o){
         userConfig = _.mix(options,o);

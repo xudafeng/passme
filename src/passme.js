@@ -614,8 +614,17 @@
     function parseExpressionStatement(){
     
     }
-
-
+    /**
+    * interface IfStatement <: Statement {
+    *   type: "IfStatement";
+    *   test: Expression;
+    *   consequent: Statement;
+    *   alternate: Statement | null;
+    * }
+    */
+    function parseIfStatement(){
+    
+    }
     /* set options */
     function setOptions(code,o){
         userConfig = _.mix(options,o);
