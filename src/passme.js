@@ -21,6 +21,10 @@
 
     var KEY_WORDS_AND_BOOlEAN_LITERALS_AND_NULLLITERAL = 'break|case|catch|continue|default|delete|do|else|finally|for|function|if|in|instanceof|new|return|switch|this|throw|try|typeof|var|void|while|with|true|false|null'.split('|');
 
+    var FUTURE_RESERVED_WORDS = 'class|enum|export|extends|import|super'.split('|');
+
+    var STRICT_MODE_RESERVED_WORDS = 'implements|interface|package|private|protected|public|static|yield|let'.split('|');
+
     var BOOlEAN_LITERALS = ['true','false'];
     
     var NULLLITERAL = ['null'];
@@ -110,6 +114,7 @@
             return __typeof('Undefined');
         }
     };
+    //export util
     exports._ = _ = new __();
     /* lexicalParse class */
     function LexAnalyzer(cfg){
@@ -467,14 +472,12 @@
             that.end();
         }
     };
-
     /* build tree class 
      *
      * based on https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
      *
      * http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
      */
-
     Syntax = {
         //Programs
         Program:'Program',
