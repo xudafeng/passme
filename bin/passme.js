@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-10-29 20:36:17
+ * Latest build : 2013-10-29 23:45:52
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -576,7 +576,7 @@
             return that.syntaxTree;
         },
         scanner:function(){
-            var that = tihs;
+            var that = this;
             for(var i =0;i<that.tokens.length;i++){
                 console.log(that.tokens[i]);
             }

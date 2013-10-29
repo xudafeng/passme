@@ -556,7 +556,7 @@
             return that.syntaxTree;
         },
         scanner:function(){
-            var that = tihs;
+            var that = this;
             for(var i =0;i<that.tokens.length;i++){
                 console.log(that.tokens[i]);
             }
