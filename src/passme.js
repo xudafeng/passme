@@ -282,13 +282,17 @@
             var t = this.token;
             switch (t.length){
                 case 0:
-                    return c === 47;
+                    return c === 47;// /
                     break;
                 case 1:
-                    return c !== 47 && c !== 42;
+                    return c !== 47 && c !== 42; // /*
                     break;
                 default:
-                    return c !== 32 && c !== 44 && c !== 59;
+                    if(t.match(/(^|[^\\]{1})\//g).length == 2){
+                        return !_.isIn(c,[33, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 58, 59, 60, 61, 62, 63, 91, 93, 123, 124, 125, 126]);
+                    }else{
+                        return true;
+                    }
                     break;
             }
         },
@@ -314,7 +318,7 @@
         isWhiteSpace:function(){
             var that = this;
             var c = this.c;
-            return that.isWrap() || c === 32 || c === 9;
+            return that.isWrap() || _.isIn(c,[9,11,12,13,32]);
         },
         isWrap:function(){
             var c = this.c;
