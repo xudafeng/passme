@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-11-03 14:33:21
+ * Latest build : 2013-11-14 16:06:56
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -277,7 +277,7 @@
         isPunctuator:function(){
             var that = this;
             var c = that.c;
-            return _.isIn(c,[33, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 58, 59, 60, 61, 62, 63, 91, 93, 123, 124, 125, 126]);
+            return _.isIn(c,[33, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 58, 59, 60, 61, 62, 63, 91, 93,94, 123, 124, 125, 126]);
         },
         isStringLiteral:function(){
             var c = this.c;
@@ -288,31 +288,55 @@
                     break;
                 case 1:
                     var _t = t[0];
-                    return c !== _t || c === _t && t[t.length -1] !==92;
+                    return true;
+                    break;
+                case 2:
+                    var _t = t[0];
+                    return _t !== t[t.length-1];
                     break;
                 default :
                     var _t = t[0];
-                    return t[t.length-1] !== _t || c === _t && t[t.length-1] !==92;
+                    return t[t.length-1] !== _t || t[t.length-1] === _t && t[t.length-2].charCodeAt() === 92 && t[t.length-3].charCodeAt() !== 92 || c === _t.charCodeAt() && t[t.length-1].charCodeAt() === 92;
                     break;
             }
         },
         isRegularExpression:function(){
             // /pattern/attribute
-            var c = this.c;
-            var t = this.token;
+            var that = this;
+            var c = that.c;
+            var t = that.token;
+            function retrospective(){
+                var isReg = true;
+                for(var i=that.tokens.length;i>=0;i--){
+                    if(that.tokens[i] && that.tokens[i].type!=='WhiteSpace'){
+                        if(that.tokens[i].type =='Punctuator' && (that.tokens[i].value =='='||that.tokens[i].value =='['||that.tokens[i].value =='('||that.tokens[i].value==':')){
+                            isReg = true;
+                        }else {
+                            isReg = false;
+                        }
+                        break;
+                    }
+                }
+                return isReg;
+            }
             switch (t.length){
                 case 0:
                     return c === 47;// /
                     break;
                 case 1:
-                    return c !== 47 && c !== 42; // /*
+                    return c !== 47 && c !== 42 && c !==61 &&retrospective();// /* =
                     break;
                 default:
                     if(t.match(/(^|[^\\]{1})\//g).length == 2){
                         return !_.isIn(c,[33, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 58, 59, 60, 61, 62, 63, 91, 93, 123, 124, 125, 126]);
-                    }else{
-                        return true;
-                    }
+                    }else if(t.match(/(^|[^\\]{1})\//g).length == 1){
+                        if(_.isIn(String.fromCharCode(c),['\n']) && t[t.length-1] !== '\\'){
+                            return false;
+                        }else {
+                            return true;
+                        }
+                    } 
+                    return true;
                     break;
             }
         },
@@ -420,7 +444,13 @@
                     that.validate();
                 }else{
                     if(that.isPunctuator()){
-                        that.token += char;
+                        if(t[t.length-1] == '=' && that.c != 61){
+                            that.validate();
+                        }else if(t[t.length-1] == '/' && that.c != 61){
+                            that.validate();
+                        }else {
+                            that.token += char;
+                        }
                     }else{
                         that.validate();
                     }
@@ -439,7 +469,10 @@
                 if(that.isRegularExpression()){
                     that.token += char;
                 }else{
-                    if(that.isComment()){
+                    if(that.c == 61){
+                        that.type = Token['Punctuator'];
+                        that.token +=char;
+                    }else if(that.isComment()){
                         that.type = Token['Comment'];
                         that.token +=char;
                     }else{
@@ -498,7 +531,7 @@
             that.end();
         }
     };
-    /* build tree class 
+    /* build tree class AST
      *
      * based on https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
      *
