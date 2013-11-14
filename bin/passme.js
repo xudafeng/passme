@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-11-14 16:06:56
+ * Latest build : 2013-11-14 17:05:00
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -309,7 +309,7 @@
                 var isReg = true;
                 for(var i=that.tokens.length;i>=0;i--){
                     if(that.tokens[i] && that.tokens[i].type!=='WhiteSpace'){
-                        if(that.tokens[i].type =='Punctuator' && (that.tokens[i].value =='='||that.tokens[i].value =='['||that.tokens[i].value =='('||that.tokens[i].value==':')){
+                        if(that.tokens[i].type =='Punctuator' && (that.tokens[i].value =='='||that.tokens[i].value =='!'||that.tokens[i].value =='['||that.tokens[i].value =='('||that.tokens[i].value==':')){
                             isReg = true;
                         }else {
                             isReg = false;
@@ -444,9 +444,13 @@
                     that.validate();
                 }else{
                     if(that.isPunctuator()){
-                        if(t[t.length-1] == '=' && that.c != 61){
+                        if(_.isIn(t,['&&','||'])){
+                            that.validate();
+                        }else if(t[t.length-1] == '=' && that.c != 61){
                             that.validate();
                         }else if(t[t.length-1] == '/' && that.c != 61){
+                            that.validate();
+                        }else if(t[t.length-1] == '!' && that.c != 61){
                             that.validate();
                         }else {
                             that.token += char;
