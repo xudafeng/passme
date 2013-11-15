@@ -1,6 +1,5 @@
 "use strict";
 var fs = require('fs');
-var should = require('should');
 
 var passme = require('../bin/passme');
 
