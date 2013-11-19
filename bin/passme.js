@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-11-14 17:17:36
+ * Latest build : 2013-11-19 15:43:17
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -309,7 +309,7 @@
                 var isReg = true;
                 for(var i=that.tokens.length;i>=0;i--){
                     if(that.tokens[i] && that.tokens[i].type!=='WhiteSpace'){
-                        if(that.tokens[i].type =='Punctuator' && (that.tokens[i].value =='='||that.tokens[i].value =='!'||that.tokens[i].value =='['||that.tokens[i].value =='('||that.tokens[i].value==':')){
+                        if(that.tokens[i].type =='Punctuator' && (that.tokens[i].value =='='||that.tokens[i].value =='!'||that.tokens[i].value =='['||that.tokens[i].value =='('||that.tokens[i].value==':')||that.tokens[i].type =='Keyword'){
                             isReg = true;
                         }else {
                             isReg = false;
@@ -635,14 +635,13 @@
         clearFlags:function(){
             var that = this;
             that.type = null;
-            that.syntax = null;
             that.current = null;
         },
         scanner:function(){
             var that = this;
             _.each(that.tokens,function(){
                 that.getToken();
-                that.create();
+                that.router();
             });
         },
         getToken:function(){
@@ -650,9 +649,17 @@
             that.current = that.tokens[that.index];
             that.index ++;
         },
-        create:function(){
+        router:function(){
             var that = this;
             console.log(that.current)
+            if(that.isVariableDeclaration()){
+                console.log(1)
+            }
+        },
+        isVariableDeclaration:function(){
+            var that = this;
+            var variableDeclarationKinds = ['var','let','const'];
+            return _.isIn(that.current.value,variableDeclarationKinds);
         }
     };
 
@@ -668,6 +675,13 @@
     *   tokens: [ Tokens ];
     * }
     */
+    /**
+     * interface VariableDeclaration <: Declaration {
+     *  type: "VariableDeclaration";
+     *  declarations: [ VariableDeclarator ];
+     *  kind: "var" | "let" | "const";
+     * }
+     */
 
     /*
     * Functions

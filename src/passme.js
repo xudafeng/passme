@@ -289,7 +289,7 @@
                 var isReg = true;
                 for(var i=that.tokens.length;i>=0;i--){
                     if(that.tokens[i] && that.tokens[i].type!=='WhiteSpace'){
-                        if(that.tokens[i].type =='Punctuator' && (that.tokens[i].value =='='||that.tokens[i].value =='!'||that.tokens[i].value =='['||that.tokens[i].value =='('||that.tokens[i].value==':')){
+                        if(that.tokens[i].type =='Punctuator' && (that.tokens[i].value =='='||that.tokens[i].value =='!'||that.tokens[i].value =='['||that.tokens[i].value =='('||that.tokens[i].value==':')||that.tokens[i].type =='Keyword'){
                             isReg = true;
                         }else {
                             isReg = false;
@@ -615,14 +615,13 @@
         clearFlags:function(){
             var that = this;
             that.type = null;
-            that.syntax = null;
             that.current = null;
         },
         scanner:function(){
             var that = this;
             _.each(that.tokens,function(){
                 that.getToken();
-                that.create();
+                that.router();
             });
         },
         getToken:function(){
@@ -630,9 +629,17 @@
             that.current = that.tokens[that.index];
             that.index ++;
         },
-        create:function(){
+        router:function(){
             var that = this;
             console.log(that.current)
+            if(that.isVariableDeclaration()){
+                console.log(1)
+            }
+        },
+        isVariableDeclaration:function(){
+            var that = this;
+            var variableDeclarationKinds = ['var','let','const'];
+            return _.isIn(that.current.value,variableDeclarationKinds);
         }
     };
 
@@ -648,6 +655,13 @@
     *   tokens: [ Tokens ];
     * }
     */
+    /**
+     * interface VariableDeclaration <: Declaration {
+     *  type: "VariableDeclaration";
+     *  declarations: [ VariableDeclarator ];
+     *  kind: "var" | "let" | "const";
+     * }
+     */
 
     /*
     * Functions
