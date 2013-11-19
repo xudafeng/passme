@@ -448,6 +448,8 @@
                             that.validate();
                         }else if(t[t.length-1] == '!' && that.c != 61){
                             that.validate();
+                        }else if(_.isIn(that.c,[40,41,91,93])){
+                            that.validate();
                         }else {
                             that.token += char;
                         }

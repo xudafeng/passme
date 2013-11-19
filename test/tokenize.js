@@ -31,12 +31,12 @@ describe('Punctuator', function(){
 describe('jQuery', function(){
     var jQuery = fs.readFileSync('test/3rdparty/jquery-1.10.2.js','utf8');
     it('should return array when the value is jQuery', function(){
-        passme.tokenize(jQuery).length.should.equal(48004);
+        passme.tokenize(jQuery).length.should.equal(48028);
     })
 })
 describe('kissy', function(){
     var kissy = fs.readFileSync('test/3rdparty/kissy-1.4.0.js','utf8');
     it('should return array when the value is kissy', function(){
-        passme.tokenize(kissy)[22812].value.should.equal('nodejs');
+        passme.tokenize(kissy)[22853].value.should.equal('nodejs');
     })
 })

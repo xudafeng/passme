@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-11-19 20:57:57
+ * Latest build : 2013-11-20 0:17:46
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -467,6 +467,8 @@
                         }else if(t[t.length-1] == '/' && that.c != 61){
                             that.validate();
                         }else if(t[t.length-1] == '!' && that.c != 61){
+                            that.validate();
+                        }else if(_.isIn(that.c,[40,41,91,93])){
                             that.validate();
                         }else {
                             that.token += char;
