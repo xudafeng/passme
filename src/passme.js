@@ -289,7 +289,7 @@
                 var isReg = true;
                 for(var i=that.tokens.length;i>=0;i--){
                     if(that.tokens[i] && that.tokens[i].type!=='WhiteSpace'){
-                        if(that.tokens[i].type =='Punctuator' && (that.tokens[i].value =='||' || that.tokens[i].value =='&&' || that.tokens[i].value =='='||that.tokens[i].value =='!'||that.tokens[i].value =='['||that.tokens[i].value =='('||that.tokens[i].value==':')||that.tokens[i].type =='Keyword'){
+                        if(that.tokens[i].type =='Punctuator' && _.isIn(that.tokens[i].value,[',','||','&&','=','==','===','!','[','(',':']) ||that.tokens[i].type =='Keyword'){
                             isReg = true;
                         }else {
                             isReg = false;
