@@ -304,19 +304,20 @@
                     return c === 47;// /
                     break;
                 case 1:
-                    return c !== 47 && c !== 42 && c !==61 &&retrospective();// /* =
+                    return c !== 47 && c !== 42 && c !==61 &&retrospective();// / * =
                     break;
                 default:
-                    if(t.match(/(^|[^\\]{1})\//g).length == 2){
+                    if(t.match(/(^|[^\\\^]{1})\//g).length == 2){
                         return !_.isIn(c,[33, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 58, 59, 60, 61, 62, 63, 91, 93, 123, 124, 125, 126]);
-                    }else if(t.match(/(^|[^\\]{1})\//g).length == 1){
-                        if(_.isIn(String.fromCharCode(c),['\n']) && t[t.length-1] !== '\\'){
+                    }else if(t.match(/(^|[^\\\^]{1})\//g).length == 1){
+                        if(/\\\\\//.test(t)&&!/\\\\\\\//.test(t)){
+                            return !_.isIn(c,[33, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 58, 59, 60, 61, 62, 63, 91, 93, 123, 124, 125, 126]);
+                        }else if(_.isIn(c,[10]) && t[t.length-1] !== '\\'){
                             return false;
                         }else {
                             return true;
                         }
-                    } 
-                    return true;
+                    }
                     break;
             }
         },
