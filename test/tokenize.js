@@ -40,3 +40,9 @@ describe('kissy', function(){
         passme.tokenize(kissy)[22853].value.should.equal('nodejs');
     })
 })
+describe('base', function(){
+    var base = fs.readFileSync('test/3rdparty/base.js','utf8');
+    it('should return array when the value is base', function(){
+        passme.tokenize(base)[passme.tokenize(base).length-1].value.should.equal(';');
+    })
+})
