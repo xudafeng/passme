@@ -299,6 +299,21 @@
                 }
                 return isReg;
             }
+            function getSlashNum(t){
+                var n = 1;
+                var o = false;
+                for(var i = 0;i<t.length;i++){
+                    if(t[i]=='[' && t[i-1] !=='\\'){
+                        o =true;
+                    }else if(t[i]==']'&& t[i-1] !=='\\'){
+                        o = false;
+                    }
+                    if(i>0 && t[i] == '/' && t[i-1]!=='\\' && !o){
+                        n++;
+                    }
+                }
+                return n;
+            }
             switch (t.length){
                 case 0:
                     return c === 47;// /
@@ -307,9 +322,9 @@
                     return c !== 47 && c !== 42 && c !==61 &&retrospective();// / * =
                     break;
                 default:
-                    if(t.match(/(^|[^\\\^]{1})\//g).length == 2){
+                    if(getSlashNum(t) == 2){
                         return !_.isIn(c,[33, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 58, 59, 60, 61, 62, 63, 91, 93, 123, 124, 125, 126]);
-                    }else if(t.match(/(^|[^\\\^]{1})\//g).length == 1){
+                    }else if(getSlashNum(t) == 1){
                         if(/\\\\\//.test(t)&&!/\\\\\\\//.test(t)){
                             return !_.isIn(c,[33, 37, 38, 40, 41, 42, 43, 44, 45, 46, 47, 58, 59, 60, 61, 62, 63, 91, 93, 123, 124, 125, 126]);
                         }else if(_.isIn(c,[10]) && t[t.length-1] !== '\\'){
