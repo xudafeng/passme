@@ -31,7 +31,7 @@ describe('Punctuator', function(){
 describe('jQuery', function(){
     var jQuery = fs.readFileSync('test/3rdparty/jquery-1.10.2.js','utf8');
     it('should return array when the value is jQuery', function(){
-        passme.tokenize(jQuery).length.should.equal(48008);
+        passme.tokenize(jQuery).length.should.equal(48004);
     })
 })
 describe('kissy', function(){

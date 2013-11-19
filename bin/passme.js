@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-11-19 17:05:49
+ * Latest build : 2013-11-19 17:20:07
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -309,7 +309,7 @@
                 var isReg = true;
                 for(var i=that.tokens.length;i>=0;i--){
                     if(that.tokens[i] && that.tokens[i].type!=='WhiteSpace'){
-                        if(that.tokens[i].type =='Punctuator' && (that.tokens[i].value =='='||that.tokens[i].value =='!'||that.tokens[i].value =='['||that.tokens[i].value =='('||that.tokens[i].value==':')||that.tokens[i].type =='Keyword'){
+                        if(that.tokens[i].type =='Punctuator' && (that.tokens[i].value =='||' || that.tokens[i].value =='='||that.tokens[i].value =='!'||that.tokens[i].value =='['||that.tokens[i].value =='('||that.tokens[i].value==':')||that.tokens[i].type =='Keyword'){
                             isReg = true;
                         }else {
                             isReg = false;
