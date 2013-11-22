@@ -289,7 +289,7 @@
                 var isReg = true;
                 for(var i=that.tokens.length;i>=0;i--){
                     if(that.tokens[i] && that.tokens[i].type!=='WhiteSpace'){
-                        if(that.tokens[i].type =='Punctuator' && _.isIn(that.tokens[i].value,[',','||','&&','=','==','===','!','[','(',':','?']) ||that.tokens[i].type =='Keyword'){
+                        if(that.tokens[i].type =='Punctuator' && _.isIn(that.tokens[i].value,['+',',','||','&&','=','==','===','!','[','(',':','?']) ||that.tokens[i].type =='Keyword'){
                             isReg = true;
                         }else {
                             isReg = false;
@@ -442,13 +442,7 @@
                     if(that.isPunctuator()){
                         if(_.isIn(t,['&&','||'])){
                             that.validate();
-                        }else if(t[t.length-1] == '=' && that.c != 61){
-                            that.validate();
-                        }else if(t[t.length-1] == '/' && that.c != 61){
-                            that.validate();
-                        }else if(t[t.length-1] == '!' && that.c != 61){
-                            that.validate();
-                        }else if(_.isIn(that.c,[40,41,91,93])){
+                        }else if(_.isIn(t[t.length-1],['+','-','*','/','!','=']) && that.c != 61){
                             that.validate();
                         }else {
                             that.token += char;

@@ -31,13 +31,14 @@ describe('Punctuator', function(){
 describe('jQuery', function(){
     var jQuery = fs.readFileSync('test/3rdparty/jquery-1.10.2.js','utf8');
     it('should return array when the value is jQuery', function(){
-        passme.tokenize(jQuery).length.should.equal(48028);
+        passme.tokenize(jQuery).length.should.equal(48187);
     })
 })
 describe('kissy', function(){
     var kissy = fs.readFileSync('test/3rdparty/kissy-1.4.0.js','utf8');
+    console.log(passme.tokenize(kissy).length)
     it('should return array when the value is kissy', function(){
-        passme.tokenize(kissy)[22853].value.should.equal('nodejs');
+        passme.tokenize(kissy)[22921].value.should.equal('nodejs');
     })
 })
 describe('base', function(){
