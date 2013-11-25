@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-11-23 0:12:20
+ * Latest build : 2013-11-25 17:47:25
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -626,14 +626,10 @@
         init:function(){
             var that = this;
             that.syntaxTree = {};
-            that.setTokens();
             that.initIndex();
+            that.initFlags();
             that.scanner();
             return that.syntaxTree;
-        },
-        setTokens:function(){
-            var that = this;
-            that.syntaxTree['tokens'] = that.tokens;
         },
         initIndex:function(){
             var that = this;
@@ -664,7 +660,93 @@
         router:function(){
             var that = this;
             console.log(that.current)
-            if(that.isVariableDeclaration()){
+            switch(that.type){
+                case null:
+                    parseProgram();
+                    break;
+                case Syntax['Program']:
+                    break;
+            }
+            /**
+            * Programs
+            *
+            * A complete program source tree.
+            *
+            * interface Program <: Node {
+            *   type: "Program";
+            *   body: [ Statement ];
+            *   comments: [ Comments ];
+            *   tokens: [ Tokens ];
+            * }
+            */
+            function parseProgram(){
+                that.type = Syntax['Program'];
+                that.syntaxTree['type'] = Syntax['Program'];
+                that.syntaxTree['body'] = [];
+                that.syntaxTree['comments'] = [];
+                that.syntaxTree['tokens'] = that.tokens;
+            }
+            /**
+             * interface VariableDeclaration <: Declaration {
+             *  type: "VariableDeclaration";
+             *  declarations: [ VariableDeclarator ];
+             *  kind: "var" | "let" | "const";
+             * }
+             */
+
+            /*
+            * Functions
+            *
+            * A function declaration or expression.
+            * The body of the function may be a block statement, or in the case of an expression closure, an expression.
+            *
+            * interface Function <: Node {
+            *   id: Identifier | null;
+            *   params: [ Pattern ];
+            *   defaults: [ Expression ];
+            *   rest: Identifier | null;
+            *   body: BlockStatement | Expression;
+            *   generator: boolean;
+            *   expression: boolean;
+            * }
+            */
+
+            /**
+            * interface EmptyStatement <: Statement {
+            *   type: "EmptyStatement";
+            * }
+            */
+            function parseEmptyStatement(){
+            
+            }
+            /**
+            * interface BlockStatement <: Statement {
+            *   type: "BlockStatement";
+            *   body: [ Statement ];
+            * }
+            */
+            function parseBlockStatement(){
+            
+            }
+            /**
+            * interface ExpressionStatement <: Statement {
+            *   type: "ExpressionStatement";
+            *   expression: Expression;
+            * }
+            */
+            function parseExpressionStatement(){
+            
+            }
+            /**
+            * interface IfStatement <: Statement {
+            *   type: "IfStatement";
+            *   test: Expression;
+            *   consequent: Statement;
+            *   alternate: Statement | null;
+            * }
+            */
+            function parseIfStatement(){
+            
             }
         },
         isVariableDeclaration:function(){
@@ -673,81 +755,6 @@
             return _.isIn(that.current.value,variableDeclarationKinds);
         }
     };
-
-    /**
-    * Programs
-    *
-    * A complete program source tree.
-    *
-    * interface Program <: Node {
-    *   type: "Program";
-    *   body: [ Statement ];
-    *   comments: [ Comments ];
-    *   tokens: [ Tokens ];
-    * }
-    */
-    /**
-     * interface VariableDeclaration <: Declaration {
-     *  type: "VariableDeclaration";
-     *  declarations: [ VariableDeclarator ];
-     *  kind: "var" | "let" | "const";
-     * }
-     */
-
-    /*
-    * Functions
-    *
-    * A function declaration or expression.
-    * The body of the function may be a block statement, or in the case of an expression closure, an expression.
-    *
-    * interface Function <: Node {
-    *   id: Identifier | null;
-    *   params: [ Pattern ];
-    *   defaults: [ Expression ];
-    *   rest: Identifier | null;
-    *   body: BlockStatement | Expression;
-    *   generator: boolean;
-    *   expression: boolean;
-    * }
-    */
-
-    /**
-    * interface EmptyStatement <: Statement {
-    *   type: "EmptyStatement";
-    * }
-    */
-    function parseEmptyStatement(){
-    
-    }
-    /**
-    * interface BlockStatement <: Statement {
-    *   type: "BlockStatement";
-    *   body: [ Statement ];
-    * }
-    */
-    function parseBlockStatement(){
-    
-    }
-    /**
-    * interface ExpressionStatement <: Statement {
-    *   type: "ExpressionStatement";
-    *   expression: Expression;
-    * }
-    */
-    function parseExpressionStatement(){
-    
-    }
-    /**
-    * interface IfStatement <: Statement {
-    *   type: "IfStatement";
-    *   test: Expression;
-    *   consequent: Statement;
-    *   alternate: Statement | null;
-    * }
-    */
-    function parseIfStatement(){
-    
-    }
     /* set options */
     function setOptions(code,o){
         userConfig = _.mix(options,o);
