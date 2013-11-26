@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-11-25 17:47:25
+ * Latest build : 2013-11-26 11:44:12
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -642,6 +642,7 @@
         },
         clearFlags:function(){
             var that = this;
+            that.stack = [];
             that.type = null;
             that.current = null;
         },
@@ -657,6 +658,15 @@
             that.current = that.tokens[that.index];
             that.index ++;
         },
+        stackIn:function(c){
+            this.stack.push(c);
+        },
+        stackOut:function(c){
+            this.stack.pop();
+        },
+        stackTop:function(){
+            return this.stack[this.stack.length-1];
+        },
         router:function(){
             var that = this;
             console.log(that.current)
@@ -665,6 +675,7 @@
                     parseProgram();
                     break;
                 case Syntax['Program']:
+                     
                     break;
             }
             /**
@@ -685,7 +696,10 @@
                 that.syntaxTree['body'] = [];
                 that.syntaxTree['comments'] = [];
                 that.syntaxTree['tokens'] = that.tokens;
+
+                that.stack.push(that.syntaxTree['body']);
             }
+            
             /**
              * interface VariableDeclaration <: Declaration {
              *  type: "VariableDeclaration";
