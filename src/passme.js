@@ -677,16 +677,6 @@
             var that = this;
             //console.log(that.current)
             switch(that.type){
-                case Syntax['Program']:
-                    if(that.isKeyWord()){
-                        if(that.isVariableDeclaration()){
-                            that.type = Syntax['VariableDeclaration'];
-                            parseVariableDeclaration();
-                        }
-                    }else{
-                    
-                    }
-                    break;
                 case Syntax['VariableDeclaration']:
                     that.type = Syntax['VariableDeclarator'];
                     parseVariableDeclarator();
@@ -696,6 +686,16 @@
                     break;
                 case null:
                     console.log(that.current);
+                    break;
+                default:
+                    if(that.isKeyWord()){
+                        if(that.isVariableDeclaration()){
+                            that.type = Syntax['VariableDeclaration'];
+                            parseVariableDeclaration();
+                        }
+                    }else{
+                    
+                    }
                     break;
             }            
             /**
@@ -769,7 +769,7 @@
                                 that.tempStack = [];
                                 that.swap = null;
                                 that.stackOut();
-                                that.type = null;
+                                that.type = true;
                             }else {
                                 /**
                                  * interface Literal <: Node, Expression {
@@ -785,7 +785,7 @@
                                 that.tempStack = [];
                                 that.swap = null;
                                 that.stackOut();
-                                that.type = null;
+                                that.type = true;
                             }
                         }
                     }else if(that.tempStack[0].value === ';'){
