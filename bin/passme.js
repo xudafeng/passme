@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-11-26 11:44:12
+ * Latest build : 2013-11-27 13:40:59
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -643,41 +643,20 @@
         clearFlags:function(){
             var that = this;
             that.stack = [];
+            that.swap = null;
+            that.tempStack = [];
             that.type = null;
             that.current = null;
         },
         scanner:function(){
             var that = this;
+            that.initProgram();
             _.each(that.tokens,function(){
                 that.getToken();
                 that.router();
             });
         },
-        getToken:function(){
-            var that = this;
-            that.current = that.tokens[that.index];
-            that.index ++;
-        },
-        stackIn:function(c){
-            this.stack.push(c);
-        },
-        stackOut:function(c){
-            this.stack.pop();
-        },
-        stackTop:function(){
-            return this.stack[this.stack.length-1];
-        },
-        router:function(){
-            var that = this;
-            console.log(that.current)
-            switch(that.type){
-                case null:
-                    parseProgram();
-                    break;
-                case Syntax['Program']:
-                     
-                    break;
-            }
+        initProgram:function(){
             /**
             * Programs
             *
@@ -690,16 +669,55 @@
             *   tokens: [ Tokens ];
             * }
             */
-            function parseProgram(){
-                that.type = Syntax['Program'];
-                that.syntaxTree['type'] = Syntax['Program'];
-                that.syntaxTree['body'] = [];
-                that.syntaxTree['comments'] = [];
-                that.syntaxTree['tokens'] = that.tokens;
-
-                that.stack.push(that.syntaxTree['body']);
-            }
-            
+            var that = this;
+            that.type = Syntax['Program'];
+            that.syntaxTree['type'] = Syntax['Program'];
+            that.syntaxTree['body'] = [];
+            that.syntaxTree['comments'] = [];
+            that.syntaxTree['tokens'] = that.tokens;
+            that.stackIn(that.syntaxTree['body']);
+        },
+        getToken:function(){
+            var that = this;
+            that.current = that.tokens[that.index];
+            that.pre = that.tokens[that.index-1];
+            that.next = that.tokens[that.index+1];
+            that.index ++;
+        },
+        stackIn:function(c){
+            this.stack.push(c);
+        },
+        stackOut:function(c){
+            this.stack.pop();
+        },
+        stackTopIn:function(c){
+            this.stack[this.stack.length-1].push(c);
+        },
+        router:function(){
+            var that = this;
+            //console.log(that.current)
+            switch(that.type){
+                case Syntax['Program']:
+                    if(that.isKeyWord()){
+                        if(that.isVariableDeclaration()){
+                            that.type = Syntax['VariableDeclaration'];
+                            parseVariableDeclaration();
+                        }
+                    }else{
+                    
+                    }
+                    break;
+                case Syntax['VariableDeclaration']:
+                    that.type = Syntax['VariableDeclarator'];
+                    parseVariableDeclarator();
+                    break;
+                case Syntax['VariableDeclarator']:
+                    parseVariableDeclarator()
+                    break;
+                case null:
+                    console.log(that.current);
+                    break;
+            }            
             /**
              * interface VariableDeclaration <: Declaration {
              *  type: "VariableDeclaration";
@@ -707,7 +725,106 @@
              *  kind: "var" | "let" | "const";
              * }
              */
-
+            function parseVariableDeclaration(){
+                that.swap = {
+                    type : that.type,
+                    declarations : [],
+                    kind : that.current.value
+                };
+                that.stackTopIn(that.swap);
+                that.stackIn(that.swap['declarations']);
+                that.swap = null;
+            }
+            /**
+             * interface VariableDeclarator <: Node {
+             *  type: "VariableDeclarator";
+             *  id: Pattern;
+             *  init: Expression | null;
+             * }
+             */
+            function parseVariableDeclarator(){
+                if(that.swap){
+                    that.tempStack.push(that.current);
+                    if(that.tempStack[0].value === '='){
+                        if(that.tempStack[1]){
+                            if(that.tempStack[1].value ==='function'){
+                                /**
+                                 *interface FunctionExpression <: Function, Expression {
+                                 *  type: "FunctionExpression";
+                                 *  id: Identifier | null;
+                                 *  params: [ Pattern ];
+                                 *  defaults: [ Expression ];
+                                 *  rest: Identifier | null;
+                                 *  body: BlockStatement | Expression;
+                                 *  generator: boolean;
+                                 *  expression: boolean;
+                                 *}
+                                 */
+                                that.swap['init'] = {
+                                    type: 'FunctionExpression',
+                                    id:'',
+                                    params:[]
+                                };
+                                that.stackTopIn(that.swap);
+                                that.tempStack = [];
+                                that.swap = null;
+                                that.stackOut();
+                                that.type = null;
+                            }else if(that.tempStack[1].value ==='{'){
+                                /**
+                                 *interface ObjectExpression <: Expression {
+                                 *  type: "ObjectExpression";
+                                 *  properties: [ { key: Literal | Identifier,
+                                 *  value: Expression,
+                                 *  kind: "init" | "get" | "set" } ];
+                                 *}
+                                 */
+                                that.swap['init'] = {
+                                    type:'ObjectExpression',
+                                    properties:[],
+                                    value:'',
+                                    kind:'init'
+                                };
+                                that.stackTopIn(that.swap);
+                                that.tempStack = [];
+                                that.swap = null;
+                                that.stackOut();
+                                that.type = null;
+                            }else {
+                                /**
+                                 * interface Literal <: Node, Expression {
+                                 * type: "Literal";
+                                 * value: string | boolean | null | number | RegExp;
+                                 * }
+                                 */
+                                that.swap['init'] = {
+                                    type:'Literal',
+                                    value:that.current.value
+                                };
+                                that.stackTopIn(that.swap);
+                                that.tempStack = [];
+                                that.swap = null;
+                                that.stackOut();
+                                that.type = null;
+                            }
+                        }
+                    }else if(that.tempStack[0].value === ';'){
+                        that.stackTopIn(that.swap);
+                        that.tempStack = [];
+                        that.swap = null;
+                        that.stackOut();
+                        that.type = null;
+                    }else {
+                        //console.log('SyntaxError: Unexpected identifier');
+                    }
+                }else{
+                    that.swap = {
+                        type : that.type,
+                        id :that.current.value,
+                        init:null
+                    };
+                }
+            }
             /*
             * Functions
             *
@@ -762,6 +879,9 @@
             function parseIfStatement(){
             
             }
+        },
+        isKeyWord:function(){
+            return this.current.type === 'Keyword';
         },
         isVariableDeclaration:function(){
             var that = this;
