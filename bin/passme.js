@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-11-27 13:53:35
+ * Latest build : 2013-12-04 0:05:28
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -282,6 +282,33 @@
         isStringLiteral:function(){
             var c = this.c;
             var t = this.token;
+            function isEndOfString(){
+                var _t = t[0];
+                if(t[t.length-1] !== _t){
+                    return true;
+                }else if(t[t.length-1] === _t){
+                    if(t[t.length-2].charCodeAt() === 92){
+                        var offset = 0;
+                        var num = 0;
+                        var can = true;
+                        while(can){
+                            offset ++;
+                            if(t[t.length-(2+offset)].charCodeAt() !== 92){
+                                can = false;
+                            }else{
+                                num ++;
+                            }
+                        }
+                        return num %2 ==0;
+                    }else{
+                        return false;
+                    }
+                }else if(c === _t.charCodeAt() && t[t.length-1].charCodeAt() === 92){//next turn
+                    return true;
+                }else{
+                    return false;
+                }
+            }
             switch (t.length){
                 case 0:
                     return c === 39 || c === 34;
@@ -295,8 +322,7 @@
                     return _t !== t[t.length-1];
                     break;
                 default :
-                    var _t = t[0];
-                    return t[t.length-1] !== _t || t[t.length-1] === _t && t[t.length-2].charCodeAt() === 92 && t[t.length-3].charCodeAt() !== 92 || c === _t.charCodeAt() && t[t.length-1].charCodeAt() === 92;
+                    return isEndOfString();
                     break;
             }
         },
@@ -820,7 +846,7 @@
                 }else{
                     that.swap = {
                         type : that.type,
-                        id :that.current.value,
+                        id : {type:'Identifier',name:that.current.value},
                         init:null
                     };
                 }
