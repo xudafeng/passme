@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-12-04 13:29:28
+ * Latest build : 2013-12-04 22:12:31
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -957,6 +957,29 @@
              * }
              */
             function parseArrayExpression(){
+            
+            }
+            /**
+             * interface ArrowExpression <: Function, Expression {
+             * type: "ArrowExpression";
+             * params: [ Pattern ];
+             * defaults: [ Expression ];
+             * rest: Identifier | null;
+             * body: BlockStatement | Expression;
+             * generator: boolean;
+             * expression: boolean;
+             * }
+             */
+            function parseArrowExpression(){
+            
+            }
+            /**
+             * interface SequenceExpression <: Expression {
+             * type: "SequenceExpression";
+             * expressions: [ Expression ];
+             * }
+             */
+            function parseSequenceExpression(){
             
             }
         },

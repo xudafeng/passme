@@ -939,6 +939,29 @@
             function parseArrayExpression(){
             
             }
+            /**
+             * interface ArrowExpression <: Function, Expression {
+             * type: "ArrowExpression";
+             * params: [ Pattern ];
+             * defaults: [ Expression ];
+             * rest: Identifier | null;
+             * body: BlockStatement | Expression;
+             * generator: boolean;
+             * expression: boolean;
+             * }
+             */
+            function parseArrowExpression(){
+            
+            }
+            /**
+             * interface SequenceExpression <: Expression {
+             * type: "SequenceExpression";
+             * expressions: [ Expression ];
+             * }
+             */
+            function parseSequenceExpression(){
+            
+            }
         },
         isKeyWord:function(){
             return this.current.type === 'Keyword';
