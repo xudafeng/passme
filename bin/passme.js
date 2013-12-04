@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-12-04 0:05:28
+ * Latest build : 2013-12-04 13:29:28
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -730,6 +730,9 @@
                 case Syntax['VariableDeclarator']:
                     parseVariableDeclarator()
                     break;
+                case Syntax['BinaryExpression']:
+                    parseBinaryExpression()
+                    break;
                 case null:
                     console.log(that.current);
                     break;
@@ -895,14 +898,65 @@
             
             }
             /**
-            * interface IfStatement <: Statement {
-            *   type: "IfStatement";
-            *   test: Expression;
-            *   consequent: Statement;
-            *   alternate: Statement | null;
-            * }
-            */
+             * interface BinaryExpression <: Expression {
+             * type: "BinaryExpression";
+             * operator: BinaryOperator;
+             * left: Expression;
+             * right: Expression;
+             * }
+             */
+            function parseBinaryExpression(){
+            
+            }
+            /**
+             * interface UnaryExpression <: Expression {
+             * type: "UnaryExpression";
+             * operator: UnaryOperator;
+             * prefix: boolean;
+             * argument: Expression;
+             * }
+             */
+            function parseUnaryExpression(){
+            
+            }
+            /**
+             * interface SequenceExpression <: Expression {
+             * type: "SequenceExpression";
+             * expressions: [ Expression ];
+             * }
+             */
+            function parseSequenceExpression(){
+            
+            }
+            /**
+             * interface IfStatement <: Statement {
+             * type: "IfStatement";
+             * test: Expression;
+             * consequent: Statement;
+             * alternate: Statement | null;
+             * }
+             */
             function parseIfStatement(){
+            
+            }
+            /**
+             * interface ObjectExpression <: Expression {
+             * type: "ObjectExpression";
+             * properties: [ { key: Literal | Identifier,
+             *       value: Expression,
+             *       kind: "init" | "get" | "set" } ];
+             * }
+             */
+            function parseObjectExpression(){
+            
+            }
+            /**
+             * interface ArrayExpression <: Expression {
+             * type: "ArrayExpression";
+             * elements: [ Expression | null ];
+             * }
+             */
+            function parseArrayExpression(){
             
             }
         },
