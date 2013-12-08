@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-12-08 13:57:32
+ * Latest build : 2013-12-08 16:27:58
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -582,7 +582,7 @@
             if (typeof (key) != "undefined") {
                 if (this.has(key) == false) {
                     this.hash[key] = typeof (value) == "undefined" ? null : value;
-                    return true;
+                    return this;
                 } else {
                     return false;
                 }
@@ -611,6 +611,7 @@
                 delete this.hash[k];
             }
         }
+        return this;
     }    /* build tree class AST
      *
      * based on https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
@@ -955,11 +956,7 @@
                  * build root node
                  */
                 that.type = Syntax['Program'];
-                that.root = new Hash();
-                that.root.set('type',Syntax['Program']);
-                that.root.set('body',[]);
-                that.root.set('comments',[]);
-                that.root.set('tokens',that.tokens);
+                that.root = new Hash().set('type',Syntax['Program']).set('body',[]).set('comments',[]).set('tokens',that.tokens);
                 /**
                  * stack in body list
                  */
@@ -1047,11 +1044,7 @@
              * }
              */
             function parseVariableDeclaration(){
-                that.swap = new Hash();
-                that.swap.set('type',that.type);
-                that.swap.set('declarations',[]);
-                that.swap.set('kind',that.current.value);
-                console.log(that.stack)
+                that.swap = new Hash().set('type',that.type).set('declarations',[]).set('kind',that.current.value);
                 that.stackTopIn(that.swap.hash);
                 that.stackIn(that.swap.get('declarations'));
                 that.tempStack = ['init','id','type'];
@@ -1067,8 +1060,7 @@
             function parseVariableDeclarator(){
                 switch(that.tempStack[that.tempStack.length-1]){
                     case 'type':
-                        that.swap = new Hash();
-                        that.swap.set('type',Syntax['VariableDeclarator']);
+                        that.swap = new Hash().set('type',Syntax['VariableDeclarator']);
                         that.type = Syntax['VariableDeclarator'];
                         that.tempStack.pop();
                         break;
@@ -1077,13 +1069,11 @@
                             that.swap.set('id',that.current.value);
                         }else if(that.isPunctuator()){
                             if(that.current.value === ','){
-                                that.swap.set('init',null);
-                                that.swap.set('type',Syntax['VariableDeclarator']);
+                                that.swap.set('init',null).set('type',Syntax['VariableDeclarator']);
                                 that.stackTopIn(that.swap.hash);
                                 that.swap = new Hash();
                             }else if(that.current.value === ';'){
-                                that.swap.set('init',null);
-                                that.swap.set('type',Syntax['VariableDeclarator']);
+                                that.swap.set('init',null).set('type',Syntax['VariableDeclarator']);
                                 that.stackTopIn(that.swap.hash);
                                 that.stackOut();
                                 that.type = Syntax['Program'];
@@ -1104,7 +1094,17 @@
                                 'type':that.current.type
                             });
                             that.stackTopIn(that.swap.hash);
-                            that.stackOut();
+                        }else if(that.isPunctuator()){
+                            if(that.current.value === ','){
+                                that.swap = new Hash();
+                                that.swap.set('type',Syntax['VariableDeclarator']);
+                            }else if(that.current.value === ';'||that.current.value === '\n'){
+                                that.stackOut();
+                            }else{
+                                console.log('error');
+                            }
+                        }else {
+                            console.log('error');
                         }
                         break;
                 }
