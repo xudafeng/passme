@@ -788,6 +788,7 @@
                 case Syntax['ObjectExpression']:
                     break;
                 case Syntax['FunctionExpression']:
+                    parseFunctionExpression();
                     break;
                 case Syntax['ArrowExpression']:
                     break;
@@ -895,6 +896,7 @@
                             case 'extends':
                                 break;
                             case 'function':
+                                type = Syntax['FunctionDeclaration'];
                                 break;
                             case 'continue':
                                 break;
@@ -919,6 +921,7 @@
                     break;
             }
             //Programs
+
             /**
             * Programs
             *
@@ -1068,12 +1071,31 @@
                         }
                         break;
                     case 'init':
-                        if(that.isKeyWord()||that.isStringLiteral()||that.isNumericLiteral()||that.isRegularExpression()){
+                        if(that.isStringLiteral()||that.isNumericLiteral()||that.isRegularExpression()){
                             that.swap.set('init',{
                                 'value':that.current.value,
                                 'type':that.current.type
                             });
                             that.stackTopIn(that.swap.hash);
+                        }else if(that.isKeyWord()){
+                            switch(that.current.value){
+                                case 'function':
+                                    that.swap.set('init',{
+                                        'type':Syntax['FunctionExpression'],
+                                        'id':null,
+                                        'defaults':[],
+                                        'params':[],
+                                        'body':[],
+                                        'rest':null,
+                                        'generator':false,
+                                        'expression':false
+                                    });
+                                    that.tempStack = ['body','params'];
+                                    that.type = Syntax['FunctionExpression'];
+                                    that.stackIn(that.swap.get('init')['params']);
+                                    that.stackTopIn(that.swap.hash);
+                                    break;
+                            }
                         }else if(that.isPunctuator()){
                             if(that.current.value === ','){
                                 that.swap = new Hash();
@@ -1090,23 +1112,21 @@
                         break;
                 }
             }
-            /*
-            * Functions
-            *
-            * A function declaration or expression.
-            * The body of the function may be a block statement, or in the case of an expression closure, an expression.
-            *
-            * interface Function <: Node {
-            *   id: Identifier | null;
-            *   params: [ Pattern ];
-            *   defaults: [ Expression ];
-            *   rest: Identifier | null;
-            *   body: BlockStatement | Expression;
-            *   generator: boolean;
-            *   expression: boolean;
-            * }
-            */
-
+            /**
+             * interface FunctionDeclaration <: Function, Declaration {
+             * type: "FunctionDeclaration";
+             * id: Identifier;
+             * params: [ Pattern ];
+             * defaults: [ Expression ];
+             * rest: Identifier | null;
+             * body: BlockStatement | Expression;
+             * generator: boolean;
+             * expression: boolean;
+             * }
+             */
+            function parseFunctionDeclaration(){
+            
+            }
             /**
              * interface ObjectExpression <: Expression {
              * type: "ObjectExpression";
@@ -1149,6 +1169,38 @@
              */
             function parseSequenceExpression(){
             
+            }
+            /**
+             * interface FunctionExpression <: Function, Expression {
+             * type: "FunctionExpression";
+             * id: Identifier | null;
+             * params: [ Pattern ];
+             * defaults: [ Expression ];
+             * rest: Identifier | null;
+             * body: BlockStatement | Expression;
+             * generator: boolean;
+             * expression: boolean;
+             * }
+             */
+            function parseFunctionExpression(){
+                switch(that.tempStack[that.tempStack.length-1]){
+                    case 'params':
+                        if(that.isIdentifier()){
+                            that.stackIn({
+                                'type':that.current.type,
+                                'name':that.current.value
+                            });
+                        }else if(that.isPunctuator()){
+                            if(that.current.value ===')'){
+                                that.stackOut();
+                                that.tempStack.pop();
+                            }
+                        }
+                        break;
+                    case 'body':
+                        console.log(that.current)
+                        break;
+                }
             }
         },
         isKeyWord:function(){
