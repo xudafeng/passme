@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-12-08 16:27:58
+ * Latest build : 2013-12-08 18:34:17
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -1088,7 +1088,7 @@
                         }
                         break;
                     case 'init':
-                        if(that.isStringLiteral()){
+                        if(that.isKeyWord()||that.isStringLiteral()||that.isNumericLiteral()||that.isRegularExpression()){
                             that.swap.set('init',{
                                 'value':that.current.value,
                                 'type':that.current.type
@@ -1098,8 +1098,9 @@
                             if(that.current.value === ','){
                                 that.swap = new Hash();
                                 that.swap.set('type',Syntax['VariableDeclarator']);
-                            }else if(that.current.value === ';'||that.current.value === '\n'){
+                            }else if(that.current.value === ';'){
                                 that.stackOut();
+                                that.type = Syntax['Program'];
                             }else{
                                 console.log('error');
                             }

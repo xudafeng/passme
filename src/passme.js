@@ -1068,7 +1068,7 @@
                         }
                         break;
                     case 'init':
-                        if(that.isStringLiteral()){
+                        if(that.isKeyWord()||that.isStringLiteral()||that.isNumericLiteral()||that.isRegularExpression()){
                             that.swap.set('init',{
                                 'value':that.current.value,
                                 'type':that.current.type
@@ -1078,8 +1078,9 @@
                             if(that.current.value === ','){
                                 that.swap = new Hash();
                                 that.swap.set('type',Syntax['VariableDeclarator']);
-                            }else if(that.current.value === ';'||that.current.value === '\n'){
+                            }else if(that.current.value === ';'){
                                 that.stackOut();
+                                that.type = Syntax['Program'];
                             }else{
                                 console.log('error');
                             }
