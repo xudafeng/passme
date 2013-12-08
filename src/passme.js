@@ -715,8 +715,13 @@
         stackIn:function(c){
             this.stack.push(c);
         },
-        stackOut:function(c){
-            this.stack.pop();
+        stackOut:function(n){
+            if(!n){
+                n = 1;
+            }
+            for (var i =0;i<n;i++){
+                this.stack.pop();
+            }
         },
         stackTopIn:function(c){
             this.stack[this.stack.length-1].push(c);
@@ -724,7 +729,9 @@
         router:function(){
             var that = this;
             //console.log(that.current)
+            //console.log(that.type)
             //console.log(that.swap)
+            //console.log(that.stack)
             switch(that.type){
                 case null:
                     parseProgram();
@@ -1024,6 +1031,7 @@
                 that.swap.set('type',that.type);
                 that.swap.set('declarations',[]);
                 that.swap.set('kind',that.current.value);
+                console.log(that.stack)
                 that.stackTopIn(that.swap.hash);
                 that.stackIn(that.swap.get('declarations'));
                 that.tempStack = ['init','id','type'];
@@ -1040,7 +1048,7 @@
                 switch(that.tempStack[that.tempStack.length-1]){
                     case 'type':
                         that.swap = new Hash();
-                        that.swap.set(type,Syntax['VariableDeclarator']);
+                        that.swap.set('type',Syntax['VariableDeclarator']);
                         that.type = Syntax['VariableDeclarator'];
                         that.tempStack.pop();
                         break;
@@ -1057,9 +1065,10 @@
                                 that.swap.set('init',null);
                                 that.swap.set('type',Syntax['VariableDeclarator']);
                                 that.stackTopIn(that.swap.hash);
-                                that.type = null;
                                 that.stackOut();
+                                that.type = Syntax['Program'];
                             }else if(that.current.value === '='){
+                                that.swap.set('type',Syntax['VariableDeclarator']);
                                 that.tempStack.pop();
                             }else{
                                 console.log('error');
@@ -1069,7 +1078,14 @@
                         }
                         break;
                     case 'init':
-                        console.log('init')
+                        if(that.isStringLiteral()){
+                            that.swap.set('init',{
+                                'value':that.current.value,
+                                'type':that.current.type
+                            });
+                            that.stackTopIn(that.swap.hash);
+                            that.stackOut();
+                        }
                         break;
                 }
             }
