@@ -36,7 +36,6 @@ describe('jQuery', function(){
 })
 describe('kissy', function(){
     var kissy = fs.readFileSync('test/3rdparty/kissy-1.4.0.js','utf8');
-    console.log(passme.tokenize(kissy).length)
     it('should return array when the value is kissy', function(){
         passme.tokenize(kissy)[22921].value.should.equal('nodejs');
     })

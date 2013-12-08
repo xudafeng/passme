@@ -2,7 +2,7 @@
  * passme.js v1.0.3
  *
  * parse me!
- * Latest build : 2013-12-04 22:12:31
+ * Latest build : 2013-12-08 13:25:30
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -573,11 +573,52 @@
             that.end();
         }
     };
-    /* build tree class AST
+    /**
+     * 实现散列哈希
+     */
+    function Hash() {
+        this.hash = new Object();
+        this.set = function (key, value) {
+            if (typeof (key) != "undefined") {
+                if (this.has(key) == false) {
+                    this.hash[key] = typeof (value) == "undefined" ? null : value;
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        this.remove = function (key) {
+            delete this.hash[key];
+        }
+        this.count = function () {
+            var i = 0;
+            for (var k in this.hash) {
+                i++;
+            }
+            return i;
+        }
+        this.get = function (key) {
+            return this.hash[key];
+        }
+        this.has = function (key) {
+            return typeof (this.hash[key]) != "undefined";
+        }
+        this.clear = function () {
+            for (var k in this.hash) {
+                delete this.hash[k];
+            }
+        }
+    }    /* build tree class AST
      *
      * based on https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
      *
      * http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
+     *
+     * FSM
+     *
      */
     Syntax = {
         //Programs
@@ -655,6 +696,7 @@
             that.initIndex();
             that.initFlags();
             that.scanner();
+            that.syntaxTree = that.root.hash;
             return that.syntaxTree;
         },
         initIndex:function(){
@@ -668,6 +710,8 @@
         },
         clearFlags:function(){
             var that = this;
+            that.syntaxTree = null;
+            that.root = null;
             that.stack = [];
             that.swap = null;
             that.tempStack = [];
@@ -676,32 +720,10 @@
         },
         scanner:function(){
             var that = this;
-            that.initProgram();
             _.each(that.tokens,function(){
                 that.getToken();
                 that.router();
             });
-        },
-        initProgram:function(){
-            /**
-            * Programs
-            *
-            * A complete program source tree.
-            *
-            * interface Program <: Node {
-            *   type: "Program";
-            *   body: [ Statement ];
-            *   comments: [ Comments ];
-            *   tokens: [ Tokens ];
-            * }
-            */
-            var that = this;
-            that.type = Syntax['Program'];
-            that.syntaxTree['type'] = Syntax['Program'];
-            that.syntaxTree['body'] = [];
-            that.syntaxTree['comments'] = [];
-            that.syntaxTree['tokens'] = that.tokens;
-            that.stackIn(that.syntaxTree['body']);
         },
         getToken:function(){
             var that = this;
@@ -722,156 +744,226 @@
         router:function(){
             var that = this;
             //console.log(that.current)
+            //console.log(that.swap)
             switch(that.type){
+                case null:
+                    parseProgram();
+                break;
+                case Syntax['EmptyStatement']:
+                    break;
+                case Syntax['BlockStatement']:
+                    break;
+                case Syntax['ExpressionStatement']:
+                    break;
+                case Syntax['IfStatement']:
+                    break;
+                case Syntax['LabeledStatement']:
+                    break;
+                case Syntax['BreakStatement']:
+                    break;
+                case Syntax['ContinueStatement']:
+                    break;
+                case Syntax['WithStatement']:
+                    break;
+                case Syntax['SwitchStatement']:
+                    break;
+                case Syntax['ReturnStatement']:
+                    break;
+                case Syntax['ThrowStatement']:
+                    break;
+                case Syntax['TryStatement']:
+                    break;
+                case Syntax['WhileStatement']:
+                    break;
+                case Syntax['DoWhileStatement']:
+                    break;
+                case Syntax['ForStatement']:
+                    break;
+                case Syntax['ForInStatement']:
+                    break;
+                case Syntax['LetStatement']:
+                    break;
+                case Syntax['DebuggerStatement']:
+                    break;
+                case Syntax['FunctionDeclaration']:
+                    break;
                 case Syntax['VariableDeclaration']:
-                    that.type = Syntax['VariableDeclarator'];
-                    parseVariableDeclarator();
+                    parseVariableDeclaration();
                     break;
                 case Syntax['VariableDeclarator']:
-                    parseVariableDeclarator()
+                    parseVariableDeclarator();
+                    break;
+                case Syntax['ThisExpression']:
+                    break;
+                case Syntax['ArrayExpression']:
+                    break;
+                case Syntax['ObjectExpression']:
+                    break;
+                case Syntax['FunctionExpression']:
+                    break;
+                case Syntax['ArrowExpression']:
+                    break;
+                case Syntax['SequenceExpression']:
+                    break;
+                case Syntax['UnaryExpression']:
                     break;
                 case Syntax['BinaryExpression']:
-                    parseBinaryExpression()
                     break;
-                case null:
-                    console.log(that.current);
+                case Syntax['AssignmentExpression']:
                     break;
-                default:
+                case Syntax['UpdateExpression']:
+                    break;
+                case Syntax['LogicalExpression']:
+                    break;
+                case Syntax['ConditionalExpression']:
+                    break;
+                case Syntax['NewExpression']:
+                    break;
+                case Syntax['CallExpression']:
+                    break;
+                case Syntax['MemberExpression']:
+                    break;
+                case Syntax['ObjectPattern']:
+                    break;
+                case Syntax['ArrayPattern']:
+                    break;
+                case Syntax['SwitchCase']:
+                    break;
+                case Syntax['CatchClause']:
+                    break;
+                case Syntax['Identifier']:
+                    break;
+                case Syntax['Literal']:
+                    break;
+                case Syntax['Program']:
                     if(that.isKeyWord()){
-                        if(that.isVariableDeclaration()){
-                            that.type = Syntax['VariableDeclaration'];
-                            parseVariableDeclaration();
+                        var type;
+                        switch (that.current.value) {
+                            case 'if':
+                                type = Syntax['IfStatement'];
+                                break;
+                            case 'in':
+                                break;
+                            case 'do':
+                                break;
+                            case 'var':
+                                type = Syntax['VariableDeclaration'];
+                                break;
+                            case 'for':
+                                break;
+                            case 'new':
+                                break;
+                            case 'try':
+                                break;
+                            case 'let':
+                                type = Syntax['VariableDeclaration'];
+                                break;
+                            case 'this':
+                                break;
+                            case 'else':
+                                break;
+                            case 'case':
+                                break;
+                            case 'void':
+                                break;
+                            case 'with':
+                                break;
+                            case 'enum':
+                                break;
+                            case 'while':
+                                break;
+                            case 'break':
+                                type = Syntax['BreakStatement'];
+                                break;
+                            case 'catch':
+                                break;
+                            case 'throw':
+                                break;
+                            case 'const':
+                                type = Syntax['VariableDeclaration'];
+                                break;
+                            case 'yield':
+                                break;
+                            case 'class':
+                                break;
+                            case 'super':
+                                break;
+                            case 'return':
+                                break;
+                            case 'typeof':
+                                break;
+                            case 'delete':
+                                break;
+                            case 'switch':
+                                break;
+                            case 'export':
+                                break;
+                            case 'import':
+                                break;
+                            case 'default':
+                                break;
+                            case 'finally':
+                                break;
+                            case 'extends':
+                                break;
+                            case 'function':
+                                break;
+                            case 'continue':
+                                break;
+                            case 'debugger':
+                                break;
+                            case 'instanceof':
+                                break;
                         }
-                    }else{
+                        that.type = type;
+                    }else if(that.isPunctuator()){
+
+                    }else if(that.isStringLiteral()){
+                    
+                    }else if(that.isIdentifier()){
+                    
+                    }else if(that.isNumericLiteral()){
+                    
+                    }else if(that.isRegularExpression()){
                     
                     }
+                    that.router();
                     break;
-            }            
-            /**
-             * interface VariableDeclaration <: Declaration {
-             *  type: "VariableDeclaration";
-             *  declarations: [ VariableDeclarator ];
-             *  kind: "var" | "let" | "const";
-             * }
-             */
-            function parseVariableDeclaration(){
-                that.swap = {
-                    type : that.type,
-                    declarations : [],
-                    kind : that.current.value
-                };
-                that.stackTopIn(that.swap);
-                that.stackIn(that.swap['declarations']);
-                that.swap = null;
             }
+            //Programs
             /**
-             * interface VariableDeclarator <: Node {
-             *  type: "VariableDeclarator";
-             *  id: Pattern;
-             *  init: Expression | null;
-             * }
-             */
-            function parseVariableDeclarator(){
-                if(that.swap){
-                    that.tempStack.push(that.current);
-                    if(that.tempStack[0].value === '='){
-                        if(that.tempStack[1]){
-                            if(that.tempStack[1].value ==='function'){
-                                /**
-                                 *interface FunctionExpression <: Function, Expression {
-                                 *  type: "FunctionExpression";
-                                 *  id: Identifier | null;
-                                 *  params: [ Pattern ];
-                                 *  defaults: [ Expression ];
-                                 *  rest: Identifier | null;
-                                 *  body: BlockStatement | Expression;
-                                 *  generator: boolean;
-                                 *  expression: boolean;
-                                 *}
-                                 */
-                                that.swap['init'] = {
-                                    type: 'FunctionExpression',
-                                    id:'',
-                                    params:[]
-                                };
-                                that.stackTopIn(that.swap);
-                                that.tempStack = [];
-                                that.swap = null;
-                                that.stackOut();
-                                that.type = null;
-                            }else if(that.tempStack[1].value ==='{'){
-                                /**
-                                 *interface ObjectExpression <: Expression {
-                                 *  type: "ObjectExpression";
-                                 *  properties: [ { key: Literal | Identifier,
-                                 *  value: Expression,
-                                 *  kind: "init" | "get" | "set" } ];
-                                 *}
-                                 */
-                                that.swap['init'] = {
-                                    type:'ObjectExpression',
-                                    properties:[],
-                                    value:'',
-                                    kind:'init'
-                                };
-                                that.stackTopIn(that.swap);
-                                that.tempStack = [];
-                                that.swap = null;
-                                that.stackOut();
-                                that.type = true;
-                            }else {
-                                /**
-                                 * interface Literal <: Node, Expression {
-                                 * type: "Literal";
-                                 * value: string | boolean | null | number | RegExp;
-                                 * }
-                                 */
-                                that.swap['init'] = {
-                                    type:'Literal',
-                                    value:that.current.value
-                                };
-                                that.stackTopIn(that.swap);
-                                that.tempStack = [];
-                                that.swap = null;
-                                that.stackOut();
-                                that.type = true;
-                            }
-                        }
-                    }else if(that.tempStack[0].value === ';'){
-                        that.stackTopIn(that.swap);
-                        that.tempStack = [];
-                        that.swap = null;
-                        that.stackOut();
-                        that.type = null;
-                    }else {
-                        //console.log('SyntaxError: Unexpected identifier');
-                    }
-                }else{
-                    that.swap = {
-                        type : that.type,
-                        id : {type:'Identifier',name:that.current.value},
-                        init:null
-                    };
-                }
-            }
-            /*
-            * Functions
+            * Programs
             *
-            * A function declaration or expression.
-            * The body of the function may be a block statement, or in the case of an expression closure, an expression.
+            * A complete program source tree.
             *
-            * interface Function <: Node {
-            *   id: Identifier | null;
-            *   params: [ Pattern ];
-            *   defaults: [ Expression ];
-            *   rest: Identifier | null;
-            *   body: BlockStatement | Expression;
-            *   generator: boolean;
-            *   expression: boolean;
+            * interface Program <: Node {
+            *   type: "Program";
+            *   body: [ Statement ];
+            *   comments: [ Comments ];
+            *   tokens: [ Tokens ];
             * }
             */
-
-            /**
+            function parseProgram(){
+                /**
+                 * build root node
+                 */
+                that.type = Syntax['Program'];
+                that.root = new Hash();
+                that.root.set('type',Syntax['Program']);
+                that.root.set('body',[]);
+                that.root.set('comments',[]);
+                that.root.set('tokens',that.tokens);
+                /**
+                 * stack in body list
+                 */
+                that.stackIn(that.root.get('body'));
+                /**
+                 * router again
+                 */
+                that.router();
+            }
+            //Statements
+                   /**
             * interface EmptyStatement <: Statement {
             *   type: "EmptyStatement";
             * }
@@ -938,7 +1030,86 @@
              */
             function parseIfStatement(){
             
+            } 
+            //Declarations
+            /**
+             * interface VariableDeclaration <: Declaration {
+             *  type: "VariableDeclaration";
+             *  declarations: [ VariableDeclarator ];
+             *  kind: "var" | "let" | "const";
+             * }
+             */
+            function parseVariableDeclaration(){
+                that.swap = new Hash();
+                that.swap.set('type',that.type);
+                that.swap.set('declarations',[]);
+                that.swap.set('kind',that.current.value);
+                that.stackTopIn(that.swap.hash);
+                that.stackIn(that.swap.get('declarations'));
+                that.tempStack = ['init','id','type'];
+                parseVariableDeclarator();
             }
+            /**
+             * interface VariableDeclarator <: Node {
+             *  type: "VariableDeclarator";
+             *  id: Pattern;
+             *  init: Expression | null;
+             * }
+             */
+            function parseVariableDeclarator(){
+                switch(that.tempStack[that.tempStack.length-1]){
+                    case 'type':
+                        that.swap = new Hash();
+                        that.swap.set(type,Syntax['VariableDeclarator']);
+                        that.type = Syntax['VariableDeclarator'];
+                        that.tempStack.pop();
+                        break;
+                    case 'id':
+                        if(that.isIdentifier()){
+                            that.swap.set('id',that.current.value);
+                        }else if(that.isPunctuator()){
+                            if(that.current.value === ','){
+                                that.swap.set('init',null);
+                                that.swap.set('type',Syntax['VariableDeclarator']);
+                                that.stackTopIn(that.swap.hash);
+                                that.swap = new Hash();
+                            }else if(that.current.value === ';'){
+                                that.swap.set('init',null);
+                                that.swap.set('type',Syntax['VariableDeclarator']);
+                                that.stackTopIn(that.swap.hash);
+                                that.type = null;
+                                that.stackOut();
+                            }else if(that.current.value === '='){
+                                that.tempStack.pop();
+                            }else{
+                                console.log('error');
+                            }
+                        }else {
+                            console.log('error');
+                        }
+                        break;
+                    case 'init':
+                        console.log('init')
+                        break;
+                }
+            }
+            /*
+            * Functions
+            *
+            * A function declaration or expression.
+            * The body of the function may be a block statement, or in the case of an expression closure, an expression.
+            *
+            * interface Function <: Node {
+            *   id: Identifier | null;
+            *   params: [ Pattern ];
+            *   defaults: [ Expression ];
+            *   rest: Identifier | null;
+            *   body: BlockStatement | Expression;
+            *   generator: boolean;
+            *   expression: boolean;
+            * }
+            */
+
             /**
              * interface ObjectExpression <: Expression {
              * type: "ObjectExpression";
@@ -986,10 +1157,20 @@
         isKeyWord:function(){
             return this.current.type === 'Keyword';
         },
-        isVariableDeclaration:function(){
-            var that = this;
-            var variableDeclarationKinds = ['var','let','const'];
-            return _.isIn(that.current.value,variableDeclarationKinds);
+        isPunctuator:function(){
+            return this.current.type === 'Punctuator';
+        },
+        isStringLiteral:function(){
+            return this.current.type === 'StringLiteral';
+        },
+        isIdentifier:function(){
+            return this.current.type === 'Identifier';
+        },
+        isNumericLiteral:function(){
+            return this.current.type === 'NumericLiteral';
+        },
+        isRegularExpression:function(){
+            return this.current.type === 'RegularExpression';
         }
     };
     /* set options */
