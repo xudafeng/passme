@@ -1,6 +1,6 @@
 {
   "name": "passme",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "parse me!",
   "main": "index.js",
   "scripts": {
