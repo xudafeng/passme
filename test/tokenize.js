@@ -46,3 +46,10 @@ describe('base', function(){
         passme.tokenize(base)[passme.tokenize(base).length-1].value.should.equal(';');
     })
 })
+describe('vendor-edit', function(){
+    var base = fs.readFileSync('test/3rdparty/vendor-edit.js','utf8');
+    it('should return array when the value is base', function(){
+        var l = passme.tokenize(base)[passme.tokenize(base).length-1];
+        console.log(l)
+    })
+})
