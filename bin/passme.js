@@ -1,8 +1,8 @@
 /* ================================================================
- * passme.js v1.0.6
+ * passme.js v1.0.7
  *
  * parse me!
- * Latest build : 2013-12-24 19:05:16
+ * Latest build : 2013-12-25 14:45:38
  *
  * ================================================================
  * * Copyright (C) 2012-2013 xudafeng <xudafeng@126.com>
@@ -335,7 +335,7 @@
                 var isReg = true;
                 for(var i=that.tokens.length;i>=0;i--){
                     if(that.tokens[i] && that.tokens[i].type!=='WhiteSpace'){
-                        if(that.tokens[i].type =='Punctuator' && _.isIn(that.tokens[i].value,[';','+',',','||','&&','=','==','===','!','[','(',':','?']) ||that.tokens[i].type =='Keyword'){
+                        if(that.tokens[i].type =='Punctuator' && _.isIn(that.tokens[i].value,['{','}',';','+',',','||','&&','=','==','===','!','[','(',':','?']) ||that.tokens[i].type =='Keyword'){
                             isReg = true;
                         }else {
                             isReg = false;
