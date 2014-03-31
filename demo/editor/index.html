@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="gbk">
+    <LINK rel="shortcut icon" href="http://xudafeng.sinaapp.com/wp-content/themes/xdf/favicon.ico" >
+    <title>passme editor</title>
+    <style>
+        body,html,pre{
+            margin:0;
+            padding:0;
+            background:#2f3129;
+        }
+        #button{
+            float:right;
+        }
+        #line{
+            background: #2f3129;
+            color: #afafaf;
+            position: absolute;
+            overflow: hidden;
+            width: 35px;
+            cursor: default;
+            z-index: 4;
+            font-family: monospace;
+            border-right:2px solid #435a5f;
+            text-align: right;
+            padding-right: 2px;
+        }
+        #line .line{
+            height:15px;
+            padding-left: 2px;
+        }
+        #highlight{
+            margin-left:30px;
+            padding-left:14px;
+            background:#2f3129;
+        }
+        #highlight .BooleanLiteral {
+            color:#9e60ff; 
+        }
+        #highlight .Identifier{
+            color:#f6f6ef;
+        }
+        #highlight .Keyword{
+            color:#51d1ed;
+        }
+        #highlight .NullLiteral{
+            color:#9e60ff;
+        }
+        #highlight .NumericLiteral{
+            color:#53a6a6;
+        }
+        #highlight .Punctuator{
+            color:#914e89;
+        }
+        #highlight .StringLiteral{
+            color:#e1ce45;
+        
+        }
+        #highlight .RegularExpression{
+            color:#e1ce45;
+        }
+        #highlight .Comment{
+            color:#625e4b;
+        }
+        #highlight .reserve {
+            color:#be4431;
+        }
+    </style>
+</head>
+<body>
+<div id="line">
+</div>
+<pre id="highlight"></pre>
+<script src="http://rawgithub.com/xudafeng/aml/master/1.0.0/bin/aml.min.js" data-init="init"></script>
+</body>
+</html>
+
