@@ -4,7 +4,6 @@
   "description": "parse me!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -14,7 +13,6 @@
     "parse"
   ],
   "author": "xudafeng",
-  "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/xudafeng/passme/issues"
   },
@@ -22,5 +20,6 @@
     "grunt": "~0.4.1",
     "grunt-contrib-concat": "~0.3.0",
     "mocha": "*"
-  }
+  },
+  "license": "MIT"
 }
