@@ -13,9 +13,6 @@
     "parse"
   ],
   "author": "xudafeng",
-  "bugs": {
-    "url": "https://github.com/xudafeng/passme/issues"
-  },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-concat": "~0.3.0",
